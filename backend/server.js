@@ -5,8 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// This is the secret key. It lives on Render, never on the user's phone.
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
+// Your key is hardcoded here for simplicity.
+const GROQ_API_KEY = "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";
 
 app.post('/api/ask', async (req, res) => {
   const { question, subject, history } = req.body;
@@ -57,7 +57,6 @@ Rules:
   }
 });
 
-// Health check route (so Render knows the app is running)
 app.get('/', (req, res) => {
   res.send('KUMG backend is running.');
 });
