@@ -239,6 +239,22 @@ async function ask() {
 
 sendBtn.onclick = ask;
 questionEl.addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
+
+// --- MOBILE KEYBOARD FIX ---
+// This listens for the keyboard opening and shrinks the page so the input field stays visible.
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    // Adjust the body height to match the visible screen
+    document.body.style.height = window.visualViewport.height + 'px';
+  });
+}
+
+// Also scroll the input into view when it's focused
+questionEl.addEventListener('focus', () => {
+  setTimeout(() => {
+    questionEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, 300);
+});
 </script>
 </body>
 </html>
