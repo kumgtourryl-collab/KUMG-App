@@ -33,18 +33,6 @@
     color: #22c55e;
   }
   .logo span { color: #d6e8d6; }
-  #settingsBtn {
-    background: none;
-    border: 1px solid #14301a;
-    border-radius: 8px;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    cursor: pointer;
-  }
   #subjects {
     display: flex;
     gap: 8px;
@@ -151,68 +139,14 @@
     transition: background 0.2s ease;
   }
   #sendBtn:disabled { background: #14532d; color: #3a5a3a; cursor: not-allowed; }
-  .spinner {
-    animation: spin 1s linear infinite;
-  }
+  .spinner { animation: spin 1s linear infinite; }
   @keyframes spin { 100% { transform: rotate(360deg); } }
-  #modal {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.88);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 10;
-    backdrop-filter: blur(4px);
-  }
-  #modal.show { display: flex; }
-  .card {
-    background: #0d1a0d;
-    border: 1px solid #14301a;
-    border-radius: 16px;
-    padding: 24px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  }
-  .card h2 { margin: 0 0 8px; color: #22c55e; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; }
-  .card p { color: #5a7a5a; font-size: 13px; margin: 0 0 20px; line-height: 1.5; }
-  .card input {
-    width: 100%;
-    background: #070a07;
-    border: 1px solid #14301a;
-    border-radius: 10px;
-    padding: 14px;
-    color: #d6e8d6;
-    font-size: 15px;
-    margin-bottom: 16px;
-    outline: none;
-    font-family: inherit;
-  }
-  .card input:focus { border-color: #22c55e; }
-  .card button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    background: #22c55e;
-    color: #061006;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">K<span>U</span>M<span>G</span></div>
-  <button id="settingsBtn" aria-label="Settings">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5a7a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3"></circle>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-    </svg>
-  </button>
 </header>
 
 <div id="subjects"></div>
@@ -235,28 +169,19 @@
   </button>
 </div>
 
-<div id="modal">
-  <div class="card">
-    <h2>KUMG Setup</h2>
-    <p>Paste your Groq API key. It is stored locally on your device and sent directly to Groq.</p>
-    <input id="keyInput" type="password" placeholder="gsk_...">
-    <button id="saveKey">Save Configuration</button>
-  </div>
-</div>
-
 <script>
+// ⚠️ REPLACE THIS WITH YOUR ACTUAL RENDER URL
+const BACKEND_URL = "https://kumg-backend.onrender.com";
+
 const SUBJECTS = ["General", "Maths", "Biology", "Chemistry", "Physics", "English", "History", "Geography", "Accounts"];
 let subject = "General";
 let history = [];
-let apiKey = localStorage.getItem("kumg_key") || "";
 
 const chat = document.getElementById("chat");
 const questionEl = document.getElementById("question");
 const sendBtn = document.getElementById("sendBtn");
-const modal = document.getElementById("modal");
 const subjectsEl = document.getElementById("subjects");
 
-// Build subject chips
 SUBJECTS.forEach((s, i) => {
   const b = document.createElement("button");
   b.className = "chip" + (i === 0 ? " active" : "");
@@ -269,23 +194,6 @@ SUBJECTS.forEach((s, i) => {
   subjectsEl.appendChild(b);
 });
 
-// API key handling
-function checkKey() {
-  if (!apiKey) modal.classList.add("show");
-}
-document.getElementById("settingsBtn").onclick = () => modal.classList.add("show");
-document.getElementById("saveKey").onclick = () => {
-  const v = document.getElementById("keyInput").value.trim();
-  if (v.startsWith("gsk_")) {
-    apiKey = v;
-    localStorage.setItem("kumg_key", v);
-    modal.classList.remove("show");
-  } else {
-    alert("Invalid format. Groq API keys start with gsk_");
-  }
-};
-
-// Add message
 function addMsg(text, who) {
   const d = document.createElement("div");
   d.className = "msg " + who;
@@ -295,10 +203,9 @@ function addMsg(text, who) {
   return d;
 }
 
-// Send
 async function ask() {
   const q = questionEl.value.trim();
-  if (!q || !apiKey) { checkKey(); return; }
+  if (!q) return;
 
   addMsg(q, "user");
   questionEl.value = "";
@@ -307,41 +214,23 @@ async function ask() {
   const loader = addMsg("", "bot");
   loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>';
 
-  const system = `You are KUMG, a professional study assistant for Zimbabwean secondary school students.
-Subject focus: ${subject}.
-Rules:
-- Explain clearly and simply, as if to a student.
-- Use short paragraphs and bullet points.
-- Give a worked example where useful.
-- End with 2 short practice questions.
-- If the question is not school-related, politely bring it back to studies.`;
-
   history.push({ role: "user", content: q });
 
   try {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const res = await fetch(`${BACKEND_URL}/api/ask`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + apiKey
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-oss-120b",
-        messages: [{ role: "system", content: system }, ...history.slice(-6)],
-        temperature: 0.6,
-        max_tokens: 900
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: q, subject, history: history.slice(-6) })
     });
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message || "Request failed");
+    if (!res.ok) throw new Error(data.error || "Request failed");
 
-    const answer = data.choices[0].message.content;
-    loader.textContent = answer;
-    history.push({ role: "assistant", content: answer });
+    loader.textContent = data.answer;
+    history.push({ role: "assistant", content: data.answer });
 
   } catch (e) {
-    loader.textContent = "System Error: " + e.message + "\n\nVerify your API key and internet connection.";
+    loader.textContent = "System Error: " + e.message;
   }
 
   sendBtn.disabled = false;
@@ -350,8 +239,6 @@ Rules:
 
 sendBtn.onclick = ask;
 questionEl.addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
-
-checkKey();
 </script>
 </body>
 </html>
