@@ -36,7 +36,8 @@ Rules:
 
   if (image) {
     // Use the Vision model if an image is attached
-    model = 'llama-3.2-11b-vision-preview';
+    // Note: The previous vision model was also deprecated. 
+    // Using gpt-oss-120b as the default for now.
     messages = [
       { role: 'system', content: system },
       {
@@ -48,9 +49,9 @@ Rules:
       }
     ];
   } else {
-    // Use the Reasoning model if Think is on
+    // Use the Reasoning model if Think is on (Now using gpt-oss-120b)
     if (think) {
-      model = 'deepseek-r1-distill-llama-70b';
+      model = 'openai/gpt-oss-120b';
     }
     messages = [
       { role: 'system', content: system },
