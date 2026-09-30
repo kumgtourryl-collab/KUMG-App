@@ -26,121 +26,70 @@
     justify-content: space-between;
     flex-shrink: 0;
   }
-  .logo {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 4px;
-    color: #22c55e;
-  }
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: 4px; color: #22c55e; }
   .logo span { color: #d6e8d6; }
   #subjects {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 10px 12px;
-    background: #0a0f0a;
-    border-bottom: 1px solid #14301a;
-    scrollbar-width: none;
-    flex-shrink: 0;
+    display: flex; gap: 8px; overflow-x: auto; padding: 10px 12px;
+    background: #0a0f0a; border-bottom: 1px solid #14301a;
+    scrollbar-width: none; flex-shrink: 0;
   }
   #subjects::-webkit-scrollbar { display: none; }
   .chip {
-    flex: 0 0 auto;
-    padding: 7px 14px;
-    border-radius: 20px;
-    border: 1px solid #14301a;
-    background: transparent;
-    color: #7a9a7a;
-    font-size: 13px;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    flex: 0 0 auto; padding: 7px 14px; border-radius: 20px; border: 1px solid #14301a;
+    background: transparent; color: #7a9a7a; font-size: 13px; white-space: nowrap;
+    cursor: pointer; transition: all 0.2s ease;
   }
-  .chip.active {
-    background: #14532d;
-    border-color: #22c55e;
-    color: #d6e8d6;
-  }
+  .chip.active { background: #14532d; border-color: #22c55e; color: #d6e8d6; }
   #chat {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;
   }
   .msg {
-    max-width: 88%;
-    padding: 12px 16px;
-    border-radius: 14px;
-    font-size: 15px;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    animation: fadeIn 0.3s ease;
+    max-width: 88%; padding: 12px 16px; border-radius: 14px; font-size: 15px;
+    line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; animation: fadeIn 0.3s ease;
   }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-  .user {
-    align-self: flex-end;
-    background: #14532d;
-    color: #e8f5e8;
-    border-bottom-right-radius: 4px;
-  }
-  .bot {
-    align-self: flex-start;
-    background: #0d1a0d;
-    border: 1px solid #14301a;
-    color: #c8dcc8;
-    border-bottom-left-radius: 4px;
-  }
-  .welcome {
-    text-align: center;
-    color: #4a6a4a;
-    font-size: 14px;
-    margin-top: 40px;
-    line-height: 1.8;
-  }
+  .user { align-self: flex-end; background: #14532d; color: #e8f5e8; border-bottom-right-radius: 4px; }
+  .bot { align-self: flex-start; background: #0d1a0d; border: 1px solid #14301a; color: #c8dcc8; border-bottom-left-radius: 4px; }
+  .welcome { text-align: center; color: #4a6a4a; font-size: 14px; margin-top: 40px; line-height: 1.8; }
   .welcome b { color: #22c55e; display: block; font-size: 18px; margin-bottom: 8px; letter-spacing: 2px; }
+  
+  /* NEW INPUT BAR DESIGN */
   #inputBar {
-    display: flex;
-    gap: 8px;
-    padding: 10px 12px;
-    padding-bottom: max(10px, env(safe-area-inset-bottom));
-    background: #0a0f0a;
-    border-top: 1px solid #14301a;
-    flex-shrink: 0;
+    background: #0a0f0a; border-top: 1px solid #14301a; padding: 10px 12px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom)); flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 8px;
   }
+  #inputTop { display: flex; width: 100%; }
   #question {
-    flex: 1;
-    background: #0d1a0d;
-    border: 1px solid #14301a;
-    border-radius: 22px;
-    padding: 12px 16px;
-    color: #d6e8d6;
-    font-size: 16px;
-    outline: none;
-    font-family: inherit;
-    transition: border-color 0.2s ease;
+    flex: 1; background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px;
+    padding: 12px 16px; color: #d6e8d6; font-size: 16px; outline: none; font-family: inherit;
+    transition: border-color 0.2s ease; resize: none;
   }
   #question:focus { border-color: #22c55e; }
+  #inputBottom { display: flex; align-items: center; justify-content: space-between; }
+  .chip-action {
+    display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 16px;
+    border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 13px;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .chip-action.active { background: #14532d; border-color: #22c55e; color: #d6e8d6; }
+  .chip-action svg { width: 14px; height: 14px; }
+  .action-buttons { display: flex; gap: 8px; align-items: center; }
+  .icon-btn {
+    background: transparent; border: 1px solid #14301a; border-radius: 50%;
+    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+    color: #7a9a7a; cursor: pointer;
+  }
   #sendBtn {
-    background: #22c55e;
-    border: none;
-    border-radius: 50%;
-    width: 46px;
-    height: 46px;
-    color: #061006;
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    cursor: pointer;
-    transition: background 0.2s ease;
+    background: #22c55e; border: none; border-radius: 50%; width: 42px; height: 42px;
+    color: #061006; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.2s ease;
   }
   #sendBtn:disabled { background: #14532d; color: #3a5a3a; cursor: not-allowed; }
   .spinner { animation: spin 1s linear infinite; }
   @keyframes spin { 100% { transform: rotate(360deg); } }
+  #previewContainer { display: none; padding: 0 12px 8px 12px; }
+  #imagePreview { max-height: 80px; border-radius: 8px; border: 1px solid #14301a; }
 </style>
 </head>
 <body>
@@ -159,28 +108,56 @@
   </div>
 </div>
 
+<div id="previewContainer">
+  <img id="imagePreview" src="" alt="Preview">
+</div>
+
 <div id="inputBar">
-  <input id="question" type="text" placeholder="Ask a question..." autocomplete="off">
-  <button id="sendBtn" aria-label="Send">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="12" y1="19" x2="12" y2="5"></line>
-      <polyline points="5 12 12 5 19 12"></polyline>
-    </svg>
-  </button>
+  <div id="inputTop">
+    <input id="question" type="text" placeholder="Ask a question..." autocomplete="off">
+  </div>
+  <div id="inputBottom">
+    <div style="display:flex; gap:6px;">
+      <button class="chip-action" id="thinkBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 10v2m0-10a4 4 0 0 0-4 4c0 1.95 1.4 3.58 3.25 3.93L12 10v2m0 0v10m-4-8h8"/></svg>
+        Think
+      </button>
+      <button class="chip-action" id="searchBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Search
+      </button>
+    </div>
+    <div class="action-buttons">
+      <input type="file" id="imageInput" accept="image/*" style="display:none;">
+      <button class="icon-btn" id="attachBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <button id="sendBtn" aria-label="Send">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+      </button>
+    </div>
+  </div>
 </div>
 
 <script>
-// Your live KUMG backend URL on Render
 const BACKEND_URL = "https://kumg-app.onrender.com";
-
 const SUBJECTS = ["General", "Maths", "Biology", "Chemistry", "Physics", "English", "History", "Geography", "Accounts"];
 let subject = "General";
 let history = [];
+let isThink = false;
+let isSearch = false;
+let currentImage = null;
 
 const chat = document.getElementById("chat");
 const questionEl = document.getElementById("question");
 const sendBtn = document.getElementById("sendBtn");
 const subjectsEl = document.getElementById("subjects");
+const thinkBtn = document.getElementById("thinkBtn");
+const searchBtn = document.getElementById("searchBtn");
+const attachBtn = document.getElementById("attachBtn");
+const imageInput = document.getElementById("imageInput");
+const previewContainer = document.getElementById("previewContainer");
+const imagePreview = document.getElementById("imagePreview");
 
 SUBJECTS.forEach((s, i) => {
   const b = document.createElement("button");
@@ -194,6 +171,24 @@ SUBJECTS.forEach((s, i) => {
   subjectsEl.appendChild(b);
 });
 
+// Toggle Buttons
+thinkBtn.onclick = () => { isThink = !isThink; thinkBtn.classList.toggle("active", isThink); };
+searchBtn.onclick = () => { isSearch = !isSearch; searchBtn.classList.toggle("active", isSearch); };
+
+// Image Upload
+attachBtn.onclick = () => imageInput.click();
+imageInput.onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    currentImage = ev.target.result; // Base64
+    imagePreview.src = currentImage;
+    previewContainer.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+};
+
 function addMsg(text, who) {
   const d = document.createElement("div");
   d.className = "msg " + who;
@@ -205,22 +200,35 @@ function addMsg(text, who) {
 
 async function ask() {
   const q = questionEl.value.trim();
-  if (!q) return;
+  if (!q && !currentImage) return;
 
-  addMsg(q, "user");
+  addMsg(q || "[Image Uploaded]", "user");
   questionEl.value = "";
   sendBtn.disabled = true;
+  
+  const imgToSend = currentImage;
+  // Clear image after sending
+  currentImage = null;
+  previewContainer.style.display = "none";
+  imageInput.value = "";
 
   const loader = addMsg("", "bot");
-  loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>';
+  loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
 
-  history.push({ role: "user", content: q });
+  if (q) history.push({ role: "user", content: q });
 
   try {
     const res = await fetch(`${BACKEND_URL}/api/ask`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: q, subject, history: history.slice(-6) })
+      body: JSON.stringify({ 
+        question: q, 
+        subject, 
+        history: history.slice(-6),
+        think: isThink,
+        search: isSearch,
+        image: imgToSend 
+      })
     });
 
     const data = await res.json();
@@ -240,20 +248,14 @@ async function ask() {
 sendBtn.onclick = ask;
 questionEl.addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
 
-// --- MOBILE KEYBOARD FIX ---
-// This listens for the keyboard opening and shrinks the page so the input field stays visible.
+// Keyboard fix
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => {
-    // Adjust the body height to match the visible screen
     document.body.style.height = window.visualViewport.height + 'px';
   });
 }
-
-// Also scroll the input into view when it's focused
 questionEl.addEventListener('focus', () => {
-  setTimeout(() => {
-    questionEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, 300);
+  setTimeout(() => questionEl.scrollIntoView({ behavior: 'smooth', block: 'end' }), 300);
 });
 </script>
 </body>
