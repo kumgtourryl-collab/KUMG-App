@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0f0a">
+<title>KUMG</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #070a07;
+    color: #d6e8d6;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  header {
+    padding: 14px 16px;
+    background: #0a0f0a;
+    border-bottom: 1px solid #14301a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #22c55e;
+  }
+  .logo span { color: #d6e8d6; }
+  #settingsBtn {
+    background: none;
+    border: 1px solid #14301a;
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+  }
+  #subjects {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px 12px;
+    background: #0a0f0a;
+    border-bottom: 1px solid #14301a;
+    scrollbar-width: none;
+    flex-shrink: 0;
+  }
+  #subjects::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto;
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid #14301a;
+    background: transparent;
+    color: #7a9a7a;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .chip.active {
+    background: #14532d;
+    border-color: #22c55e;
+    color: #d6e8d6;
+  }
+  #chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .msg {
+    max-width: 88%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .user {
+    align-self: flex-end;
+    background: #14532d;
+    color: #e8f5e8;
+    border-bottom-right-radius: 4px;
+  }
+  .bot {
+    align-self: flex-start;
+    background: #0d1a0d;
+    border: 1px solid #14301a;
+    color: #c8dcc8;
+    border-bottom-left-radius: 4px;
+  }
+  .welcome {
+    text-align: center;
+    color: #4a6a4a;
+    font-size: 14px;
+    margin-top: 40px;
+    line-height: 1.8;
+  }
+  .welcome b { color: #22c55e; display: block; font-size: 18px; margin-bottom: 8px; letter-spacing: 2px; }
+  #inputBar {
+    display: flex;
+    gap: 8px;
+    padding: 10px 12px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    background: #0a0f0a;
+    border-top: 1px solid #14301a;
+    flex-shrink: 0;
+  }
+  #question {
+    flex: 1;
+    background: #0d1a0d;
+    border: 1px solid #14301a;
+    border-radius: 22px;
+    padding: 12px 16px;
+    color: #d6e8d6;
+    font-size: 16px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+  }
+  #question:focus { border-color: #22c55e; }
+  #sendBtn {
+    background: #22c55e;
+    border: none;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    color: #061006;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  #sendBtn:disabled { background: #14532d; color: #3a5a3a; cursor: not-allowed; }
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  #modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.88);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+  }
+  #modal.show { display: flex; }
+  .card {
+    background: #0d1a0d;
+    border: 1px solid #14301a;
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .card h2 { margin: 0 0 8px; color: #22c55e; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; }
+  .card p { color: #5a7a5a; font-size: 13px; margin: 0 0 20px; line-height: 1.5; }
+  .card input {
+    width: 100%;
+    background: #070a07;
+    border: 1px solid #14301a;
+    border-radius: 10px;
+    padding: 14px;
+    color: #d6e8d6;
+    font-size: 15px;
+    margin-bottom: 16px;
+    outline: none;
+    font-family: inherit;
+  }
+  .card input:focus { border-color: #22c55e; }
+  .card button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: #22c55e;
+    color: #061006;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">K<span>U</span>M<span>G</span></div>
+  <button id="settingsBtn" aria-label="Settings">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5a7a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+  </button>
+</header>
+
+<div id="subjects"></div>
+
+<div id="chat">
+  <div class="welcome">
+    <b>KUMG</b>
+    Ask me anything about your school work.<br>
+    I'll explain it simply, with examples.
+  </div>
+</div>
+
+<div id="inputBar">
+  <input id="question" type="text" placeholder="Ask a question..." autocomplete="off">
+  <button id="sendBtn" aria-label="Send">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="19" x2="12" y2="5"></line>
+      <polyline points="5 12 12 5 19 12"></polyline>
+    </svg>
+  </button>
+</div>
+
+<div id="modal">
+  <div class="card">
+    <h2>KUMG Setup</h2>
+    <p>Paste your Groq API key. It is stored locally on your device and sent directly to Groq.</p>
+    <input id="keyInput" type="password" placeholder="gsk_...">
+    <button id="saveKey">Save Configuration</button>
+  </div>
+</div>
+
+<script>
+const SUBJECTS = ["General", "Maths", "Biology", "Chemistry", "Physics", "English", "History", "Geography", "Accounts"];
+let subject = "General";
+let history = [];
+let apiKey = localStorage.getItem("kumg_key") || "";
+
+const chat = document.getElementById("chat");
+const questionEl = document.getElementById("question");
+const sendBtn = document.getElementById("sendBtn");
+const modal = document.getElementById("modal");
+const subjectsEl = document.getElementById("subjects");
+
+// Build subject chips
+SUBJECTS.forEach((s, i) => {
+  const b = document.createElement("button");
+  b.className = "chip" + (i === 0 ? " active" : "");
+  b.textContent = s;
+  b.onclick = () => {
+    subject = s;
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    b.classList.add("active");
+  };
+  subjectsEl.appendChild(b);
+});
+
+// API key handling
+function checkKey() {
+  if (!apiKey) modal.classList.add("show");
+}
+document.getElementById("settingsBtn").onclick = () => modal.classList.add("show");
+document.getElementById("saveKey").onclick = () => {
+  const v = document.getElementById("keyInput").value.trim();
+  if (v.startsWith("gsk_")) {
+    apiKey = v;
+    localStorage.setItem("kumg_key", v);
+    modal.classList.remove("show");
+  } else {
+    alert("Invalid format. Groq API keys start with gsk_");
+  }
+};
+
+// Add message
+function addMsg(text, who) {
+  const d = document.createElement("div");
+  d.className = "msg " + who;
+  d.textContent = text;
+  chat.appendChild(d);
+  chat.scrollTop = chat.scrollHeight;
+  return d;
+}
+
+// Send
+async function ask() {
+  const q = questionEl.value.trim();
+  if (!q || !apiKey) { checkKey(); return; }
+
+  addMsg(q, "user");
+  questionEl.value = "";
+  sendBtn.disabled = true;
+
+  const loader = addMsg("", "bot");
+  loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>';
+
+  const system = `You are KUMG, a professional study assistant for Zimbabwean secondary school students.
+Subject focus: ${subject}.
+Rules:
+- Explain clearly and simply, as if to a student.
+- Use short paragraphs and bullet points.
+- Give a worked example where useful.
+- End with 2 short practice questions.
+- If the question is not school-related, politely bring it back to studies.`;
+
+  history.push({ role: "user", content: q });
+
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-oss-120b",
+        messages: [{ role: "system", content: system }, ...history.slice(-6)],
+        temperature: 0.6,
+        max_tokens: 900
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || "Request failed");
+
+    const answer = data.choices[0].message.content;
+    loader.textContent = answer;
+    history.push({ role: "assistant", content: answer });
+
+  } catch (e) {
+    loader.textContent = "System Error: " + e.message + "\n\nVerify your API key and internet connection.";
+  }
+
+  sendBtn.disabled = false;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+sendBtn.onclick = ask;
+questionEl.addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
+
+checkKey();
+</script>
+</body>
+</html>
