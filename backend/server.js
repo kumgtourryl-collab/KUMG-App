@@ -5,7 +5,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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";
 
 app.post('/api/ask', async (req, res) => {
   const { question, subject, history, think, search, language, paperContext } = req.body;
