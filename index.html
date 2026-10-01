@@ -36,6 +36,7 @@
   }
   .auth-card button:disabled { background: #14532d; color: #3a5a3a; }
   .auth-toggle { display: block; text-align: center; color: #22c55e; font-size: 13px; margin-top: 16px; cursor: pointer; text-decoration: underline; }
+  .auth-message { text-align: center; font-size: 13px; margin-top: 12px; min-height: 18px; }
 
   /* --- MAIN APP --- */
   #mainApp { display: flex; flex-direction: column; height: 100dvh; }
@@ -110,8 +111,9 @@
   <div class="auth-card">
     <h2 id="authTitle">Welcome Back</h2>
     <input id="emailInput" type="email" placeholder="Email address">
-    <input id="passwordInput" type="password" placeholder="Password">
+    <input id="passwordInput" type="password" placeholder="Password (min 6 chars)">
     <button id="authSubmit">Login</button>
+    <div class="auth-message" id="authMessage"></div>
     <span class="auth-toggle" id="toggleAuth">Don't have an account? Sign up</span>
   </div>
 </div>
@@ -131,7 +133,6 @@
     </div>
   </header>
 
-  <!-- SIDEBAR OVERLAY & DRAWER -->
   <div id="overlay"></div>
   <div id="sidebar">
     <div class="sidebar-header">
@@ -159,7 +160,6 @@
     </div>
   </div>
 
-  <!-- CHAT AREA -->
   <div id="subjects"></div>
   <div id="chat">
     <div class="welcome">
@@ -167,7 +167,6 @@
     </div>
   </div>
 
-  <!-- INPUT BAR -->
   <div id="inputBar">
     <input id="question" type="text" placeholder="Ask a question..." autocomplete="off">
     <div id="inputBottom">
@@ -189,7 +188,8 @@ const SUPABASE_URL = "https://mzwfpgmgofhkjplexsam.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_8xuNROZulsGa7GL94cSAGA_D04QsR2Y";
 const BACKEND_URL = "https://kumg-app.onrender.com";
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// FIXED: Renamed to supabaseClient to avoid shadowing the library
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let subject = "General";
@@ -209,6 +209,7 @@ const passwordInput = document.getElementById("passwordInput");
 const authSubmit = document.getElementById("authSubmit");
 const toggleAuth = document.getElementById("toggleAuth");
 const authTitle = document.getElementById("authTitle");
+const authMessage = document.getElementById("authMessage");
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
 const menuBtn = document.getElementById("menuBtn");
@@ -231,24 +232,56 @@ toggleAuth.onclick = () => {
   authTitle.textContent = isLoginMode ? "Welcome Back" : "Create Account";
   authSubmit.textContent = isLoginMode ? "Login" : "Sign Up";
   toggleAuth.textContent = isLoginMode ? "Don't have an account? Sign up" : "Already have an account? Login";
+  authMessage.textContent = "";
 };
 
 authSubmit.onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
-  if (!email || !password) return alert("Please enter email and password.");
+  authMessage.textContent = "";
+  authMessage.style.color = "#22c55e";
+
+  if (!email || !password) {
+    authMessage.textContent = "Please enter email and password.";
+    authMessage.style.color = "#ef4444";
+    return;
+  }
+  if (password.length < 6) {
+    authMessage.textContent = "Password must be at least 6 characters.";
+    authMessage.style.color = "#ef4444";
+    return;
+  }
 
   authSubmit.disabled = true;
   authSubmit.textContent = "Please wait...";
 
-  if (isLoginMode) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) alert(error.message);
-  } else {
-    const { error } = await supabase.auth.signUp({ email, password });
-    if (error) alert(error.message);
-    else alert("Account created! You can now log in.");
+  try {
+    if (isLoginMode) {
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) {
+        authMessage.textContent = error.message;
+        authMessage.style.color = "#ef4444";
+      }
+    } else {
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) {
+        authMessage.textContent = error.message;
+        authMessage.style.color = "#ef4444";
+      } else {
+        // If email confirmation is off, session is created immediately
+        if (data.session) {
+          authMessage.textContent = "Account created! Logging in...";
+        } else {
+          authMessage.textContent = "Account created! Please check your email to confirm.";
+          authMessage.style.color = "#22c55e";
+        }
+      }
+    }
+  } catch (err) {
+    authMessage.textContent = "Unexpected error: " + err.message;
+    authMessage.style.color = "#ef4444";
   }
+
   authSubmit.disabled = false;
   authSubmit.textContent = isLoginMode ? "Login" : "Sign Up";
 };
@@ -260,7 +293,7 @@ menuBtn.onclick = openSidebar;
 overlay.onclick = closeSidebar;
 
 // Check Auth State
-supabase.auth.onAuthStateChange((event, session) => {
+supabaseClient.auth.onAuthStateChange((event, session) => {
   if (session) {
     currentUser = session.user;
     userEmail.textContent = currentUser.email;
@@ -277,7 +310,7 @@ supabase.auth.onAuthStateChange((event, session) => {
 });
 
 // Logout
-document.getElementById("logoutBtn").onclick = () => { closeSidebar(); supabase.auth.signOut(); };
+document.getElementById("logoutBtn").onclick = () => { closeSidebar(); supabaseClient.auth.signOut(); };
 
 // New Chat
 document.getElementById("newChatBtn").onclick = () => {
@@ -290,7 +323,7 @@ document.getElementById("newChatBtn").onclick = () => {
 document.getElementById("clearHistoryBtn").onclick = async () => {
   if (!currentUser) return;
   closeSidebar();
-  await supabase.from('chats').delete().eq('user_id', currentUser.id);
+  await supabaseClient.from('chats').delete().eq('user_id', currentUser.id);
   chat.innerHTML = '<div class="welcome"><b>KUMG</b> History cleared.</div>';
   history = [];
 };
@@ -298,7 +331,7 @@ document.getElementById("clearHistoryBtn").onclick = async () => {
 // Load History from Supabase
 async function loadHistory() {
   if (!currentUser) return;
-  const { data, error } = await supabase.from('chats').select('*').order('created_at', { ascending: true }).limit(50);
+  const { data, error } = await supabaseClient.from('chats').select('*').order('created_at', { ascending: true }).limit(50);
   if (error) return console.error(error);
   
   chat.innerHTML = '<div class="welcome"><b>KUMG</b> Welcome back. Continue your studies.</div>';
@@ -322,7 +355,7 @@ function addMsg(text, who) {
 // Save Message to Supabase
 async function saveMsg(content, role) {
   if (!currentUser) return;
-  await supabase.from('chats').insert([{ user_id: currentUser.id, content, role }]);
+  await supabaseClient.from('chats').insert([{ user_id: currentUser.id, content, role }]);
 }
 
 // Ask AI
