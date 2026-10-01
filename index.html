@@ -184,7 +184,7 @@
 </div>
 
 <script>
-// ⚠️ REPLACE WITH YOUR SUPABASE CREDENTIALS
+// YOUR SUPABASE CREDENTIALS
 const SUPABASE_URL = "https://mzwfpgmgofhkjplexsam.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_8xuNROZulsGa7GL94cSAGA_D04QsR2Y";
 const BACKEND_URL = "https://kumg-app.onrender.com";
@@ -247,7 +247,7 @@ authSubmit.onclick = async () => {
   } else {
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) alert(error.message);
-    else alert("Account created! Please check your email to verify, or log in directly if confirmation is disabled.");
+    else alert("Account created! You can now log in.");
   }
   authSubmit.disabled = false;
   authSubmit.textContent = isLoginMode ? "Login" : "Sign Up";
