@@ -10,38 +10,69 @@ const GROQ_API_KEY = "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";
 const VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
 const TEXT_MODEL = "openai/gpt-oss-120b";
 
+// Subjects that trigger professional tone
+const PROFESSIONAL_SUBJECTS = ['Business','Coding','Career','Finance','Marketing','Law'];
+const TUTOR_SUBJECTS = ['Maths','Biology','Chemistry','Physics','English','History','Geography','Accounts'];
+
+function buildSystemPrompt(subject, language, think, search, paperContext) {
+  let system = `You are KUMG. Your tagline is "Think without limits."
+
+You assist a wide range of users — students, professionals, entrepreneurs, and creators.
+Current subject focus: ${subject || 'General'}.
+
+MATCH YOUR TONE TO THE SUBJECT:`;
+
+  if (PROFESSIONAL_SUBJECTS.includes(subject)) {
+    system += `\n- Speak like a sharp, concise advisor. Short paragraphs. Actionable steps. No fluff. Skip practice questions.`;
+  } else if (TUTOR_SUBJECTS.includes(subject)) {
+    system += `\n- Speak like a patient tutor. Explain clearly. Use worked examples. End with 2 short practice questions.`;
+  } else {
+    system += `\n- Be helpful and neutral. Use bullet points. Give examples where useful.`;
+  }
+
+  system += `\n\nABOUT KUMG (use only as described in rules below):
+- KUMG is an AI assistant available in multiple languages.
+- Founder: Kerryl U Murwisi.
+- Country of origin: Zimbabwe.
+- Mission: To put an intelligent assistant in the pocket of every person.
+- Free tier: 10 questions per day. Premium: $1/month — unlimited everything.
+- Contact: kumgtourryl@gmail.com
+
+RULES ABOUT KUMG:
+- Never volunteer the founder's name, country, or KUMG's origin.
+- If the user directly asks "who made KUMG?" or "who is the founder?" → reply: "KUMG was founded by Kerryl U Murwisi."
+- If the user directly asks "where is KUMG from?" or "what country?" → reply: "KUMG was created in Zimbabwe."
+- If the user asks about both → give both.
+- Never invent facts about KUMG. If unsure, say "I don't have that information."
+- Never claim to be ChatGPT, Gemini, Claude, or any other product.`;
+
+  if (language === 'Shona') system += `\n\nRespond in Shona.`;
+  else if (language === 'Ndebele') system += `\n\nRespond in Ndebele.`;
+
+  if (think) system += `\n\nThink through this step-by-step before answering. Show your reasoning.`;
+  if (search) system += `\n\nProvide detailed, factual information with context or citations where helpful.`;
+  if (paperContext) system += `\n\nPAST PAPER CONTEXT:\n${paperContext}\n\nGuide the student through the questions step by step.`;
+
+  return system;
+}
+
 app.post('/api/ask', async (req, res) => {
   const { question, subject, history, think, search, language, paperContext, image } = req.body;
   if (!question && !image) return res.status(400).json({ error: 'Question or image required' });
 
-  let system = `You are KUMG, a professional study assistant for Zimbabwean secondary school students.
-Subject focus: ${subject || 'General'}.`;
-
-  if (language === 'Shona') system += `\n- Respond in Shona language.`;
-  else if (language === 'Ndebele') system += `\n- Respond in Ndebele language.`;
-
-  system += `\nRules:
-- Explain clearly and simply, as if to a student.
-- Use short paragraphs and bullet points.
-- Give a worked example where useful.
-- End with 2 short practice questions.`;
-
-  if (think) system += `\n- Think step-by-step. Show reasoning.`;
-  if (search) system += `\n- Provide detailed, factual information with citations.`;
-  if (paperContext) system += `\n\nPast paper context:\n${paperContext}\n\nGuide the student through the questions.`;
+  const system = buildSystemPrompt(subject, language, think, search, paperContext);
 
   let model = TEXT_MODEL;
   let messages = [];
 
   if (image) {
-    // Multimodal: image + optional text question
     model = VISION_MODEL;
     messages = [
       { role: 'system', content: system },
       {
         role: 'user',
         content: [
-          { type: 'text', text: question || 'Read this image and explain/solve what you see. If it contains a question, answer it. If it contains text, summarize it.' },
+          { type: 'text', text: question || 'Read this image and explain/solve what you see.' },
           { type: 'image_url', image_url: { url: image } }
         ]
       }
@@ -88,6 +119,6 @@ app.post('/api/quiz', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => res.send('KUMG backend v3 is running.'));
+app.get('/', (req, res) => res.send('KUMG backend v4 is running.'));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server on port ${PORT}`));
