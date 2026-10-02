@@ -41,30 +41,36 @@
   #usageBadge.warning { color: #f59e0b; border-color: #f59e0b; }
   #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; z-index: 15; backdrop-filter: blur(2px); }
   #overlay.show { display: block; }
-  #sidebar { position: fixed; top: 0; left: -290px; width: 290px; height: 100%; background: #0a0f0a; border-right: 1px solid #14301a; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 20; display: flex; flex-direction: column; overflow-y: auto; }
+  #sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: #0a0f0a; border-right: 1px solid #14301a; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 20; display: flex; flex-direction: column; }
   #sidebar.open { left: 0; }
-  .sidebar-header { padding: 20px 16px; border-bottom: 1px solid #14301a; }
-  .sidebar-user { padding: 16px; border-bottom: 1px solid #14301a; }
-  .sidebar-user p { margin: 0; color: #5a7a5a; font-size: 12px; }
-  .sidebar-user span { color: #d6e8d6; font-size: 14px; font-weight: 600; display: block; margin-top: 4px; word-break: break-all; }
-  .plan-badge { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  .sidebar-header { padding: 14px 16px; border-bottom: 1px solid #14301a; display: flex; align-items: center; justify-content: space-between; }
+  .new-chat-btn { display: flex; align-items: center; gap: 10px; margin: 10px 12px; padding: 10px 14px; background: #14301a; border: 1px solid #22c55e; border-radius: 10px; color: #22c55e; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .new-chat-btn svg { width: 16px; height: 16px; }
+  .conv-search { margin: 0 12px 8px; padding: 8px 12px; background: #070a07; border: 1px solid #14301a; border-radius: 10px; color: #d6e8d6; font-size: 13px; outline: none; }
+  .conv-search:focus { border-color: #22c55e; }
+  #convList { flex: 1; overflow-y: auto; padding: 4px 8px 12px; }
+  .conv-section { margin-bottom: 10px; }
+  .conv-label { padding: 8px 10px 4px; font-size: 10px; font-weight: 700; color: #4a6a4a; text-transform: uppercase; letter-spacing: 1px; }
+  .conv-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 10px; border-radius: 8px; color: #c8dcc8; font-size: 13px; cursor: pointer; gap: 8px; }
+  .conv-item:hover, .conv-item:active { background: #14301a; }
+  .conv-item.active { background: #14532d; color: #fff; }
+  .conv-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .conv-pin { background: transparent; border: none; color: #5a7a5a; font-size: 12px; cursor: pointer; padding: 2px 4px; flex-shrink: 0; }
+  .conv-pin.pinned { color: #f59e0b; }
+  .sidebar-user-mini { padding: 12px 16px; border-top: 1px solid #14301a; border-bottom: 1px solid #14301a; }
+  .sidebar-user-mini .email { color: #d6e8d6; font-size: 12px; font-weight: 600; word-break: break-all; }
+  .sidebar-user-mini .row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .plan-badge { padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
   .plan-badge.free { background: #14301a; color: #7a9a7a; }
   .plan-badge.premium { background: #22c55e; color: #061006; }
-  .stats-row { display: flex; gap: 8px; margin-top: 12px; }
-  .stat { flex: 1; background: #0d1a0d; border: 1px solid #14301a; border-radius: 10px; padding: 8px; text-align: center; }
-  .stat b { display: block; color: #22c55e; font-size: 18px; }
-  .stat span { color: #5a7a5a; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
-  .ref-box { background: #0d1a0d; border: 1px dashed #22c55e; border-radius: 10px; padding: 12px; margin-top: 12px; text-align: center; }
-  .ref-box p { margin: 0 0 6px; color: #5a7a5a; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-  .ref-box .code { font-size: 22px; font-weight: 800; letter-spacing: 3px; color: #22c55e; margin: 6px 0; }
-  .ref-box button { background: #22c55e; border: none; color: #061006; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 8px; cursor: pointer; margin-top: 4px; }
-  .sidebar-menu { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
-  .sidebar-btn { display: flex; align-items: center; gap: 12px; padding: 12px; background: transparent; border: 1px solid transparent; border-radius: 10px; color: #d6e8d6; font-size: 14px; cursor: pointer; text-align: left; width: 100%; }
-  .sidebar-btn:hover, .sidebar-btn:active { background: #14532d; border-color: #14301a; }
-  .sidebar-btn svg { width: 18px; height: 18px; color: #22c55e; flex-shrink: 0; }
-  .sidebar-btn.upgrade { background: linear-gradient(135deg, #14532d, #0d1a0d); border: 1px solid #22c55e; }
+  .stat-mini { font-size: 11px; color: #7a9a7a; }
+  .stat-mini b { color: #22c55e; }
+  .sidebar-footer-menu { padding: 8px; border-top: 1px solid #14301a; display: flex; flex-direction: column; gap: 2px; max-height: 40vh; overflow-y: auto; }
+  .sidebar-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: transparent; border: none; border-radius: 8px; color: #c8dcc8; font-size: 13px; cursor: pointer; text-align: left; width: 100%; }
+  .sidebar-btn:hover, .sidebar-btn:active { background: #14532d; }
+  .sidebar-btn svg { width: 16px; height: 16px; color: #22c55e; flex-shrink: 0; }
+  .sidebar-btn.upgrade { background: linear-gradient(135deg, #14532d, #0d1a0d); border: 1px solid #22c55e; color: #d6e8d6; font-weight: 700; }
   .sidebar-btn.upgrade svg { color: #f59e0b; }
-  .sidebar-footer { padding: 12px; border-top: 1px solid #14301a; }
   #subjects { display: flex; gap: 8px; overflow-x: auto; padding: 10px 12px; background: #0a0f0a; border-bottom: 1px solid #14301a; scrollbar-width: none; flex-shrink: 0; }
   #subjects::-webkit-scrollbar { display: none; }
   .chip { flex: 0 0 auto; padding: 7px 14px; border-radius: 20px; border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 13px; cursor: pointer; }
@@ -190,24 +196,32 @@
   <div id="refBanner">You were invited! Sign up to unlock <b>7 days free premium</b>.</div>
 
   <div id="overlay"></div>
+
+  <!-- SIDEBAR -->
   <div id="sidebar">
-    <div class="sidebar-header"><div class="logo">K<span>U</span>M<span>G</span></div></div>
-    <div class="sidebar-user">
-      <p>Logged in as</p>
-      <span id="userEmail">student@example.com</span>
-      <span class="plan-badge free" id="planBadge">FREE PLAN</span>
-      <div class="stats-row">
-        <div class="stat"><b id="pointsStat">0</b><span>Points</span></div>
-        <div class="stat"><b id="streakStat">0</b><span>Streak</span></div>
-      </div>
-      <div class="ref-box">
-        <p>Your Referral Code</p>
-        <div class="code" id="refCode">------</div>
-        <button id="shareRefBtn">Share & Earn 7 Days</button>
-        <p style="margin-top:8px; font-size:11px;">Friends referred: <b id="refCount" style="color:#22c55e;">0</b></p>
+    <div class="sidebar-header">
+      <div class="logo">K<span>U</span>M<span>G</span></div>
+    </div>
+
+    <button class="new-chat-btn" id="newChatBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Chat
+    </button>
+
+    <input class="conv-search" id="convSearch" type="text" placeholder="Search chats...">
+
+    <div id="convList"></div>
+
+    <div class="sidebar-user-mini">
+      <div class="email" id="userEmail">student@example.com</div>
+      <div class="row">
+        <span class="plan-badge free" id="planBadge">FREE</span>
+        <span class="stat-mini"><b id="pointsStat">0</b> pts</span>
+        <span class="stat-mini"><b id="streakStat">0</b> 🔥</span>
       </div>
     </div>
-    <div class="sidebar-menu">
+
+    <div class="sidebar-footer-menu">
       <button class="sidebar-btn upgrade" id="upgradeSidebarBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         Upgrade to Premium
@@ -221,12 +235,16 @@
         Study Reminder
       </button>
       <button class="sidebar-btn" id="leaderboardBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
         Leaderboard
       </button>
       <button class="sidebar-btn" id="pastPapersBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Past Papers
+      </button>
+      <button class="sidebar-btn" id="shareRefBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Invite Friends (<span id="refCount" style="color:#22c55e;">0</span>)
       </button>
       <button class="sidebar-btn" id="supportBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
@@ -236,16 +254,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
         Owner Panel
       </button>
-      <button class="sidebar-btn" id="newChatBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        New Chat
-      </button>
-      <button class="sidebar-btn" id="clearHistoryBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-        Clear History
-      </button>
-    </div>
-    <div class="sidebar-footer">
       <button class="sidebar-btn" id="logoutBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Logout
@@ -285,94 +293,13 @@
   </div>
 </div>
 
-<!-- Leaderboard -->
-<div class="modal" id="leaderboardModal">
-  <div class="modal-card">
-    <h2>Top Students</h2>
-    <p>Points earned from studying on KUMG.</p>
-    <div id="leaderboardList"></div>
-    <button class="cancel" id="closeLbBtn">Close</button>
-  </div>
-</div>
-
-<!-- Past Papers -->
-<div class="modal" id="papersModal">
-  <div class="modal-card">
-    <h2>Past Papers</h2>
-    <p>Select a paper. KUMG will guide you through it.</p>
-    <div id="papersList"></div>
-    <button class="cancel" id="closePapersBtn">Cancel</button>
-  </div>
-</div>
-
-<!-- Upgrade -->
-<div class="modal" id="upgradeModal">
-  <div class="modal-card">
-    <h2>Upgrade to Premium</h2>
-    <p>Unlimited questions, quizzes, and past papers.</p>
-    <div class="upgrade-price">$1<span>/month</span></div>
-    <ul class="upgrade-features">
-      <li>Unlimited questions per day</li>
-      <li>Unlimited Quiz generation</li>
-      <li>All Past Papers unlocked</li>
-      <li>Priority support</li>
-    </ul>
-    <button class="primary" id="startPaymentBtn">Pay with EcoCash</button>
-    <button class="cancel" id="cancelUpgrade">Maybe later</button>
-  </div>
-</div>
-
-<!-- Payment -->
-<div class="modal" id="paymentModal">
-  <div class="modal-card">
-    <h2>Pay with EcoCash</h2>
-    <p>Follow the steps below. Approval usually takes under 1 hour.</p>
-    <div class="step-box"><b>Step 1 — Send $1</b><div class="ecocash" id="ecocashDisplay">—</div><small>Use EcoCash to send exactly $1 USD to this number.</small></div>
-    <div class="step-box"><b>Step 2 — Use this reference</b><div class="ref-num" id="paymentRef">KUMG-XXXX</div><small>Add this as the payment reference/note.</small></div>
-    <div class="step-box"><b>Step 3 — Enter your EcoCash transaction ID</b><input id="txnInput" type="text" placeholder="e.g. MP240101.1234.A56789" autocomplete="off"><small>You'll find this in the EcoCash SMS.</small></div>
-    <button class="primary" id="submitPaymentBtn">Submit Payment</button>
-    <button class="cancel" id="cancelPayment">Cancel</button>
-  </div>
-</div>
-
-<!-- Owner Panel -->
-<div class="modal" id="ownerModal">
-  <div class="modal-card">
-    <h2>Owner Panel</h2>
-    <p>Pending EcoCash payments awaiting approval.</p>
-    <div id="pendingList"></div>
-    <button class="cancel" id="closeOwnerBtn">Close</button>
-  </div>
-</div>
-
-<!-- Analytics -->
-<div class="modal" id="analyticsModal">
-  <div class="modal-card">
-    <h2>My Analytics</h2>
-    <p>Your study activity on KUMG.</p>
-    <div class="analytics-grid" id="analyticsGrid"></div>
-    <button class="cancel" id="closeAnalyticsBtn">Close</button>
-  </div>
-</div>
-
-<!-- Reminder -->
-<div class="modal" id="reminderModal">
-  <div class="modal-card">
-    <h2>Study Reminder</h2>
-    <p>Get a nudge every day to keep your streak alive.</p>
-    <div class="reminder-row">
-      <span>Enable Daily Reminder</span>
-      <label class="switch"><input type="checkbox" id="reminderToggle"><span class="slider"></span></label>
-    </div>
-    <div class="reminder-row">
-      <span>Reminder Time</span>
-      <input type="time" id="reminderTime" value="18:00" style="width:130px; padding:8px; margin:0;">
-    </div>
-    <p style="font-size:11px; color:#5a7a5a; margin-top:12px;">Tip: Install KUMG to your home screen (browser menu → "Add to Home Screen") for reminders to work best.</p>
-    <button class="primary" id="saveReminderBtn">Save</button>
-    <button class="cancel" id="cancelReminderBtn">Cancel</button>
-  </div>
-</div>
+<div class="modal" id="leaderboardModal"><div class="modal-card"><h2>Top Students</h2><p>Points earned from studying on KUMG.</p><div id="leaderboardList"></div><button class="cancel" id="closeLbBtn">Close</button></div></div>
+<div class="modal" id="papersModal"><div class="modal-card"><h2>Past Papers</h2><p>Select a paper. KUMG will guide you through it.</p><div id="papersList"></div><button class="cancel" id="closePapersBtn">Cancel</button></div></div>
+<div class="modal" id="upgradeModal"><div class="modal-card"><h2>Upgrade to Premium</h2><p>Unlimited questions, quizzes, and past papers.</p><div class="upgrade-price">$1<span>/month</span></div><ul class="upgrade-features"><li>Unlimited questions per day</li><li>Unlimited Quiz generation</li><li>All Past Papers unlocked</li><li>Priority support</li></ul><button class="primary" id="startPaymentBtn">Pay with EcoCash</button><button class="cancel" id="cancelUpgrade">Maybe later</button></div></div>
+<div class="modal" id="paymentModal"><div class="modal-card"><h2>Pay with EcoCash</h2><p>Follow the steps below. Approval usually takes under 1 hour.</p><div class="step-box"><b>Step 1 — Send $1</b><div class="ecocash" id="ecocashDisplay">—</div><small>Use EcoCash to send exactly $1 USD to this number.</small></div><div class="step-box"><b>Step 2 — Use this reference</b><div class="ref-num" id="paymentRef">KUMG-XXXX</div><small>Add this as the payment reference/note.</small></div><div class="step-box"><b>Step 3 — Enter your EcoCash transaction ID</b><input id="txnInput" type="text" placeholder="e.g. MP240101.1234.A56789" autocomplete="off"><small>You'll find this in the EcoCash SMS.</small></div><button class="primary" id="submitPaymentBtn">Submit Payment</button><button class="cancel" id="cancelPayment">Cancel</button></div></div>
+<div class="modal" id="ownerModal"><div class="modal-card"><h2>Owner Panel</h2><p>Pending EcoCash payments awaiting approval.</p><div id="pendingList"></div><button class="cancel" id="closeOwnerBtn">Close</button></div></div>
+<div class="modal" id="analyticsModal"><div class="modal-card"><h2>My Analytics</h2><p>Your study activity on KUMG.</p><div class="analytics-grid" id="analyticsGrid"></div><button class="cancel" id="closeAnalyticsBtn">Close</button></div></div>
+<div class="modal" id="reminderModal"><div class="modal-card"><h2>Study Reminder</h2><p>Get a nudge every day to keep your streak alive.</p><div class="reminder-row"><span>Enable Daily Reminder</span><label class="switch"><input type="checkbox" id="reminderToggle"><span class="slider"></span></label></div><div class="reminder-row"><span>Reminder Time</span><input type="time" id="reminderTime" value="18:00" style="width:130px; padding:8px; margin:0;"></div><p style="font-size:11px; color:#5a7a5a; margin-top:12px;">Tip: Install KUMG to your home screen for reminders to work best.</p><button class="primary" id="saveReminderBtn">Save</button><button class="cancel" id="cancelReminderBtn">Cancel</button></div></div>
 
 <script>
 const SUPABASE_URL = "https://mzwfpgmgofhkjplexsam.supabase.co";
@@ -393,6 +320,8 @@ let isThink = false, isSearch = false;
 let language = "English";
 let activePaper = null;
 let pendingImage = null;
+let currentConversationId = null;
+let conversations = [];
 
 const urlParams = new URLSearchParams(window.location.search);
 const refFromUrl = urlParams.get('ref');
@@ -410,10 +339,10 @@ const pointsStat = $("pointsStat"), streakStat = $("streakStat");
 const paperBanner = $("paperBanner"), paperBannerText = $("paperBannerText");
 const paymentModal = $("paymentModal"), ownerModal = $("ownerModal");
 const imagePreviewBar = $("imagePreviewBar"), imagePreview = $("imagePreview"), imageInput = $("imageInput");
+const convList = $("convList"), convSearch = $("convSearch");
 
 let isLoginMode = true;
 
-// PWA Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js').catch(e => console.log('SW error', e));
 }
@@ -471,6 +400,104 @@ function closeSidebar(){ sidebar.classList.remove("open"); overlay.classList.rem
 menuBtn.onclick = openSidebar;
 overlay.onclick = closeSidebar;
 
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+// --- CONVERSATIONS ---
+async function loadConversations() {
+  if (!currentUser) return;
+  const { data, error } = await supabaseClient.from('conversations').select('*').order('updated_at', { ascending: false }).limit(200);
+  if (error) { console.error(error); return; }
+  conversations = data || [];
+  renderConversationList();
+}
+
+function renderConversationList() {
+  const filter = (convSearch.value || '').trim().toLowerCase();
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterdayStart = new Date(todayStart - 86400000);
+  const weekStart = new Date(todayStart - 7*86400000);
+
+  const filtered = conversations.filter(c => !filter || (c.title || '').toLowerCase().includes(filter));
+  const pinned = filtered.filter(c => c.pinned);
+  const today = filtered.filter(c => !c.pinned && new Date(c.updated_at) >= todayStart);
+  const yesterday = filtered.filter(c => !c.pinned && new Date(c.updated_at) >= yesterdayStart && new Date(c.updated_at) < todayStart);
+  const week = filtered.filter(c => !c.pinned && new Date(c.updated_at) >= weekStart && new Date(c.updated_at) < yesterdayStart);
+  const older = filtered.filter(c => !c.pinned && new Date(c.updated_at) < weekStart);
+
+  function section(label, items) {
+    if (items.length === 0) return '';
+    return `<div class="conv-section"><div class="conv-label">${label}</div>` +
+      items.map(c => `<div class="conv-item ${c.id === currentConversationId ? 'active' : ''}" data-id="${c.id}">
+        <span class="conv-title">${escapeHtml(c.title || 'Chat')}</span>
+        <button class="conv-pin ${c.pinned ? 'pinned' : ''}" data-pin="${c.id}">${c.pinned ? '★' : '☆'}</button>
+      </div>`).join('') + `</div>`;
+  }
+
+  const html = section('Pinned', pinned) + section('Today', today) + section('Yesterday', yesterday) + section('Previous 7 Days', week) + section('Older', older);
+
+  convList.innerHTML = html || '<div style="color:#4a6a4a; font-size:12px; padding:20px; text-align:center;">No chats yet.<br>Tap "New Chat" to start.</div>';
+
+  convList.querySelectorAll('.conv-item').forEach(el => {
+    el.onclick = (e) => {
+      if (e.target.classList.contains('conv-pin')) return;
+      openConversation(parseInt(el.dataset.id));
+    };
+  });
+  convList.querySelectorAll('.conv-pin').forEach(btn => {
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      const id = parseInt(btn.dataset.pin);
+      const conv = conversations.find(c => c.id === id);
+      if (!conv) return;
+      conv.pinned = !conv.pinned;
+      await supabaseClient.from('conversations').update({ pinned: conv.pinned }).eq('id', id);
+      renderConversationList();
+    };
+  });
+}
+convSearch.addEventListener('input', renderConversationList);
+
+async function openConversation(id) {
+  currentConversationId = id;
+  closeSidebar();
+  const { data, error } = await supabaseClient.from('chats').select('*').eq('conversation_id', id).order('created_at', { ascending: true });
+  chat.innerHTML = '';
+  history = [];
+  if (data) {
+    data.forEach(msg => {
+      addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot', false);
+      history.push({ role: msg.role, content: msg.content });
+    });
+  }
+  renderConversationList();
+}
+
+function newChat() {
+  currentConversationId = null;
+  chat.innerHTML = '<div class="welcome"><b>KUMG</b> New study session.</div>';
+  history = [];
+  closeSidebar();
+  renderConversationList();
+}
+$("newChatBtn").onclick = newChat;
+
+async function ensureConversation(firstMessage) {
+  if (currentConversationId) return currentConversationId;
+  const title = (firstMessage || 'Photo question').substring(0, 45);
+  const { data, error } = await supabaseClient.from('conversations').insert([{
+    user_id: currentUser.id,
+    title,
+    subject
+  }]).select().single();
+  if (error) { console.error(error); return null; }
+  currentConversationId = data.id;
+  conversations.unshift(data);
+  renderConversationList();
+  return data.id;
+}
+
+// --- PROFILE + USAGE ---
 async function loadProfile() {
   if (!currentUser) return;
   const { data, error } = await supabaseClient.from('profiles').select('*').eq('id', currentUser.id).single();
@@ -505,7 +532,6 @@ async function loadProfile() {
     Object.assign(userProfile, updates);
   }
 
-  $("refCode").textContent = userProfile.referral_code || "------";
   $("refCount").textContent = userProfile.referral_count || 0;
   if (userProfile.role === 'owner') $("ownerBtn").classList.remove("hidden");
 
@@ -538,7 +564,7 @@ function updateUsageUI() {
     const remaining = Math.max(0, FREE_DAILY_LIMIT - userProfile.questions_today);
     usageBadge.textContent = `${remaining} / ${FREE_DAILY_LIMIT} left`;
     usageBadge.classList.toggle("warning", remaining <= 3);
-    planBadge.textContent = "FREE PLAN";
+    planBadge.textContent = "FREE";
     planBadge.classList.remove("premium"); planBadge.classList.add("free");
   }
 }
@@ -552,9 +578,10 @@ supabaseClient.auth.onAuthStateChange(async (event, session) => {
     userEmail.textContent = currentUser.email;
     authScreen.classList.add("hidden"); mainApp.classList.remove("hidden");
     await loadProfile();
-    loadHistory();
+    await loadConversations();
+    newChat();
   } else {
-    currentUser = null; userProfile = null;
+    currentUser = null; userProfile = null; conversations = []; currentConversationId = null;
     authScreen.classList.remove("hidden"); mainApp.classList.add("hidden");
     chat.innerHTML = '<div class="welcome"><b>KUMG</b> Ask me anything about your school work.</div>';
     history = [];
@@ -562,14 +589,6 @@ supabaseClient.auth.onAuthStateChange(async (event, session) => {
 });
 
 $("logoutBtn").onclick = () => { closeSidebar(); supabaseClient.auth.signOut(); };
-$("newChatBtn").onclick = () => { closeSidebar(); chat.innerHTML = '<div class="welcome"><b>KUMG</b> New study session.</div>'; history = []; };
-$("clearHistoryBtn").onclick = async () => {
-  if (!currentUser) return;
-  closeSidebar();
-  await supabaseClient.from('chats').delete().eq('user_id', currentUser.id);
-  chat.innerHTML = '<div class="welcome"><b>KUMG</b> History cleared.</div>';
-  history = [];
-};
 
 $("supportBtn").onclick = () => {
   closeSidebar();
@@ -578,24 +597,13 @@ $("supportBtn").onclick = () => {
 };
 
 $("shareRefBtn").onclick = () => {
+  closeSidebar();
   const code = userProfile?.referral_code;
-  if (!code) return;
+  if (!code) return alert("Referral code is still loading...");
   const link = `${APP_URL}?ref=${code}`;
   const msg = `📚 I'm using KUMG — an AI study assistant for Zimbabwean students. Free O-Level/A-Level help.\n\nUse my link for 7 days premium FREE:\n${link}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 };
-
-async function loadHistory() {
-  if (!currentUser) return;
-  const { data, error } = await supabaseClient.from('chats').select('*').order('created_at', { ascending: true }).limit(50);
-  if (error) return console.error(error);
-  chat.innerHTML = '<div class="welcome"><b>KUMG</b> Welcome back.</div>';
-  history = [];
-  data.forEach(msg => {
-    addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot', false);
-    history.push({ role: msg.role, content: msg.content });
-  });
-}
 
 function addMsg(text, who, addShare = true, imageData = null) {
   const d = document.createElement("div");
@@ -629,8 +637,9 @@ function shareToWhatsApp(text) {
 }
 
 async function saveMsg(content, role) {
-  if (!currentUser) return;
-  await supabaseClient.from('chats').insert([{ user_id: currentUser.id, content, role, subject }]);
+  if (!currentUser || !currentConversationId) return;
+  await supabaseClient.from('chats').insert([{ user_id: currentUser.id, conversation_id: currentConversationId, content, role, subject }]);
+  await supabaseClient.from('conversations').update({ updated_at: new Date().toISOString() }).eq('id', currentConversationId);
 }
 
 $("cameraBtn").onclick = () => imageInput.click();
@@ -658,9 +667,13 @@ async function ask() {
   const isPremium = userProfile && (userProfile.subscription === 'premium' || userProfile.subscription === 'school');
   if (!isPremium && userProfile && userProfile.questions_today >= FREE_DAILY_LIMIT) { showUpgrade(); return; }
 
+  await ensureConversation(q);
+  if (!currentConversationId) return alert("Could not create chat. Try again.");
+
   const imageToSend = pendingImage;
   addMsg(q || "[Photo]", "user", true, imageToSend);
-  if (q) saveMsg(q, "user"); else saveMsg("[Photo uploaded]", "user");
+  await saveMsg(q || "[Photo uploaded]", "user");
+
   questionEl.value = "";
   pendingImage = null; imageInput.value = "";
   imagePreviewBar.classList.remove("show");
@@ -693,12 +706,13 @@ async function ask() {
     if (!res.ok) throw new Error(data.error || "Request failed");
     loader.textContent = data.answer;
     history.push({ role: "assistant", content: data.answer });
-    saveMsg(data.answer, "assistant");
+    await saveMsg(data.answer, "assistant");
     const row = document.createElement("div");
     row.className = "share-row";
     row.innerHTML = `<button class="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>`;
     row.querySelector('.share-btn').onclick = () => shareToWhatsApp(data.answer);
     chat.appendChild(row);
+    loadConversations();
   } catch (e) { loader.textContent = "Error: " + e.message; }
 
   sendBtn.disabled = false;
@@ -707,6 +721,7 @@ async function ask() {
 
 $("quizBtn").onclick = async () => {
   if (history.length === 0) return alert("Ask a question first so KUMG can build a quiz!");
+  await ensureConversation("Quiz session");
   sendBtn.disabled = true;
   const loader = addMsg("Generating quiz...", "bot", false);
   loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
@@ -715,7 +730,9 @@ $("quizBtn").onclick = async () => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Request failed");
     loader.textContent = data.answer;
+    await saveMsg(data.answer, "assistant");
     awardPoints(50);
+    loadConversations();
   } catch (e) { loader.textContent = "Error: " + e.message; }
   sendBtn.disabled = false;
   chat.scrollTop = chat.scrollHeight;
@@ -759,8 +776,7 @@ $("pastPapersBtn").onclick = async () => {
       paperBanner.classList.add("show");
       paperBannerText.textContent = "Studying: " + paper.title;
       $("papersModal").classList.remove("show");
-      chat.innerHTML = '<div class="welcome"><b>KUMG</b> Past paper loaded. Ask about any question.</div>';
-      history = [];
+      newChat();
     };
   });
 };
@@ -827,9 +843,9 @@ $("analyticsBtn").onclick = async () => {
   grid.innerHTML = `
     <div class="analytics-card"><b>${data.total_questions}</b><span>Total Questions</span></div>
     <div class="analytics-card"><b>${data.this_month}</b><span>This Month</span></div>
-    <div class="analytics-card"><b>${data.total_quizzes}</b><span>Quizzes Generated</span></div>
+    <div class="analytics-card"><b>${data.total_quizzes}</b><span>Quizzes</span></div>
     <div class="analytics-card"><b style="font-size:14px;">${data.top_subject}</b><span>Top Subject</span></div>
-    <div class="analytics-card" style="grid-column: span 2;"><b style="font-size:14px;">${data.weakest_subject}</b><span>Weakest Subject — Ask more questions here</span></div>
+    <div class="analytics-card" style="grid-column: span 2;"><b style="font-size:14px;">${data.weakest_subject}</b><span>Weakest — Ask more here</span></div>
   `;
 };
 $("closeAnalyticsBtn").onclick = () => $("analyticsModal").classList.remove("show");
@@ -844,15 +860,10 @@ $("cancelReminderBtn").onclick = () => $("reminderModal").classList.remove("show
 $("saveReminderBtn").onclick = async () => {
   const enabled = $("reminderToggle").checked;
   const time = $("reminderTime").value || "18:00";
-
   if (enabled && 'Notification' in window) {
     const perm = await Notification.requestPermission();
-    if (perm !== 'granted') {
-      alert("Please allow notifications in your browser settings to use reminders.");
-      return;
-    }
+    if (perm !== 'granted') { alert("Please allow notifications."); return; }
   }
-
   await supabaseClient.from('profiles').update({ reminder_enabled: enabled, reminder_time: time }).eq('id', currentUser.id);
   userProfile.reminder_enabled = enabled;
   userProfile.reminder_time = time;
@@ -870,13 +881,8 @@ function checkReminder() {
   const today = now.toISOString().split('T')[0];
   const alreadyShown = localStorage.getItem('kumg_reminder_shown') === today;
   const studiedToday = userProfile.last_active_date === today && userProfile.questions_today > 0;
-
   if (!alreadyShown && nowMinutes >= reminderMinutes && !studiedToday) {
-    new Notification("KUMG — Time to Study!", {
-      body: "Keep your streak alive. Ask KUMG one question today.",
-      icon: "icon-192.png",
-      badge: "icon-192.png"
-    });
+    new Notification("KUMG — Time to Study!", { body: "Keep your streak alive.", icon: "icon-192.png" });
     localStorage.setItem('kumg_reminder_shown', today);
   }
 }
