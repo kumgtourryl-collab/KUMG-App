@@ -4,7 +4,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '15mb' }));
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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";
 const VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
 const TEXT_MODEL = "openai/gpt-oss-120b";
 
