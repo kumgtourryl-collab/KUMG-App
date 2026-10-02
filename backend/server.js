@@ -58,10 +58,6 @@ FORMAT YOUR RESPONSES USING MARKDOWN — THIS IS CRITICAL:
 
 4. CODE
    - Use triple backticks with the language tag for code blocks.
-   - Example:
-     \`\`\`python
-     print("Hello")
-     \`\`\`
    - Use \`inline code\` for short technical terms.
 
 5. DIAGRAMS
@@ -83,7 +79,7 @@ FORMAT YOUR RESPONSES USING MARKDOWN — THIS IS CRITICAL:
 
 6. IMAGES
    - You may include image URLs using markdown: ![description](url)
-   - Only use well-known stable sources (Wikipedia, Unsplash) and only when the image is genuinely helpful.
+   - Only use well-known stable sources and only when genuinely helpful.
 
 7. FORMATTING RULES
    - Never dump a wall of text. Break everything into sections.
@@ -116,11 +112,29 @@ RULES ABOUT KUMG:
   return system;
 }
 
+// --- MAIN ASK ENDPOINT ---
 app.post('/api/ask', async (req, res) => {
-  const { question, subject, history, think, search, language, paperContext, image } = req.body;
-  if (!question && !image) return res.status(400).json({ error: 'Question or image required' });
+  const { question, subject, history, think, search, language, paperContext, image, continue: isContinue } = req.body;
+  if (!question && !image && !isContinue) return res.status(400).json({ error: 'Question or image required' });
 
-  const system = buildSystemPrompt(subject, language, think, search, paperContext);
+  let system;
+  if (isContinue) {
+    system = `You are KUMG. Continue your previous answer.
+
+STRICT RULES:
+- Do NOT repeat what you already said.
+- Do NOT add a greeting, intro, or "continuing from..." phrase.
+- Do NOT summarise what came before.
+- Just continue exactly where you left off, as if the reader is reading the same text.
+- Maintain the same markdown formatting, tone, and style as the previous answer.
+- If the previous answer ended with practice questions, skip re-doing them and add more depth instead.
+
+ABOUT KUMG (only mention when directly asked): Founder Kerryl U Murwisi, created in Zimbabwe.`;
+    if (language === 'Shona') system += `\n\nRespond in Shona.`;
+    else if (language === 'Ndebele') system += `\n\nRespond in Ndebele.`;
+  } else {
+    system = buildSystemPrompt(subject, language, think, search, paperContext);
+  }
 
   let model = TEXT_MODEL;
   let messages = [];
@@ -141,7 +155,7 @@ app.post('/api/ask', async (req, res) => {
     messages = [
       { role: 'system', content: system },
       ...(history || []).slice(-6),
-      { role: 'user', content: question }
+      { role: 'user', content: isContinue ? 'continue' : question }
     ];
   }
 
@@ -159,14 +173,28 @@ app.post('/api/ask', async (req, res) => {
   }
 });
 
+// --- QUIZ ENDPOINT ---
 app.post('/api/quiz', async (req, res) => {
   const { subject, history, language } = req.body;
   let system = `You are KUMG. Generate a 5-question multiple choice quiz based on the recent chat history for subject: ${subject}.
 
-FORMAT: Use markdown. Number questions (1., 2., ...). List options as A) B) C) D). Put the answer key at the end under "### Answer Key".`;
+FORMAT (use markdown):
+- Use a heading: ### Quiz
+- Number each question: **1.**, **2.**, etc.
+- List options as A) B) C) D) on separate lines.
+- After all questions, add a heading: ### Answer Key
+- List correct answers under it.
+
+Rules:
+- Base every question on the topic discussed in the chat history.
+- Make 3 of the questions medium difficulty, 2 harder.
+- Avoid trick questions.`;
+
   if (language === 'Shona') system += `\nRespond in Shona.`;
-  if (language === 'Ndebele') system += `\nRespond in Ndebele.`;
+  else if (language === 'Ndebele') system += `\nRespond in Ndebele.`;
+
   const messages = [{ role: 'system', content: system }, ...(history || []).slice(-6)];
+
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -181,6 +209,6 @@ FORMAT: Use markdown. Number questions (1., 2., ...). List options as A) B) C) D
   }
 });
 
-app.get('/', (req, res) => res.send('KUMG backend v5 is running.'));
+app.get('/', (req, res) => res.send('KUMG backend v6 is running.'));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server on port ${PORT}`));
