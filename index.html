@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a0f0a">
 <title>KUMG</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KUMG">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -13,7 +17,7 @@
   #authScreen { position: fixed; inset: 0; background: #070a07; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; z-index: 30; }
   .auth-logo { font-size: 32px; font-weight: 800; letter-spacing: 6px; color: #22c55e; margin-bottom: 8px; }
   .auth-logo span { color: #d6e8d6; }
-  .auth-subtitle { color: #5a7a5a; font-size: 14px; margin-bottom: 40px; }
+  .auth-subtitle { color: #5a7a5a; font-size: 14px; margin-bottom: 40px; text-align: center; }
   .auth-card { width: 100%; max-width: 380px; background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px; padding: 28px; }
   .auth-card h2 { margin: 0 0 20px; color: #d6e8d6; font-size: 20px; text-align: center; }
   .auth-card input { width: 100%; background: #070a07; border: 1px solid #14301a; border-radius: 10px; padding: 14px; color: #d6e8d6; font-size: 15px; margin-bottom: 14px; outline: none; }
@@ -21,10 +25,12 @@
   .auth-card button { width: 100%; padding: 14px; border-radius: 10px; border: none; background: #22c55e; color: #061006; font-weight: 700; font-size: 15px; cursor: pointer; }
   .auth-toggle { display: block; text-align: center; color: #22c55e; font-size: 13px; margin-top: 16px; cursor: pointer; text-decoration: underline; }
   .auth-message { text-align: center; font-size: 13px; margin-top: 12px; min-height: 18px; }
+  #refBanner { display: none; padding: 8px 12px; background: #14532d; border-bottom: 1px solid #22c55e; color: #22c55e; font-size: 12px; text-align: center; }
+  #refBanner.show { display: block; }
   #mainApp { display: flex; flex-direction: column; height: 100dvh; }
   header { padding: 10px 12px; background: #0a0f0a; border-bottom: 1px solid #14301a; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 8px; }
   .header-left { display: flex; align-items: center; gap: 10px; }
-  #menuBtn { background: none; border: none; color: #7a9a7a; cursor: pointer; padding: 4px; display: flex; align-items: center; }
+  #menuBtn { background: none; border: none; color: #7a9a7a; cursor: pointer; padding: 4px; }
   .logo { font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #22c55e; }
   .logo span { color: #d6e8d6; }
   .header-right { display: flex; align-items: center; gap: 6px; }
@@ -35,7 +41,7 @@
   #usageBadge.warning { color: #f59e0b; border-color: #f59e0b; }
   #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; z-index: 15; backdrop-filter: blur(2px); }
   #overlay.show { display: block; }
-  #sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0a0f0a; border-right: 1px solid #14301a; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 20; display: flex; flex-direction: column; overflow-y: auto; }
+  #sidebar { position: fixed; top: 0; left: -290px; width: 290px; height: 100%; background: #0a0f0a; border-right: 1px solid #14301a; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 20; display: flex; flex-direction: column; overflow-y: auto; }
   #sidebar.open { left: 0; }
   .sidebar-header { padding: 20px 16px; border-bottom: 1px solid #14301a; }
   .sidebar-user { padding: 16px; border-bottom: 1px solid #14301a; }
@@ -48,6 +54,10 @@
   .stat { flex: 1; background: #0d1a0d; border: 1px solid #14301a; border-radius: 10px; padding: 8px; text-align: center; }
   .stat b { display: block; color: #22c55e; font-size: 18px; }
   .stat span { color: #5a7a5a; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .ref-box { background: #0d1a0d; border: 1px dashed #22c55e; border-radius: 10px; padding: 12px; margin-top: 12px; text-align: center; }
+  .ref-box p { margin: 0 0 6px; color: #5a7a5a; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .ref-box .code { font-size: 22px; font-weight: 800; letter-spacing: 3px; color: #22c55e; margin: 6px 0; }
+  .ref-box button { background: #22c55e; border: none; color: #061006; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 8px; cursor: pointer; margin-top: 4px; }
   .sidebar-menu { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
   .sidebar-btn { display: flex; align-items: center; gap: 12px; padding: 12px; background: transparent; border: 1px solid transparent; border-radius: 10px; color: #d6e8d6; font-size: 14px; cursor: pointer; text-align: left; width: 100%; }
   .sidebar-btn:hover, .sidebar-btn:active { background: #14532d; border-color: #14301a; }
@@ -62,10 +72,15 @@
   #paperBanner { display: none; padding: 8px 12px; background: #14301a; border-bottom: 1px solid #22c55e; color: #22c55e; font-size: 12px; align-items: center; justify-content: space-between; flex-shrink: 0; }
   #paperBanner.show { display: flex; }
   #paperBanner button { background: none; border: none; color: #ef4444; font-size: 12px; cursor: pointer; font-weight: 700; }
+  #imagePreviewBar { display: none; padding: 8px 12px; background: #0a0f0a; border-bottom: 1px solid #14301a; align-items: center; gap: 10px; flex-shrink: 0; }
+  #imagePreviewBar.show { display: flex; }
+  #imagePreviewBar img { max-height: 60px; border-radius: 8px; border: 1px solid #14301a; }
+  #imagePreviewBar button { background: none; border: 1px solid #ef4444; color: #ef4444; font-size: 12px; padding: 4px 10px; border-radius: 8px; cursor: pointer; margin-left: auto; }
   #chat { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
   .msg { max-width: 88%; padding: 12px 16px; border-radius: 14px; font-size: 15px; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .user { align-self: flex-end; background: #14532d; color: #e8f5e8; border-bottom-right-radius: 4px; }
+  .user img { max-width: 100%; border-radius: 8px; margin-bottom: 6px; display: block; }
   .bot { align-self: flex-start; background: #0d1a0d; border: 1px solid #14301a; color: #c8dcc8; border-bottom-left-radius: 4px; }
   .share-row { align-self: flex-start; margin-top: -8px; margin-left: 4px; }
   .share-btn { background: transparent; border: 1px solid #14301a; color: #7a9a7a; font-size: 11px; padding: 4px 10px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
@@ -76,20 +91,30 @@
   #question { width: 100%; background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px; padding: 12px 16px; color: #d6e8d6; font-size: 16px; outline: none; }
   #question:focus { border-color: #22c55e; }
   #inputBottom { display: flex; align-items: center; justify-content: space-between; }
+  .left-actions { display: flex; gap: 5px; align-items: center; }
   .chip-action { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 16px; border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 12px; cursor: pointer; }
   .chip-action.active { background: #14532d; border-color: #22c55e; color: #d6e8d6; }
   .chip-action svg { width: 13px; height: 13px; }
-  #sendBtn { background: #22c55e; border: none; border-radius: 50%; width: 42px; height: 42px; color: #061006; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .icon-btn { background: transparent; border: 1px solid #14301a; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #7a9a7a; cursor: pointer; padding: 0; }
+  .right-actions { display: flex; gap: 6px; align-items: center; }
+  #sendBtn { background: #22c55e; border: none; border-radius: 50%; width: 42px; height: 42px; color: #061006; display: flex; align-items: center; justify-content: center; cursor: pointer; }
   #sendBtn:disabled { background: #14532d; color: #3a5a3a; }
   .spinner { animation: spin 1s linear infinite; }
   @keyframes spin { 100% { transform: rotate(360deg); } }
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 40; backdrop-filter: blur(4px); }
   .modal.show { display: flex; }
-  .modal-card { background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px; padding: 22px; width: 100%; max-width: 420px; max-height: 80vh; overflow-y: auto; }
+  .modal-card { background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px; padding: 22px; width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto; }
   .modal-card h2 { color: #22c55e; font-size: 18px; margin: 0 0 8px; letter-spacing: 1px; }
-  .modal-card p { color: #7a9a7a; font-size: 13px; margin: 0 0 16px; }
-  .modal-card button { width: 100%; padding: 12px; border-radius: 10px; border: none; background: #22c55e; color: #061006; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px; }
-  .modal-card button.cancel { background: transparent; color: #7a9a7a; border: 1px solid #14301a; }
+  .modal-card p { color: #7a9a7a; font-size: 13px; margin: 0 0 16px; line-height: 1.5; }
+  .modal-card input { width: 100%; background: #070a07; border: 1px solid #14301a; border-radius: 10px; padding: 12px; color: #d6e8d6; font-size: 15px; margin-bottom: 12px; outline: none; }
+  .modal-card input:focus { border-color: #22c55e; }
+  .modal-card button.primary { width: 100%; padding: 13px; border-radius: 10px; border: none; background: #22c55e; color: #061006; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px; }
+  .modal-card button.cancel { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 14px; cursor: pointer; margin-top: 8px; }
+  .step-box { background: #070a07; border: 1px solid #14301a; border-radius: 12px; padding: 14px; margin: 10px 0; }
+  .step-box b { color: #22c55e; display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .step-box .ecocash { font-size: 20px; font-weight: 800; color: #d6e8d6; letter-spacing: 1px; }
+  .step-box .ref-num { font-size: 16px; font-weight: 800; color: #f59e0b; letter-spacing: 2px; margin-top: 4px; }
+  .step-box small { color: #5a7a5a; font-size: 11px; display: block; margin-top: 6px; }
   .lb-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: #070a07; margin-bottom: 6px; }
   .lb-row.me { background: #14532d; border: 1px solid #22c55e; }
   .lb-rank { color: #5a7a5a; font-weight: 700; width: 30px; font-size: 13px; }
@@ -100,14 +125,31 @@
   .paper-item:active { border-color: #22c55e; }
   .paper-item h3 { margin: 0 0 4px; color: #d6e8d6; font-size: 14px; }
   .paper-item p { margin: 0; color: #5a7a5a; font-size: 12px; }
-  .upgrade-card { background: linear-gradient(160deg, #0d1a0d, #0a0f0a); border: 1px solid #22c55e; border-radius: 20px; padding: 28px; width: 100%; max-width: 400px; text-align: center; }
-  .upgrade-card h2 { color: #22c55e; font-size: 22px; margin: 0 0 8px; letter-spacing: 2px; }
-  .upgrade-card p { color: #7a9a7a; font-size: 14px; margin: 0 0 20px; }
-  .upgrade-price { font-size: 42px; color: #d6e8d6; font-weight: 800; margin: 20px 0; }
+  .upgrade-price { font-size: 42px; color: #d6e8d6; font-weight: 800; margin: 20px 0; text-align: center; }
   .upgrade-price span { font-size: 16px; color: #7a9a7a; font-weight: 400; }
-  .upgrade-features { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .upgrade-features { text-align: left; margin: 16px 0; padding: 0; list-style: none; }
   .upgrade-features li { color: #c8dcc8; font-size: 14px; padding: 6px 0; }
   .upgrade-features li::before { content: "✓"; color: #22c55e; font-weight: 700; margin-right: 10px; }
+  .pending-row { background: #070a07; border: 1px solid #14301a; border-radius: 10px; padding: 10px; margin-bottom: 8px; font-size: 12px; }
+  .pending-row .u { color: #d6e8d6; font-weight: 700; }
+  .pending-row .r { color: #f59e0b; font-family: monospace; margin: 4px 0; }
+  .pending-row .actions { display: flex; gap: 6px; margin-top: 8px; }
+  .pending-row .actions button { flex: 1; padding: 6px; border-radius: 6px; border: none; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .pending-row .actions .approve { background: #22c55e; color: #061006; }
+  .pending-row .actions .reject { background: transparent; color: #ef4444; border: 1px solid #ef4444; }
+  .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+  .analytics-card { background: #070a07; border: 1px solid #14301a; border-radius: 12px; padding: 14px; text-align: center; }
+  .analytics-card b { display: block; color: #22c55e; font-size: 22px; font-weight: 800; }
+  .analytics-card span { color: #5a7a5a; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .reminder-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #14301a; }
+  .reminder-row:last-child { border-bottom: none; }
+  .reminder-row span { color: #d6e8d6; font-size: 14px; }
+  .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; inset: 0; background: #14301a; transition: .3s; border-radius: 24px; }
+  .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #5a7a5a; transition: .3s; border-radius: 50%; }
+  input:checked + .slider { background: #22c55e; }
+  input:checked + .slider:before { transform: translateX(20px); background: #061006; }
 </style>
 </head>
 <body>
@@ -145,6 +187,8 @@
     </div>
   </header>
 
+  <div id="refBanner">You were invited! Sign up to unlock <b>7 days free premium</b>.</div>
+
   <div id="overlay"></div>
   <div id="sidebar">
     <div class="sidebar-header"><div class="logo">K<span>U</span>M<span>G</span></div></div>
@@ -154,13 +198,27 @@
       <span class="plan-badge free" id="planBadge">FREE PLAN</span>
       <div class="stats-row">
         <div class="stat"><b id="pointsStat">0</b><span>Points</span></div>
-        <div class="stat"><b id="streakStat">0</b><span>Day Streak</span></div>
+        <div class="stat"><b id="streakStat">0</b><span>Streak</span></div>
+      </div>
+      <div class="ref-box">
+        <p>Your Referral Code</p>
+        <div class="code" id="refCode">------</div>
+        <button id="shareRefBtn">Share & Earn 7 Days</button>
+        <p style="margin-top:8px; font-size:11px;">Friends referred: <b id="refCount" style="color:#22c55e;">0</b></p>
       </div>
     </div>
     <div class="sidebar-menu">
       <button class="sidebar-btn upgrade" id="upgradeSidebarBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         Upgrade to Premium
+      </button>
+      <button class="sidebar-btn" id="analyticsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        My Analytics
+      </button>
+      <button class="sidebar-btn" id="reminderBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        Study Reminder
       </button>
       <button class="sidebar-btn" id="leaderboardBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
@@ -169,6 +227,10 @@
       <button class="sidebar-btn" id="pastPapersBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Past Papers
+      </button>
+      <button class="sidebar-btn hidden" id="ownerBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+        Owner Panel
       </button>
       <button class="sidebar-btn" id="newChatBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -181,7 +243,7 @@
     </div>
     <div class="sidebar-footer">
       <button class="sidebar-btn" id="logoutBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Logout
       </button>
     </div>
@@ -192,6 +254,10 @@
     <span id="paperBannerText">Studying: —</span>
     <button id="exitPaperBtn">EXIT</button>
   </div>
+  <div id="imagePreviewBar">
+    <img id="imagePreview" src="" alt="">
+    <button id="removeImageBtn">Remove</button>
+  </div>
   <div id="chat">
     <div class="welcome"><b>KUMG</b> Ask me anything about your school work.</div>
   </div>
@@ -199,17 +265,23 @@
   <div id="inputBar">
     <input id="question" type="text" placeholder="Ask a question..." autocomplete="off">
     <div id="inputBottom">
-      <div style="display:flex; gap:5px;">
+      <div class="left-actions">
         <button class="chip-action" id="thinkBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 10v2m0-10a4 4 0 0 0-4 4c0 1.95 1.4 3.58 3.25 3.93L12 10v2m0 0v10m-4-8h8"/></svg> Think</button>
         <button class="chip-action" id="searchBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> Search</button>
         <button class="chip-action" id="quizBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Quiz</button>
       </div>
-      <button id="sendBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
+      <div class="right-actions">
+        <input type="file" id="imageInput" accept="image/*" capture="environment" style="display:none;">
+        <button class="icon-btn" id="cameraBtn" aria-label="Photo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+        <button id="sendBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Leaderboard Modal -->
+<!-- Leaderboard -->
 <div class="modal" id="leaderboardModal">
   <div class="modal-card">
     <h2>Top Students</h2>
@@ -219,7 +291,7 @@
   </div>
 </div>
 
-<!-- Past Papers Modal -->
+<!-- Past Papers -->
 <div class="modal" id="papersModal">
   <div class="modal-card">
     <h2>Past Papers</h2>
@@ -229,11 +301,11 @@
   </div>
 </div>
 
-<!-- Upgrade Modal -->
+<!-- Upgrade -->
 <div class="modal" id="upgradeModal">
-  <div class="upgrade-card">
-    <h2>GO PREMIUM</h2>
-    <p>Unlimited studying. Ace your exams.</p>
+  <div class="modal-card">
+    <h2>Upgrade to Premium</h2>
+    <p>Unlimited questions, quizzes, and past papers.</p>
     <div class="upgrade-price">$1<span>/month</span></div>
     <ul class="upgrade-features">
       <li>Unlimited questions per day</li>
@@ -241,8 +313,60 @@
       <li>All Past Papers unlocked</li>
       <li>Priority support</li>
     </ul>
-    <button id="payBtn">Pay with EcoCash</button>
-    <button class="cancel" id="cancelUpgrade" style="background:transparent; color:#7a9a7a; border:1px solid #14301a;">Maybe later</button>
+    <button class="primary" id="startPaymentBtn">Pay with EcoCash</button>
+    <button class="cancel" id="cancelUpgrade">Maybe later</button>
+  </div>
+</div>
+
+<!-- Payment -->
+<div class="modal" id="paymentModal">
+  <div class="modal-card">
+    <h2>Pay with EcoCash</h2>
+    <p>Follow the steps below. Approval usually takes under 1 hour.</p>
+    <div class="step-box"><b>Step 1 — Send $1</b><div class="ecocash" id="ecocashDisplay">—</div><small>Use EcoCash to send exactly $1 USD to this number.</small></div>
+    <div class="step-box"><b>Step 2 — Use this reference</b><div class="ref-num" id="paymentRef">KUMG-XXXX</div><small>Add this as the payment reference/note.</small></div>
+    <div class="step-box"><b>Step 3 — Enter your EcoCash transaction ID</b><input id="txnInput" type="text" placeholder="e.g. MP240101.1234.A56789" autocomplete="off"><small>You'll find this in the EcoCash SMS.</small></div>
+    <button class="primary" id="submitPaymentBtn">Submit Payment</button>
+    <button class="cancel" id="cancelPayment">Cancel</button>
+  </div>
+</div>
+
+<!-- Owner Panel -->
+<div class="modal" id="ownerModal">
+  <div class="modal-card">
+    <h2>Owner Panel</h2>
+    <p>Pending EcoCash payments awaiting approval.</p>
+    <div id="pendingList"></div>
+    <button class="cancel" id="closeOwnerBtn">Close</button>
+  </div>
+</div>
+
+<!-- Analytics -->
+<div class="modal" id="analyticsModal">
+  <div class="modal-card">
+    <h2>My Analytics</h2>
+    <p>Your study activity on KUMG.</p>
+    <div class="analytics-grid" id="analyticsGrid"></div>
+    <button class="cancel" id="closeAnalyticsBtn">Close</button>
+  </div>
+</div>
+
+<!-- Reminder -->
+<div class="modal" id="reminderModal">
+  <div class="modal-card">
+    <h2>Study Reminder</h2>
+    <p>Get a nudge every day to keep your streak alive.</p>
+    <div class="reminder-row">
+      <span>Enable Daily Reminder</span>
+      <label class="switch"><input type="checkbox" id="reminderToggle"><span class="slider"></span></label>
+    </div>
+    <div class="reminder-row">
+      <span>Reminder Time</span>
+      <input type="time" id="reminderTime" value="18:00" style="width:130px; padding:8px; margin:0;">
+    </div>
+    <p style="font-size:11px; color:#5a7a5a; margin-top:12px;">Tip: Install KUMG to your home screen (browser menu → "Add to Home Screen") for reminders to work best.</p>
+    <button class="primary" id="saveReminderBtn">Save</button>
+    <button class="cancel" id="cancelReminderBtn">Cancel</button>
   </div>
 </div>
 
@@ -251,8 +375,8 @@ const SUPABASE_URL = "https://mzwfpgmgofhkjplexsam.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_8xuNROZulsGa7GL94cSAGA_D04QsR2Y";
 const BACKEND_URL = "https://kumg-app.onrender.com";
 const FREE_DAILY_LIMIT = 10;
-const WHATSAPP_NUMBER = "263771234567";
-const SHARE_URL = "https://ngtourryl-collab.github.io/kumg/";
+const ECOCASH_NUMBER = "0771234567";
+const APP_URL = "https://ngtourryl-collab.github.io/kumg/";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -260,10 +384,14 @@ let currentUser = null;
 let userProfile = null;
 let subject = "General";
 let history = [];
-let isThink = false;
-let isSearch = false;
+let isThink = false, isSearch = false;
 let language = "English";
 let activePaper = null;
+let pendingImage = null;
+
+const urlParams = new URLSearchParams(window.location.search);
+const refFromUrl = urlParams.get('ref');
+if (refFromUrl) { localStorage.setItem('kumg_ref', refFromUrl); document.getElementById('refBanner').classList.add('show'); }
 
 const $ = id => document.getElementById(id);
 const chat = $("chat"), questionEl = $("question"), sendBtn = $("sendBtn");
@@ -275,8 +403,15 @@ const menuBtn = $("menuBtn"), userEmail = $("userEmail"), planBadge = $("planBad
 const usageBadge = $("usageBadge"), upgradeModal = $("upgradeModal");
 const pointsStat = $("pointsStat"), streakStat = $("streakStat");
 const paperBanner = $("paperBanner"), paperBannerText = $("paperBannerText");
+const paymentModal = $("paymentModal"), ownerModal = $("ownerModal");
+const imagePreviewBar = $("imagePreviewBar"), imagePreview = $("imagePreview"), imageInput = $("imageInput");
 
 let isLoginMode = true;
+
+// PWA Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js').catch(e => console.log('SW error', e));
+}
 
 ["General","Maths","Biology","Chemistry","Physics","English","History","Geography","Accounts"].forEach((s,i)=>{
   const b = document.createElement("button");
@@ -286,7 +421,6 @@ let isLoginMode = true;
   subjectsEl.appendChild(b);
 });
 
-// Language toggle
 document.querySelectorAll(".lang-btn").forEach(btn => {
   btn.onclick = () => {
     language = btn.dataset.lang;
@@ -296,7 +430,6 @@ document.querySelectorAll(".lang-btn").forEach(btn => {
   };
 });
 
-// Auth
 toggleAuth.onclick = () => {
   isLoginMode = !isLoginMode;
   authTitle.textContent = isLoginMode ? "Welcome Back" : "Create Account";
@@ -308,25 +441,24 @@ toggleAuth.onclick = () => {
 authSubmit.onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
-  authMessage.textContent = "";
-  authMessage.style.color = "#22c55e";
+  authMessage.textContent = ""; authMessage.style.color = "#22c55e";
   if (!email || !password) { authMessage.textContent = "Enter email and password."; authMessage.style.color = "#ef4444"; return; }
   if (password.length < 6) { authMessage.textContent = "Password must be 6+ characters."; authMessage.style.color = "#ef4444"; return; }
-  authSubmit.disabled = true;
-  authSubmit.textContent = "Please wait...";
+  authSubmit.disabled = true; authSubmit.textContent = "Please wait...";
   try {
     if (isLoginMode) {
       const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
       if (error) { authMessage.textContent = error.message; authMessage.style.color = "#ef4444"; }
     } else {
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      const refCode = localStorage.getItem('kumg_ref');
+      const metadata = refCode ? { referred_by_code: refCode } : {};
+      const { data, error } = await supabaseClient.auth.signUp({ email, password, options: { data: metadata } });
       if (error) { authMessage.textContent = error.message; authMessage.style.color = "#ef4444"; }
-      else if (data.session) authMessage.textContent = "Account created!";
+      else if (data.session) { authMessage.textContent = refCode ? "Signed up! 7 days free premium 🎉" : "Account created!"; localStorage.removeItem('kumg_ref'); }
       else authMessage.textContent = "Check your email to confirm.";
     }
   } catch (err) { authMessage.textContent = err.message; authMessage.style.color = "#ef4444"; }
-  authSubmit.disabled = false;
-  authSubmit.textContent = isLoginMode ? "Login" : "Sign Up";
+  authSubmit.disabled = false; authSubmit.textContent = isLoginMode ? "Login" : "Sign Up";
 };
 
 function openSidebar(){ sidebar.classList.add("open"); overlay.classList.add("show"); }
@@ -334,12 +466,18 @@ function closeSidebar(){ sidebar.classList.remove("open"); overlay.classList.rem
 menuBtn.onclick = openSidebar;
 overlay.onclick = closeSidebar;
 
-// Profile + streak logic
 async function loadProfile() {
   if (!currentUser) return;
   const { data, error } = await supabaseClient.from('profiles').select('*').eq('id', currentUser.id).single();
   if (error) { console.error(error); return; }
   userProfile = data;
+
+  if (userProfile.premium_until && new Date(userProfile.premium_until) < new Date()) {
+    if (userProfile.subscription === 'premium' && userProfile.role !== 'owner') {
+      await supabaseClient.from('profiles').update({ subscription: 'free' }).eq('id', currentUser.id);
+      userProfile.subscription = 'free';
+    }
+  }
 
   if (userProfile.preferred_language) {
     language = userProfile.preferred_language;
@@ -348,31 +486,27 @@ async function loadProfile() {
 
   const today = new Date().toISOString().split('T')[0];
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-
   let updates = {};
-
-  // Reset daily question counter
-  if (userProfile.last_reset_date !== today) {
-    updates.questions_today = 0;
-    updates.last_reset_date = today;
-  }
-
-  // Streak logic — only once per day
+  if (userProfile.last_reset_date !== today) { updates.questions_today = 0; updates.last_reset_date = today; }
   if (userProfile.last_active_date !== today) {
     let newStreak = 1;
     if (userProfile.last_active_date === yesterday) newStreak = (userProfile.streak_days || 0) + 1;
     updates.streak_days = newStreak;
-    updates.points = (userProfile.points || 0) + 5; // daily login bonus
+    updates.points = (userProfile.points || 0) + 5;
     updates.last_active_date = today;
   }
-
   if (Object.keys(updates).length > 0) {
     await supabaseClient.from('profiles').update(updates).eq('id', currentUser.id);
     Object.assign(userProfile, updates);
   }
 
+  $("refCode").textContent = userProfile.referral_code || "------";
+  $("refCount").textContent = userProfile.referral_count || 0;
+  if (userProfile.role === 'owner') $("ownerBtn").classList.remove("hidden");
+
   updateUsageUI();
   updateStatsUI();
+  checkReminder();
 }
 
 function updateStatsUI() {
@@ -392,39 +526,31 @@ function updateUsageUI() {
   if (!userProfile) return;
   const isPremium = userProfile.subscription === 'premium' || userProfile.subscription === 'school';
   if (isPremium) {
-    usageBadge.textContent = "∞ PREMIUM";
-    usageBadge.classList.remove("warning");
-    planBadge.textContent = "PREMIUM";
+    usageBadge.textContent = "∞ PREMIUM"; usageBadge.classList.remove("warning");
+    planBadge.textContent = userProfile.role === 'owner' ? "OWNER" : "PREMIUM";
     planBadge.classList.remove("free"); planBadge.classList.add("premium");
   } else {
     const remaining = Math.max(0, FREE_DAILY_LIMIT - userProfile.questions_today);
     usageBadge.textContent = `${remaining} / ${FREE_DAILY_LIMIT} left`;
     usageBadge.classList.toggle("warning", remaining <= 3);
     planBadge.textContent = "FREE PLAN";
+    planBadge.classList.remove("premium"); planBadge.classList.add("free");
   }
 }
 
 function showUpgrade(){ upgradeModal.classList.add("show"); }
 function hideUpgrade(){ upgradeModal.classList.remove("show"); }
-$("upgradeSidebarBtn").onclick = () => { closeSidebar(); showUpgrade(); };
-$("cancelUpgrade").onclick = hideUpgrade;
-$("payBtn").onclick = () => {
-  const msg = encodeURIComponent("Hi KUMG, I'd like to upgrade to Premium ($1/month).");
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-};
 
 supabaseClient.auth.onAuthStateChange(async (event, session) => {
   if (session) {
     currentUser = session.user;
     userEmail.textContent = currentUser.email;
-    authScreen.classList.add("hidden");
-    mainApp.classList.remove("hidden");
+    authScreen.classList.add("hidden"); mainApp.classList.remove("hidden");
     await loadProfile();
     loadHistory();
   } else {
     currentUser = null; userProfile = null;
-    authScreen.classList.remove("hidden");
-    mainApp.classList.add("hidden");
+    authScreen.classList.remove("hidden"); mainApp.classList.add("hidden");
     chat.innerHTML = '<div class="welcome"><b>KUMG</b> Ask me anything about your school work.</div>';
     history = [];
   }
@@ -440,25 +566,42 @@ $("clearHistoryBtn").onclick = async () => {
   history = [];
 };
 
+$("shareRefBtn").onclick = () => {
+  const code = userProfile?.referral_code;
+  if (!code) return;
+  const link = `${APP_URL}?ref=${code}`;
+  const msg = `📚 I'm using KUMG — an AI study assistant for Zimbabwean students. Free O-Level/A-Level help.\n\nUse my link for 7 days premium FREE:\n${link}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
 async function loadHistory() {
   if (!currentUser) return;
   const { data, error } = await supabaseClient.from('chats').select('*').order('created_at', { ascending: true }).limit(50);
   if (error) return console.error(error);
-  chat.innerHTML = '<div class="welcome"><b>KUMG</b> Welcome back. Continue your studies.</div>';
+  chat.innerHTML = '<div class="welcome"><b>KUMG</b> Welcome back.</div>';
   history = [];
   data.forEach(msg => {
-    addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot');
+    addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot', false);
     history.push({ role: msg.role, content: msg.content });
   });
 }
 
-function addMsg(text, who) {
+function addMsg(text, who, addShare = true, imageData = null) {
   const d = document.createElement("div");
   d.className = "msg " + who;
-  d.textContent = text;
+  if (imageData) {
+    const img = document.createElement("img");
+    img.src = imageData;
+    d.appendChild(img);
+  }
+  if (text) {
+    const t = document.createElement("div");
+    t.textContent = text;
+    d.appendChild(t);
+  }
   chat.appendChild(d);
   chat.scrollTop = chat.scrollHeight;
-  if (who === "bot" && text) {
+  if (who === "bot" && text && addShare) {
     const row = document.createElement("div");
     row.className = "share-row";
     row.innerHTML = `<button class="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>`;
@@ -470,24 +613,48 @@ function addMsg(text, who) {
 
 function shareToWhatsApp(text) {
   const short = text.length > 700 ? text.substring(0, 700) + "..." : text;
-  const msg = `${short}\n\n— Answered by KUMG, your AI study buddy\n👉 ${SHARE_URL}`;
+  const msg = `${short}\n\n— Answered by KUMG\n👉 ${APP_URL}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 async function saveMsg(content, role) {
   if (!currentUser) return;
-  await supabaseClient.from('chats').insert([{ user_id: currentUser.id, content, role }]);
+  await supabaseClient.from('chats').insert([{ user_id: currentUser.id, content, role, subject }]);
 }
+
+// --- IMAGE UPLOAD ---
+$("cameraBtn").onclick = () => imageInput.click();
+imageInput.onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 4 * 1024 * 1024) { alert("Image too large. Max 4MB."); imageInput.value = ""; return; }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    pendingImage = ev.target.result;
+    imagePreview.src = pendingImage;
+    imagePreviewBar.classList.add("show");
+  };
+  reader.readAsDataURL(file);
+};
+$("removeImageBtn").onclick = () => {
+  pendingImage = null; imageInput.value = "";
+  imagePreviewBar.classList.remove("show");
+};
 
 async function ask() {
   const q = questionEl.value.trim();
-  if (!q) return;
+  if (!q && !pendingImage) return;
 
   const isPremium = userProfile && (userProfile.subscription === 'premium' || userProfile.subscription === 'school');
   if (!isPremium && userProfile && userProfile.questions_today >= FREE_DAILY_LIMIT) { showUpgrade(); return; }
 
-  addMsg(q, "user"); saveMsg(q, "user");
-  questionEl.value = ""; sendBtn.disabled = true;
+  const imageToSend = pendingImage;
+  addMsg(q || "[Photo]", "user", true, imageToSend);
+  if (q) saveMsg(q, "user"); else saveMsg("[Photo uploaded]", "user");
+  questionEl.value = "";
+  pendingImage = null; imageInput.value = "";
+  imagePreviewBar.classList.remove("show");
+  sendBtn.disabled = true;
 
   if (!isPremium && userProfile) {
     userProfile.questions_today += 1;
@@ -496,10 +663,10 @@ async function ask() {
     awardPoints(10);
   }
 
-  const loader = addMsg("", "bot");
+  const loader = addMsg("", "bot", false);
   loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
 
-  history.push({ role: "user", content: q });
+  if (q) history.push({ role: "user", content: q });
 
   try {
     const res = await fetch(`${BACKEND_URL}/api/ask`, {
@@ -508,7 +675,8 @@ async function ask() {
       body: JSON.stringify({
         question: q, subject, history: history.slice(-6),
         think: isThink, search: isSearch, language,
-        paperContext: activePaper ? activePaper.content : null
+        paperContext: activePaper ? activePaper.content : null,
+        image: imageToSend
       })
     });
     const data = await res.json();
@@ -516,7 +684,6 @@ async function ask() {
     loader.textContent = data.answer;
     history.push({ role: "assistant", content: data.answer });
     saveMsg(data.answer, "assistant");
-    // Add share button after final answer
     const row = document.createElement("div");
     row.className = "share-row";
     row.innerHTML = `<button class="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>`;
@@ -531,13 +698,10 @@ async function ask() {
 $("quizBtn").onclick = async () => {
   if (history.length === 0) return alert("Ask a question first so KUMG can build a quiz!");
   sendBtn.disabled = true;
-  const loader = addMsg("Generating quiz...", "bot");
+  const loader = addMsg("Generating quiz...", "bot", false);
   loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
   try {
-    const res = await fetch(`${BACKEND_URL}/api/quiz`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subject, history: history.slice(-6), language })
-    });
+    const res = await fetch(`${BACKEND_URL}/api/quiz`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subject, history: history.slice(-6), language }) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Request failed");
     loader.textContent = data.answer;
@@ -549,7 +713,6 @@ $("quizBtn").onclick = async () => {
 
 $("thinkBtn").onclick = () => { isThink = !isThink; $("thinkBtn").classList.toggle("active", isThink); };
 $("searchBtn").onclick = () => { isSearch = !isSearch; $("searchBtn").classList.toggle("active", isSearch); };
-
 sendBtn.onclick = ask;
 questionEl.addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
 
@@ -559,22 +722,14 @@ $("leaderboardBtn").onclick = async () => {
   const list = $("leaderboardList");
   list.innerHTML = '<p style="color:#5a7a5a; text-align:center;">Loading...</p>';
   $("leaderboardModal").classList.add("show");
-
   const { data, error } = await supabaseClient.rpc('get_leaderboard');
   if (error) { list.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
-
   const myName = currentUser ? currentUser.email.split('@')[0] : "";
-  if (!data || data.length === 0) { list.innerHTML = '<p>No students yet. Be the first!</p>'; return; }
-
+  if (!data || data.length === 0) { list.innerHTML = '<p>No students yet.</p>'; return; }
   list.innerHTML = data.map((row, i) => {
     const isMe = row.display_name === myName;
     const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i+1}`;
-    return `<div class="lb-row ${isMe ? 'me' : ''}">
-      <span class="lb-rank">${medal}</span>
-      <span class="lb-name">${row.display_name}</span>
-      <span class="lb-streak">🔥${row.streak_days}</span>
-      <span class="lb-points">${row.points}</span>
-    </div>`;
+    return `<div class="lb-row ${isMe ? 'me' : ''}"><span class="lb-rank">${medal}</span><span class="lb-name">${row.display_name}</span><span class="lb-streak">🔥${row.streak_days}</span><span class="lb-points">${row.points}</span></div>`;
   }).join("");
 };
 $("closeLbBtn").onclick = () => $("leaderboardModal").classList.remove("show");
@@ -585,18 +740,10 @@ $("pastPapersBtn").onclick = async () => {
   const list = $("papersList");
   list.innerHTML = '<p style="color:#5a7a5a; text-align:center;">Loading...</p>';
   $("papersModal").classList.add("show");
-
   const { data, error } = await supabaseClient.from('past_papers').select('*').order('subject').order('year', { ascending: false });
   if (error) { list.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
   if (!data || data.length === 0) { list.innerHTML = '<p>No papers available yet.</p>'; return; }
-
-  list.innerHTML = data.map(p => `
-    <div class="paper-item" data-id="${p.id}">
-      <h3>${p.title}</h3>
-      <p>${p.subject} · ${p.level} · ${p.year || ''}</p>
-    </div>
-  `).join("");
-
+  list.innerHTML = data.map(p => `<div class="paper-item" data-id="${p.id}"><h3>${p.title}</h3><p>${p.subject} · ${p.level} · ${p.year || ''}</p></div>`).join("");
   list.querySelectorAll(".paper-item").forEach(el => {
     el.onclick = () => {
       const paper = data.find(p => p.id == el.dataset.id);
@@ -604,13 +751,131 @@ $("pastPapersBtn").onclick = async () => {
       paperBanner.classList.add("show");
       paperBannerText.textContent = "Studying: " + paper.title;
       $("papersModal").classList.remove("show");
-      chat.innerHTML = '<div class="welcome"><b>KUMG</b> Past paper loaded. Ask about any question, or say "start from question 1".</div>';
+      chat.innerHTML = '<div class="welcome"><b>KUMG</b> Past paper loaded. Ask about any question.</div>';
       history = [];
     };
   });
 };
 $("closePapersBtn").onclick = () => $("papersModal").classList.remove("show");
 $("exitPaperBtn").onclick = () => { activePaper = null; paperBanner.classList.remove("show"); };
+
+// --- UPGRADE + PAYMENT ---
+$("upgradeSidebarBtn").onclick = () => { closeSidebar(); showUpgrade(); };
+$("cancelUpgrade").onclick = hideUpgrade;
+$("startPaymentBtn").onclick = () => {
+  hideUpgrade();
+  const ref = "KUMG-" + (userProfile?.referral_code || Math.random().toString(36).substring(2, 8).toUpperCase());
+  $("paymentRef").textContent = ref;
+  $("ecocashDisplay").textContent = ECOCASH_NUMBER;
+  $("paymentRef").dataset.ref = ref;
+  paymentModal.classList.add("show");
+};
+$("cancelPayment").onclick = () => paymentModal.classList.remove("show");
+$("submitPaymentBtn").onclick = async () => {
+  const txn = $("txnInput").value.trim();
+  const ref = $("paymentRef").dataset.ref;
+  if (!txn || txn.length < 5) return alert("Enter the EcoCash transaction ID.");
+  const btn = $("submitPaymentBtn");
+  btn.disabled = true; btn.textContent = "Submitting...";
+  const { error } = await supabaseClient.from('payments').insert([{ user_id: currentUser.id, amount: 1.00, method: 'EcoCash', transaction_ref: `${ref} | ${txn}`, status: 'pending' }]);
+  btn.disabled = false; btn.textContent = "Submit Payment";
+  if (error) { alert("Error: " + error.message); return; }
+  paymentModal.classList.remove("show");
+  alert("Payment submitted! Approved within 1 hour.");
+  $("txnInput").value = "";
+};
+
+// --- OWNER PANEL ---
+$("ownerBtn").onclick = async () => {
+  closeSidebar();
+  const list = $("pendingList");
+  list.innerHTML = '<p style="color:#5a7a5a;">Loading...</p>';
+  ownerModal.classList.add("show");
+  const { data, error } = await supabaseClient.from('payments').select('*').eq('status', 'pending').order('created_at', { ascending: false });
+  if (error) { list.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+  if (!data || data.length === 0) { list.innerHTML = '<p style="color:#5a7a5a;">No pending payments.</p>'; return; }
+  list.innerHTML = data.map(p => `<div class="pending-row" data-id="${p.id}"><div class="u">User: ${p.user_id.substring(0, 8)}...</div><div class="r">${p.transaction_ref}</div><div style="color:#5a7a5a; font-size:11px;">${new Date(p.created_at).toLocaleString()}</div><div class="actions"><button class="approve">Approve</button><button class="reject">Reject</button></div></div>`).join("");
+  list.querySelectorAll(".pending-row").forEach(row => {
+    const id = row.dataset.id;
+    row.querySelector(".approve").onclick = async () => {
+      const { error } = await supabaseClient.rpc('approve_payment', { payment_id: id });
+      if (error) return alert(error.message);
+      alert("Approved!"); $("ownerBtn").click();
+    };
+    row.querySelector(".reject").onclick = async () => {
+      const { error } = await supabaseClient.rpc('reject_payment', { payment_id: id });
+      if (error) return alert(error.message);
+      alert("Rejected."); $("ownerBtn").click();
+    };
+  });
+};
+$("closeOwnerBtn").onclick = () => ownerModal.classList.remove("show");
+
+// --- ANALYTICS ---
+$("analyticsBtn").onclick = async () => {
+  closeSidebar();
+  const grid = $("analyticsGrid");
+  grid.innerHTML = '<p style="color:#5a7a5a; grid-column: span 2; text-align:center;">Loading...</p>';
+  $("analyticsModal").classList.add("show");
+  const { data, error } = await supabaseClient.rpc('get_my_analytics');
+  if (error) { grid.innerHTML = `<p style="color:#ef4444; grid-column: span 2;">${error.message}</p>`; return; }
+  grid.innerHTML = `
+    <div class="analytics-card"><b>${data.total_questions}</b><span>Total Questions</span></div>
+    <div class="analytics-card"><b>${data.this_month}</b><span>This Month</span></div>
+    <div class="analytics-card"><b>${data.total_quizzes}</b><span>Quizzes Generated</span></div>
+    <div class="analytics-card"><b style="font-size:14px;">${data.top_subject}</b><span>Top Subject</span></div>
+    <div class="analytics-card" style="grid-column: span 2;"><b style="font-size:14px;">${data.weakest_subject}</b><span>Weakest Subject — Ask more questions here</span></div>
+  `;
+};
+$("closeAnalyticsBtn").onclick = () => $("analyticsModal").classList.remove("show");
+
+// --- REMINDER ---
+$("reminderBtn").onclick = () => {
+  closeSidebar();
+  $("reminderToggle").checked = userProfile?.reminder_enabled || false;
+  $("reminderTime").value = userProfile?.reminder_time || "18:00";
+  $("reminderModal").classList.add("show");
+};
+$("cancelReminderBtn").onclick = () => $("reminderModal").classList.remove("show");
+$("saveReminderBtn").onclick = async () => {
+  const enabled = $("reminderToggle").checked;
+  const time = $("reminderTime").value || "18:00";
+
+  if (enabled && 'Notification' in window) {
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') {
+      alert("Please allow notifications in your browser settings to use reminders.");
+      return;
+    }
+  }
+
+  await supabaseClient.from('profiles').update({ reminder_enabled: enabled, reminder_time: time }).eq('id', currentUser.id);
+  userProfile.reminder_enabled = enabled;
+  userProfile.reminder_time = time;
+  $("reminderModal").classList.remove("show");
+  alert(enabled ? `Reminder set for ${time} daily.` : "Reminder turned off.");
+};
+
+function checkReminder() {
+  if (!userProfile || !userProfile.reminder_enabled) return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const now = new Date();
+  const [h, m] = (userProfile.reminder_time || "18:00").split(':').map(Number);
+  const reminderMinutes = h * 60 + m;
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  const today = now.toISOString().split('T')[0];
+  const alreadyShown = localStorage.getItem('kumg_reminder_shown') === today;
+  const studiedToday = userProfile.last_active_date === today && userProfile.questions_today > 0;
+
+  if (!alreadyShown && nowMinutes >= reminderMinutes && !studiedToday) {
+    new Notification("KUMG — Time to Study!", {
+      body: "Keep your streak alive. Ask KUMG one question today.",
+      icon: "icon-192.png",
+      badge: "icon-192.png"
+    });
+    localStorage.setItem('kumg_reminder_shown', today);
+  }
+}
 
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => { document.body.style.height = window.visualViewport.height + 'px'; });
