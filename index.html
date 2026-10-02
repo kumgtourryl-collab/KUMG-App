@@ -33,6 +33,9 @@
   .auth-message { text-align: center; font-size: 13px; margin-top: 12px; min-height: 18px; }
   #refBanner { display: none; padding: 8px 12px; background: #14532d; border-bottom: 1px solid #22c55e; color: #22c55e; font-size: 12px; text-align: center; }
   #refBanner.show { display: block; }
+  #announcementBar { display: none; padding: 10px 12px; background: linear-gradient(90deg, #14532d, #0a1a0a); border-bottom: 1px solid #22c55e; color: #d6e8d6; font-size: 12px; text-align: center; }
+  #announcementBar.show { display: block; }
+  #announcementBar b { color: #22c55e; }
   #mainApp { display: flex; flex-direction: column; height: 100dvh; }
   header { padding: 10px 12px; background: #0a0f0a; border-bottom: 1px solid #14301a; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 8px; }
   .header-left { display: flex; align-items: center; gap: 10px; }
@@ -57,12 +60,13 @@
   #convList { flex: 1; overflow-y: auto; padding: 4px 8px 12px; }
   .conv-section { margin-bottom: 10px; }
   .conv-label { padding: 8px 10px 4px; font-size: 10px; font-weight: 700; color: #4a6a4a; text-transform: uppercase; letter-spacing: 1px; }
-  .conv-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 10px; border-radius: 8px; color: #c8dcc8; font-size: 13px; cursor: pointer; gap: 6px; }
+  .conv-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 10px; border-radius: 8px; color: #c8dcc8; font-size: 13px; cursor: pointer; gap: 4px; }
   .conv-item:hover, .conv-item:active { background: #14301a; }
   .conv-item.active { background: #14532d; color: #fff; }
   .conv-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .conv-icon-btn { background: transparent; border: none; color: #5a7a5a; font-size: 14px; cursor: pointer; padding: 2px 5px; flex-shrink: 0; line-height: 1; }
+  .conv-icon-btn { background: transparent; border: none; color: #5a7a5a; font-size: 13px; cursor: pointer; padding: 2px 4px; flex-shrink: 0; line-height: 1; }
   .conv-pin.pinned { color: #f59e0b; }
+  .conv-share.active { color: #22c55e; }
   .conv-del { color: #ef4444; opacity: 0.6; }
   .clear-all-btn { margin: 4px 12px 12px; padding: 10px; background: transparent; border: 1px solid #ef4444; color: #ef4444; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; }
   .sidebar-user-mini { padding: 12px 16px; border-top: 1px solid #14301a; border-bottom: 1px solid #14301a; }
@@ -114,7 +118,7 @@
   .chip-action { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 16px; border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 12px; cursor: pointer; }
   .chip-action.active { background: #14532d; border-color: #22c55e; color: #d6e8d6; }
   .chip-action svg { width: 13px; height: 13px; }
-  .icon-btn { background: transparent; border: 1px solid #14301a; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #7a9a7a; cursor: pointer; padding: 0; transition: all 0.2s ease; }
+  .icon-btn { background: transparent; border: 1px solid #14301a; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #7a9a7a; cursor: pointer; padding: 0; }
   .icon-btn.listening { background: #ef4444; border-color: #ef4444; color: #fff; animation: pulse 1.2s infinite; }
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
   .right-actions { display: flex; gap: 6px; align-items: center; }
@@ -124,11 +128,11 @@
   @keyframes spin { 100% { transform: rotate(360deg); } }
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 40; backdrop-filter: blur(4px); }
   .modal.show { display: flex; }
-  .modal-card { background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px; padding: 22px; width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto; }
+  .modal-card { background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px; padding: 22px; width: 100%; max-width: 500px; max-height: 88vh; overflow-y: auto; }
   .modal-card h2 { color: #22c55e; font-size: 18px; margin: 0 0 8px; letter-spacing: 1px; }
   .modal-card p { color: #7a9a7a; font-size: 13px; margin: 0 0 16px; line-height: 1.5; }
-  .modal-card input { width: 100%; background: #070a07; border: 1px solid #14301a; border-radius: 10px; padding: 12px; color: #d6e8d6; font-size: 15px; margin-bottom: 12px; outline: none; }
-  .modal-card input:focus { border-color: #22c55e; }
+  .modal-card input, .modal-card select, .modal-card textarea { width: 100%; background: #070a07; border: 1px solid #14301a; border-radius: 10px; padding: 12px; color: #d6e8d6; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; }
+  .modal-card input:focus, .modal-card select:focus, .modal-card textarea:focus { border-color: #22c55e; }
   .modal-card button.primary { width: 100%; padding: 13px; border-radius: 10px; border: none; background: #22c55e; color: #061006; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px; }
   .modal-card button.cancel { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 14px; cursor: pointer; margin-top: 8px; }
   .modal-card button.danger { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid #ef4444; background: transparent; color: #ef4444; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; }
@@ -172,8 +176,24 @@
   .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #5a7a5a; transition: .3s; border-radius: 50%; }
   input:checked + .slider { background: #22c55e; }
   input:checked + .slider:before { transform: translateX(20px); background: #061006; }
-
-  /* MARKDOWN RENDERING */
+  .owner-tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; scrollbar-width: none; }
+  .owner-tabs::-webkit-scrollbar { display: none; }
+  .owner-tab { flex: 0 0 auto; padding: 6px 12px; border-radius: 8px; border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .owner-tab.active { background: #22c55e; color: #061006; border-color: #22c55e; }
+  .user-row { background: #070a07; border: 1px solid #14301a; border-radius: 10px; padding: 10px; margin-bottom: 6px; font-size: 12px; }
+  .user-row .e { color: #d6e8d6; font-weight: 700; word-break: break-all; }
+  .user-row .m { color: #5a7a5a; font-size: 11px; margin-top: 3px; }
+  .user-row .a { display: flex; gap: 4px; margin-top: 8px; }
+  .user-row .a button { flex: 1; padding: 5px; border-radius: 6px; border: 1px solid #14301a; font-size: 11px; font-weight: 700; background: transparent; color: #7a9a7a; cursor: pointer; }
+  .user-row .a button.on { background: #22c55e; color: #061006; border-color: #22c55e; }
+  .share-view { position: fixed; inset: 0; background: #070a07; z-index: 50; display: none; flex-direction: column; }
+  .share-view.show { display: flex; }
+  .share-header { padding: 14px 16px; background: #0a0f0a; border-bottom: 1px solid #14301a; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .share-body { flex: 1; overflow-y: auto; padding: 16px; }
+  .share-cta { padding: 16px; background: linear-gradient(135deg, #14532d, #0a1a0a); border-top: 1px solid #22c55e; text-align: center; flex-shrink: 0; }
+  .share-cta b { color: #22c55e; display: block; font-size: 15px; margin-bottom: 6px; }
+  .share-cta p { color: #d6e8d6; font-size: 12px; margin: 0 0 12px; }
+  .share-cta button { padding: 12px 20px; border-radius: 10px; border: none; background: #22c55e; color: #061006; font-weight: 700; font-size: 14px; cursor: pointer; }
   .msg.bot { display: block; }
   .msg.bot > *:first-child { margin-top: 0; }
   .msg.bot > *:last-child { margin-bottom: 0; }
@@ -187,56 +207,70 @@
   .msg.bot em { color: #b8d0b8; font-style: italic; }
   .msg.bot ul, .msg.bot ol { margin: 8px 0; padding-left: 22px; }
   .msg.bot li { margin: 4px 0; }
-  .msg.bot code {
-    background: #14301a; color: #6ee7a7; padding: 2px 6px; border-radius: 4px;
-    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px;
-  }
-  .msg.bot pre {
-    background: #061006; border: 1px solid #14301a; border-radius: 10px;
-    padding: 12px 14px; margin: 10px 0; overflow-x: auto; position: relative;
-    font-size: 13px; line-height: 1.5;
-  }
-  .msg.bot pre code {
-    background: none; color: #d6e8d6; padding: 0; font-size: 13px; display: block;
-    white-space: pre; word-break: normal; overflow-wrap: normal;
-  }
-  .msg.bot pre .copy-btn {
-    position: absolute; top: 6px; right: 6px; background: #14301a; color: #7a9a7a;
-    border: 1px solid #22c55e; border-radius: 6px; padding: 3px 8px; font-size: 11px;
-    cursor: pointer;
-  }
-  .msg.bot pre .copy-btn:active { background: #22c55e; color: #061006; }
-  .msg.bot blockquote {
-    border-left: 3px solid #22c55e; padding: 6px 12px; margin: 10px 0;
-    background: #0a0f0a; color: #b8d0b8; font-style: italic; border-radius: 0 6px 6px 0;
-  }
-  .msg.bot table {
-    border-collapse: collapse; margin: 10px 0; width: 100%; font-size: 13px;
-    display: block; overflow-x: auto; white-space: nowrap;
-  }
+  .msg.bot code { background: #14301a; color: #6ee7a7; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; }
+  .msg.bot pre { background: #061006; border: 1px solid #14301a; border-radius: 10px; padding: 12px 14px; margin: 10px 0; overflow-x: auto; position: relative; font-size: 13px; line-height: 1.5; }
+  .msg.bot pre code { background: none; color: #d6e8d6; padding: 0; font-size: 13px; display: block; white-space: pre; word-break: normal; overflow-wrap: normal; }
+  .msg.bot pre .copy-btn { position: absolute; top: 6px; right: 6px; background: #14301a; color: #7a9a7a; border: 1px solid #22c55e; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
+  .msg.bot blockquote { border-left: 3px solid #22c55e; padding: 6px 12px; margin: 10px 0; background: #0a0f0a; color: #b8d0b8; font-style: italic; border-radius: 0 6px 6px 0; }
+  .msg.bot table { border-collapse: collapse; margin: 10px 0; width: 100%; font-size: 13px; display: block; overflow-x: auto; white-space: nowrap; }
   .msg.bot table thead { background: #14301a; }
-  .msg.bot table th {
-    color: #22c55e; font-weight: 700; text-align: left; padding: 8px 12px;
-    border: 1px solid #1e4429;
-  }
-  .msg.bot table td {
-    padding: 8px 12px; border: 1px solid #1e4429; color: #c8dcc8;
-  }
+  .msg.bot table th { color: #22c55e; font-weight: 700; text-align: left; padding: 8px 12px; border: 1px solid #1e4429; }
+  .msg.bot table td { padding: 8px 12px; border: 1px solid #1e4429; color: #c8dcc8; }
   .msg.bot table tr:nth-child(even) td { background: #0a0f0a; }
-  .msg.bot hr { border: none; border-top: 1px solid #14301a; margin: 14px 0; }
   .msg.bot a { color: #22c55e; text-decoration: underline; }
-  .msg.bot img { max-width: 100%; border-radius: 8px; margin: 8px 0; border: 1px solid #14301a; }
   .katex { color: #e8f5e8 !important; font-size: 1em !important; }
   .katex-display { margin: 10px 0 !important; overflow-x: auto; overflow-y: hidden; }
-  .mermaid-container {
-    background: #061006; border: 1px solid #14301a; border-radius: 10px;
-    padding: 12px; margin: 10px 0; text-align: center; overflow-x: auto;
-  }
+  .mermaid-container { background: #061006; border: 1px solid #14301a; border-radius: 10px; padding: 12px; margin: 10px 0; text-align: center; overflow-x: auto; }
   .mermaid-container svg { max-width: 100%; height: auto; }
-  .msg.bot .render-error { color: #f59e0b; font-size: 12px; font-style: italic; padding: 6px 0; }
+  #studyScreen { position: fixed; inset: 0; background: #070a07; z-index: 45; display: none; flex-direction: column; }
+  #studyScreen.show { display: flex; }
+  .study-header { padding: 12px 16px; background: #0a0f0a; border-bottom: 1px solid #14301a; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .study-header .title { color: #22c55e; font-size: 16px; font-weight: 800; letter-spacing: 2px; }
+  .study-header button { background: none; border: none; color: #7a9a7a; cursor: pointer; padding: 4px; font-size: 20px; }
+  .study-tabs { display: flex; background: #0a0f0a; border-bottom: 1px solid #14301a; flex-shrink: 0; }
+  .study-tab { flex: 1; padding: 12px; background: none; border: none; color: #7a9a7a; font-size: 13px; font-weight: 700; cursor: pointer; border-bottom: 2px solid transparent; }
+  .study-tab.active { color: #22c55e; border-bottom-color: #22c55e; }
+  #studyContent { flex: 1; overflow-y: auto; padding: 20px 16px; }
+  .flashcard-wrapper { perspective: 1000px; margin: 20px auto; max-width: 500px; height: 340px; position: relative; }
+  .flashcard { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: linear-gradient(160deg, #0d1a0d, #0a0f0a); border: 1px solid #14301a; border-radius: 20px; padding: 30px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 17px; line-height: 1.5; overflow-y: auto; }
+  .flashcard-front { color: #d6e8d6; }
+  .flashcard-back { color: #e8f5e8; transform: rotateY(180deg); background: linear-gradient(160deg, #14532d, #0a1a0a); border-color: #22c55e; }
+  .flashcard-hint { position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; color: #5a7a5a; font-size: 11px; }
+  .study-counter { text-align: center; color: #5a7a5a; font-size: 12px; margin-top: 8px; }
+  .study-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+  .study-btn { padding: 14px 24px; border-radius: 12px; border: none; font-weight: 700; font-size: 15px; cursor: pointer; }
+  .study-btn.miss { background: transparent; border: 1px solid #ef4444; color: #ef4444; }
+  .study-btn.got { background: #22c55e; color: #061006; }
+  .study-empty { text-align: center; color: #7a9a7a; font-size: 14px; padding: 40px 20px; line-height: 1.8; }
+  .study-form { background: #0d1a0d; border: 1px solid #14301a; border-radius: 16px; padding: 20px; max-width: 500px; margin: 20px auto; }
+  .study-form h3 { margin: 0 0 16px; color: #22c55e; font-size: 16px; }
+  .study-form input, .study-form select { width: 100%; background: #070a07; border: 1px solid #14301a; border-radius: 10px; padding: 12px; color: #d6e8d6; font-size: 14px; margin-bottom: 12px; outline: none; }
+  .study-form input:focus, .study-form select:focus { border-color: #22c55e; }
+  .study-form button { width: 100%; padding: 13px; border-radius: 10px; border: none; background: #22c55e; color: #061006; font-weight: 700; font-size: 14px; cursor: pointer; margin-bottom: 8px; }
+  .study-form button.secondary { background: transparent; border: 1px solid #22c55e; color: #22c55e; }
+  .study-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .flashcard-list-item { background: #0d1a0d; border: 1px solid #14301a; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+  .flashcard-list-item .q { color: #d6e8d6; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .flashcard-list-item .a { color: #7a9a7a; font-size: 13px; }
 </style>
 </head>
 <body>
+
+<!-- SHARE VIEW (no login) -->
+<div class="share-view" id="shareView">
+  <div class="share-header">
+    <div class="logo">K<span>U</span>M<span>G</span></div>
+    <div style="color:#5a7a5a; font-size:11px;">Shared Chat</div>
+  </div>
+  <div class="share-body" id="shareBody"></div>
+  <div class="share-cta">
+    <b>Think without limits.</b>
+    <p>Get your own AI assistant — free to start.</p>
+    <button onclick="window.location.href='./'">Try KUMG Free</button>
+  </div>
+</div>
 
 <div id="authScreen">
   <div class="auth-logo">K<span>U</span>M<span>G</span></div>
@@ -272,6 +306,7 @@
     </div>
   </header>
 
+  <div id="announcementBar"></div>
   <div id="refBanner">You were invited! Sign up to unlock <b>7 days free premium</b>.</div>
 
   <div id="overlay"></div>
@@ -296,6 +331,14 @@
     </div>
 
     <div class="sidebar-footer-menu">
+      <button class="sidebar-btn upgrade" id="studyModeBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Study Mode
+      </button>
+      <button class="sidebar-btn" id="libraryBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Explore Library
+      </button>
       <button class="sidebar-btn upgrade" id="upgradeSidebarBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         Upgrade to Premium
@@ -374,12 +417,40 @@
   </div>
 </div>
 
+<div id="studyScreen">
+  <div class="study-header">
+    <div class="title">STUDY MODE</div>
+    <button id="closeStudyBtn">✕</button>
+  </div>
+  <div class="study-tabs">
+    <button class="study-tab active" data-tab="flashcards">Flashcards</button>
+    <button class="study-tab" data-tab="practice">Practice</button>
+    <button class="study-tab" data-tab="mycards">My Cards</button>
+  </div>
+  <div id="studyContent"></div>
+</div>
+
 <div class="modal" id="confirmModal"><div class="modal-card"><h2 id="confirmTitle">Confirm</h2><p id="confirmText">Are you sure?</p><button class="danger" id="confirmYes">Yes, delete</button><button class="cancel" id="confirmNo">Cancel</button></div></div>
-<div class="modal" id="leaderboardModal"><div class="modal-card"><h2>Top Minds</h2><p>Most active users this week.</p><div id="leaderboardList"></div><button class="cancel" id="closeLbBtn">Close</button></div></div>
+<div class="modal" id="leaderboardModal"><div class="modal-card"><h2 id="lbTitle">Top Minds</h2><div style="display:flex; gap:6px; margin-bottom:12px;"><button class="owner-tab active" id="lbByPoints">By Points</button><button class="owner-tab" id="lbByRefs">By Referrals</button></div><div id="leaderboardList"></div><button class="cancel" id="closeLbBtn">Close</button></div></div>
 <div class="modal" id="papersModal"><div class="modal-card"><h2>Past Papers</h2><p>Select a paper. KUMG will guide you through it.</p><div id="papersList"></div><button class="cancel" id="closePapersBtn">Cancel</button></div></div>
-<div class="modal" id="upgradeModal"><div class="modal-card"><h2>Upgrade to Premium</h2><p>Unlimited everything. One dollar a month.</p><div class="upgrade-price">$1<span>/month</span></div><ul class="upgrade-features"><li>Unlimited questions per day</li><li>Unlimited Quiz generation</li><li>All Past Papers unlocked</li><li>Voice input in Shona and Ndebele</li><li>Priority support</li></ul><button class="primary" id="startPaymentBtn">Pay with EcoCash</button><button class="cancel" id="cancelUpgrade">Maybe later</button></div></div>
+<div class="modal" id="libraryModal"><div class="modal-card"><h2>Explore Library</h2><p>Chats shared by the KUMG community.</p><div id="libraryList"></div><button class="cancel" id="closeLibraryBtn">Close</button></div></div>
+<div class="modal" id="upgradeModal"><div class="modal-card"><h2>Upgrade to Premium</h2><p>Unlimited everything. One dollar a month.</p><div class="upgrade-price">$1<span>/month</span></div><ul class="upgrade-features"><li>Unlimited questions per day</li><li>Unlimited Flashcards and Quizzes</li><li>All Past Papers unlocked</li><li>Voice input in Shona and Ndebele</li><li>Priority support</li></ul><button class="primary" id="startPaymentBtn">Pay with EcoCash</button><button class="cancel" id="cancelUpgrade">Maybe later</button></div></div>
 <div class="modal" id="paymentModal"><div class="modal-card"><h2>Pay with EcoCash</h2><p>Approval usually takes under 1 hour.</p><div class="step-box"><b>Step 1 — Send $1</b><div class="ecocash" id="ecocashDisplay">—</div><small>Use EcoCash to send exactly $1 USD to this number.</small></div><div class="step-box"><b>Step 2 — Use this reference</b><div class="ref-num" id="paymentRef">KUMG-XXXX</div><small>Add this as the payment reference/note.</small></div><div class="step-box"><b>Step 3 — Enter your EcoCash transaction ID</b><input id="txnInput" type="text" placeholder="e.g. MP240101.1234.A56789" autocomplete="off"><small>You'll find this in the EcoCash SMS.</small></div><button class="primary" id="submitPaymentBtn">Submit Payment</button><button class="cancel" id="cancelPayment">Cancel</button></div></div>
-<div class="modal" id="ownerModal"><div class="modal-card"><h2>Owner Dashboard</h2><div class="analytics-grid" id="ownerStats"></div><h2 style="margin-top:24px;">Pending Payments</h2><div id="pendingList"></div><button class="cancel" id="closeOwnerBtn">Close</button></div></div>
+
+<!-- OWNER DASHBOARD with tabs -->
+<div class="modal" id="ownerModal"><div class="modal-card">
+  <h2>Owner Dashboard</h2>
+  <div class="owner-tabs">
+    <button class="owner-tab active" data-otab="stats">Stats</button>
+    <button class="owner-tab" data-otab="payments">Payments</button>
+    <button class="owner-tab" data-otab="users">Users</button>
+    <button class="owner-tab" data-otab="papers">Papers</button>
+    <button class="owner-tab" data-otab="broadcast">Broadcast</button>
+  </div>
+  <div id="ownerContent"></div>
+  <button class="cancel" id="closeOwnerBtn">Close</button>
+</div></div>
+
 <div class="modal" id="analyticsModal"><div class="modal-card"><h2>My Analytics</h2><p>Your activity on KUMG.</p><div class="analytics-grid" id="analyticsGrid"></div><button class="cancel" id="closeAnalyticsBtn">Close</button></div></div>
 <div class="modal" id="reminderModal"><div class="modal-card"><h2>Study Reminder</h2><p>Get a nudge every day to keep your streak alive.</p><div class="reminder-row"><span>Enable Daily Reminder</span><label class="switch"><input type="checkbox" id="reminderToggle"><span class="slider"></span></label></div><div class="reminder-row"><span>Reminder Time</span><input type="time" id="reminderTime" value="18:00" style="width:130px; padding:8px; margin:0;"></div><p style="font-size:11px; color:#5a7a5a; margin-top:12px;">Tip: Install KUMG to your home screen for reminders to work best.</p><button class="primary" id="saveReminderBtn">Save</button><button class="cancel" id="cancelReminderBtn">Cancel</button></div></div>
 
@@ -393,7 +464,6 @@ const SUPPORT_WHATSAPP = "263790274867";
 const APP_URL = "https://ngtourryl-collab.github.io/kumg/";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 marked.setOptions({ breaks: true, gfm: true });
 mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
 
@@ -408,9 +478,16 @@ let pendingImage = null;
 let currentConversationId = null;
 let conversations = [];
 let confirmCallback = null;
+let studyTab = "flashcards";
+let reviewQueue = [];
+let reviewIndex = 0;
+let isFlipped = false;
+let lbMode = "points";
+let ownerTab = "stats";
 
 const urlParams = new URLSearchParams(window.location.search);
 const refFromUrl = urlParams.get('ref');
+const shareFromUrl = urlParams.get('share');
 if (refFromUrl) { localStorage.setItem('kumg_ref', refFromUrl); document.getElementById('refBanner').classList.add('show'); }
 
 const $ = id => document.getElementById(id);
@@ -428,6 +505,9 @@ const imagePreviewBar = $("imagePreviewBar"), imagePreview = $("imagePreview"), 
 const convList = $("convList"), convSearch = $("convSearch");
 const confirmModal = $("confirmModal");
 const micBtn = $("micBtn");
+const studyScreen = $("studyScreen"), studyContent = $("studyContent");
+const shareView = $("shareView"), shareBody = $("shareBody");
+const announcementBar = $("announcementBar");
 
 let isLoginMode = true;
 
@@ -435,8 +515,57 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js').catch(e => console.log('SW error', e));
 }
 
-const SUBJECTS = ["General","Writing","Business","Coding","Career","Finance","Marketing","Health","Law",
-                  "Maths","Biology","Chemistry","Physics","English","History","Geography","Accounts"];
+// ============================================================
+// SHARE VIEW — runs before anything else if ?share=token
+// ============================================================
+if (shareFromUrl) {
+  authScreen.classList.add("hidden");
+  mainApp.classList.add("hidden");
+  shareView.classList.add("show");
+  loadSharedConversation(shareFromUrl);
+}
+
+async function loadSharedConversation(token) {
+  shareBody.innerHTML = '<div style="text-align:center; color:#5a7a5a; padding:40px;">Loading...</div>';
+  const { data, error } = await supabaseClient.rpc('get_shared_conversation', { p_token: token });
+  if (error || !data || data.error) {
+    shareBody.innerHTML = '<div style="text-align:center; color:#ef4444; padding:40px;">This conversation is no longer available.</div>';
+    return;
+  }
+  shareBody.innerHTML = `
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="color:#22c55e; font-size:16px; font-weight:700; margin-bottom:4px;">${escapeHtml(data.title || 'Shared Chat')}</div>
+      <div style="color:#5a7a5a; font-size:11px;">${escapeHtml(data.subject || 'General')} · ${new Date(data.created_at).toLocaleDateString()}</div>
+    </div>
+  `;
+  const msgs = data.messages || [];
+  msgs.forEach(m => {
+    const d = document.createElement("div");
+    d.className = "msg " + (m.role === 'user' ? 'user' : 'bot');
+    if (m.role === 'bot') {
+      try { d.innerHTML = marked.parse(m.content); } catch(e) { d.textContent = m.content; }
+    } else {
+      d.textContent = m.content;
+    }
+    shareBody.appendChild(d);
+  });
+  // Render math + mermaid
+  if (window.renderMathInElement) {
+    try { renderMathInElement(shareBody, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false, ignoredTags: ['script','noscript','style','textarea','pre','code'] }); } catch(e){}
+  }
+  const mBlocks = shareBody.querySelectorAll('pre code.language-mermaid');
+  for (const codeEl of mBlocks) {
+    const code = codeEl.textContent; const preEl = codeEl.parentElement;
+    const container = document.createElement('div'); container.className = 'mermaid-container';
+    try { const { svg } = await mermaid.render('sm-' + Math.random().toString(36).substring(2,8), code); container.innerHTML = svg; preEl.replaceWith(container); }
+    catch(e) { preEl.remove(); }
+  }
+}
+
+// ============================================================
+// SUBJECTS, LANG
+// ============================================================
+const SUBJECTS = ["General","Writing","Business","Coding","Career","Finance","Marketing","Health","Law","Maths","Biology","Chemistry","Physics","English","History","Geography","Accounts"];
 SUBJECTS.forEach((s,i)=>{
   const b = document.createElement("button");
   b.className = "chip" + (i===0?" active":"");
@@ -444,7 +573,6 @@ SUBJECTS.forEach((s,i)=>{
   b.onclick = () => { subject=s; document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active")); b.classList.add("active"); };
   subjectsEl.appendChild(b);
 });
-
 document.querySelectorAll(".lang-btn").forEach(btn => {
   btn.onclick = () => {
     language = btn.dataset.lang;
@@ -454,6 +582,9 @@ document.querySelectorAll(".lang-btn").forEach(btn => {
   };
 });
 
+// ============================================================
+// AUTH
+// ============================================================
 toggleAuth.onclick = () => {
   isLoginMode = !isLoginMode;
   authTitle.textContent = isLoginMode ? "Welcome Back" : "Create Account";
@@ -461,7 +592,6 @@ toggleAuth.onclick = () => {
   toggleAuth.textContent = isLoginMode ? "Don't have an account? Sign up" : "Already have an account? Login";
   authMessage.textContent = "";
 };
-
 authSubmit.onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
@@ -491,8 +621,8 @@ menuBtn.onclick = openSidebar;
 overlay.onclick = closeSidebar;
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function genToken() { return Math.random().toString(36).substring(2,10) + Math.random().toString(36).substring(2,6); }
 
-// --- ICONS ---
 const ICON = {
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
   regen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>',
@@ -505,208 +635,79 @@ const ICON = {
 };
 
 // ============================================================
-// VOICE INPUT + READ ALOUD
+// VOICE
 // ============================================================
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let isListening = false;
 let currentlySpeakingBtn = null;
-
-function getLangCode() {
-  if (language === 'Shona') return 'sn-ZW';
-  if (language === 'Ndebele') return 'nd-ZW';
-  return 'en-ZW';
-}
-
-// Text-to-speech is available?
+function getLangCode() { if (language === 'Shona') return 'sn-ZW'; if (language === 'Ndebele') return 'nd-ZW'; return 'en-ZW'; }
 function ttsAvailable() { return 'speechSynthesis' in window; }
-
 function stripMarkdownForSpeech(text) {
-  return text
-    .replace(/```[\s\S]*?```/g, ' code block ')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/#{1,6}\s?/g, '')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\*([^*]+)\*/g, '$1')
-    .replace(/__([^_]+)__/g, '$1')
-    .replace(/_([^_]+)_/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/\$([^$]+)\$/g, '$1')
-    .replace(/^\s*[-*+]\s+/gm, '')
-    .replace(/^\s*\d+\.\s+/gm, '')
-    .replace(/\n{2,}/g, '. ')
-    .replace(/\n/g, ', ')
-    .trim();
+  return text.replace(/```[\s\S]*?```/g, ' code block ').replace(/`([^`]+)`/g, '$1').replace(/#{1,6}\s?/g, '').replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\*([^*]+)\*/g, '$1').replace(/__([^_]+)__/g, '$1').replace(/_([^_]+)_/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\$([^$]+)\$/g, '$1').replace(/^\s*[-*+]\s+/gm, '').replace(/^\s*\d+\.\s+/gm, '').replace(/\n{2,}/g, '. ').replace(/\n/g, ', ').trim();
 }
-
 function speakText(btn, text) {
-  if (!ttsAvailable()) return alert("Text-to-speech is not supported on this browser.");
-
-  // Stop if already speaking from this button
-  if (currentlySpeakingBtn === btn) {
-    window.speechSynthesis.cancel();
-    currentlySpeakingBtn = null;
-    btn.classList.remove('speaking');
-    btn.innerHTML = ICON.speak + ' Listen';
-    return;
-  }
-
-  // Cancel any ongoing speech
+  if (!ttsAvailable()) return alert("Text-to-speech isn't supported here.");
+  if (currentlySpeakingBtn === btn) { window.speechSynthesis.cancel(); currentlySpeakingBtn = null; btn.classList.remove('speaking'); btn.innerHTML = ICON.speak + ' Listen'; return; }
   window.speechSynthesis.cancel();
-
   const plain = stripMarkdownForSpeech(text);
   if (!plain) return;
-
   const utter = new SpeechSynthesisUtterance(plain);
-  utter.lang = getLangCode();
-  utter.rate = 0.95;
-  utter.pitch = 1;
-
-  // Try to pick a matching voice
+  utter.lang = getLangCode(); utter.rate = 0.95;
   const voices = window.speechSynthesis.getVoices();
   const targetPrefix = utter.lang.slice(0, 2);
   const exact = voices.find(v => v.lang.toLowerCase() === utter.lang.toLowerCase());
   const partial = voices.find(v => v.lang.toLowerCase().startsWith(targetPrefix));
-  if (exact) utter.voice = exact;
-  else if (partial) utter.voice = partial;
-
-  utter.onend = () => {
-    if (currentlySpeakingBtn === btn) {
-      currentlySpeakingBtn = null;
-      btn.classList.remove('speaking');
-      btn.innerHTML = ICON.speak + ' Listen';
-    }
-  };
+  if (exact) utter.voice = exact; else if (partial) utter.voice = partial;
+  utter.onend = () => { if (currentlySpeakingBtn === btn) { currentlySpeakingBtn = null; btn.classList.remove('speaking'); btn.innerHTML = ICON.speak + ' Listen'; } };
   utter.onerror = utter.onend;
-
-  currentlySpeakingBtn = btn;
-  btn.classList.add('speaking');
-  btn.innerHTML = ICON.stop + ' Stop';
-
+  currentlySpeakingBtn = btn; btn.classList.add('speaking'); btn.innerHTML = ICON.stop + ' Stop';
   window.speechSynthesis.speak(utter);
 }
-
-// Preload voices (some browsers load them async)
-if (ttsAvailable()) {
-  window.speechSynthesis.onvoiceschanged = () => { /* no-op, just triggers load */ };
-  window.speechSynthesis.getVoices();
-}
-
-// Mic toggle
+if (ttsAvailable()) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
 function toggleVoice() {
-  if (!SpeechRecognition) {
-    return alert("Voice input isn't supported on this browser. Try Chrome on Android.");
-  }
-
-  if (isListening) {
-    try { recognition.stop(); } catch(e) {}
-    return;
-  }
-
+  if (!SpeechRecognition) return alert("Voice input isn't supported. Try Chrome.");
+  if (isListening) { try { recognition.stop(); } catch(e){} return; }
   recognition = new SpeechRecognition();
   recognition.lang = getLangCode();
-  recognition.interimResults = true;
-  recognition.continuous = false;
-  recognition.maxAlternatives = 1;
-
+  recognition.interimResults = true; recognition.continuous = false; recognition.maxAlternatives = 1;
   let finalText = '';
-
-  recognition.onstart = () => {
-    isListening = true;
-    micBtn.classList.add('listening');
-    questionEl.placeholder = "Listening... speak now";
-  };
-
+  recognition.onstart = () => { isListening = true; micBtn.classList.add('listening'); questionEl.placeholder = "Listening... speak now"; };
   recognition.onresult = (event) => {
-    let interim = '';
-    finalText = '';
+    let interim = ''; finalText = '';
     for (let i = 0; i < event.results.length; i++) {
       if (event.results[i].isFinal) finalText += event.results[i][0].transcript;
       else interim += event.results[i][0].transcript;
     }
     questionEl.value = finalText || interim;
   };
-
-  recognition.onerror = (e) => {
-    console.warn('Speech error:', e.error);
-    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-      alert("Microphone access was denied. Please allow it in your browser settings.");
-    } else if (e.error === 'no-speech') {
-      // Silent — user didn't speak
-    }
-  };
-
-  recognition.onend = () => {
-    isListening = false;
-    micBtn.classList.remove('listening');
-    questionEl.placeholder = "Ask anything...";
-    if (finalText.trim()) {
-      questionEl.focus();
-    }
-  };
-
-  try {
-    recognition.start();
-  } catch (err) {
-    console.warn('Speech start error', err);
-    isListening = false;
-    micBtn.classList.remove('listening');
-  }
+  recognition.onerror = (e) => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') alert("Microphone denied."); };
+  recognition.onend = () => { isListening = false; micBtn.classList.remove('listening'); questionEl.placeholder = "Ask anything..."; if (finalText.trim()) questionEl.focus(); };
+  try { recognition.start(); } catch(err){ isListening = false; micBtn.classList.remove('listening'); }
 }
 micBtn.onclick = toggleVoice;
 
 // ============================================================
-// RICH RENDERING
+// RENDERING
 // ============================================================
 async function enhanceRendered(el) {
   if (window.renderMathInElement) {
-    try {
-      renderMathInElement(el, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
-          { left: '\\[', right: '\\]', display: true },
-          { left: '\\(', right: '\\)', display: false }
-        ],
-        throwOnError: false,
-        ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      });
-    } catch (e) { console.warn('KaTeX error', e); }
+    try { renderMathInElement(el, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}], throwOnError: false, ignoredTags: ['script','noscript','style','textarea','pre','code'] }); } catch(e){}
   }
-
-  const mermaidBlocks = el.querySelectorAll('pre code.language-mermaid');
-  for (const codeEl of mermaidBlocks) {
-    const code = codeEl.textContent;
-    const preEl = codeEl.parentElement;
-    const container = document.createElement('div');
-    container.className = 'mermaid-container';
-    try {
-      const id = 'mmd-' + Math.random().toString(36).substring(2, 10);
-      const { svg } = await mermaid.render(id, code);
-      container.innerHTML = svg;
-      preEl.replaceWith(container);
-    } catch (e) {
-      container.innerHTML = '<div class="render-error">Diagram could not be rendered.</div>';
-      preEl.replaceWith(container);
-    }
+  const mBlocks = el.querySelectorAll('pre code.language-mermaid');
+  for (const codeEl of mBlocks) {
+    const code = codeEl.textContent; const preEl = codeEl.parentElement;
+    const container = document.createElement('div'); container.className = 'mermaid-container';
+    try { const { svg } = await mermaid.render('mmd-' + Math.random().toString(36).substring(2,10), code); container.innerHTML = svg; preEl.replaceWith(container); }
+    catch(e) { container.innerHTML = '<div class="render-error">Diagram could not be rendered.</div>'; preEl.replaceWith(container); }
   }
-
   el.querySelectorAll('pre').forEach(pre => {
     if (pre.querySelector('.copy-btn')) return;
-    const code = pre.querySelector('code');
-    if (!code) return;
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.textContent = 'Copy';
-    btn.onclick = () => {
-      navigator.clipboard.writeText(code.textContent).then(() => {
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = 'Copy', 1500);
-      });
-    };
+    const code = pre.querySelector('code'); if (!code) return;
+    const btn = document.createElement('button'); btn.className = 'copy-btn'; btn.textContent = 'Copy';
+    btn.onclick = () => { navigator.clipboard.writeText(code.textContent).then(() => { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1500); }); };
     pre.appendChild(btn);
   });
-
   chat.scrollTop = chat.scrollHeight;
 }
 
@@ -721,75 +722,42 @@ function buildBotActions(msgEl, msgData) {
     <button class="action-btn" data-act="regen">${ICON.regen} Retry</button>
     <button class="action-btn" data-act="cont">${ICON.cont} Continue</button>
     <button class="action-btn" data-act="speak">${ICON.speak} Listen</button>
+    <button class="action-btn" data-act="card">＋ Card</button>
     <button class="action-btn" data-act="share">${ICON.share} Share</button>
   `;
-  row.querySelector('[data-act="copy"]').onclick = () => {
-    navigator.clipboard.writeText(msgEl.innerText).then(() => {
-      const b = row.querySelector('[data-act="copy"]');
-      b.textContent = 'Copied!';
-      setTimeout(() => b.innerHTML = ICON.copy + ' Copy', 1500);
-    });
-  };
+  row.querySelector('[data-act="copy"]').onclick = () => { navigator.clipboard.writeText(msgEl.innerText).then(() => { const b = row.querySelector('[data-act="copy"]'); b.textContent = 'Copied!'; setTimeout(() => b.innerHTML = ICON.copy + ' Copy', 1500); }); };
   row.querySelector('[data-act="regen"]').onclick = () => regenerateBot(msgEl, msgData.dbId);
   row.querySelector('[data-act="cont"]').onclick = () => continueBot(msgEl, msgData.dbId);
   row.querySelector('[data-act="speak"]').onclick = (e) => speakText(e.currentTarget, msgEl.innerText);
+  row.querySelector('[data-act="card"]').onclick = () => generateFlashcardsFromText(msgEl.innerText);
   row.querySelector('[data-act="share"]').onclick = () => shareToWhatsApp(msgEl.innerText);
   return row;
 }
-
 function buildUserActions(msgEl, msgData) {
   const row = document.createElement("div");
   row.className = "actions-row user-actions";
-  row.innerHTML = `
-    <button class="action-btn" data-act="edit">${ICON.edit} Edit</button>
-    <button class="action-btn" data-act="del">${ICON.del} Delete</button>
-  `;
+  row.innerHTML = `<button class="action-btn" data-act="edit">${ICON.edit} Edit</button><button class="action-btn" data-act="del">${ICON.del} Delete</button>`;
   row.querySelector('[data-act="edit"]').onclick = () => editUserMsg(msgEl, msgData.dbId);
   row.querySelector('[data-act="del"]').onclick = () => deleteMsg(msgEl, msgData.dbId);
   return row;
 }
-
 function addMsg(text, who, options = {}) {
   const { dbId = null, addActions = true, imageData = null } = options;
-
   const d = document.createElement("div");
   d.className = "msg " + who;
   if (dbId) d.dataset.dbId = dbId;
-
-  if (imageData) {
-    const img = document.createElement("img");
-    img.src = imageData;
-    d.appendChild(img);
-  }
-
+  if (imageData) { const img = document.createElement("img"); img.src = imageData; d.appendChild(img); }
   if (text) {
-    if (who === "bot") {
-      try { d.innerHTML = marked.parse(text); }
-      catch (e) { const t = document.createElement("div"); t.textContent = text; d.appendChild(t); }
-    } else {
-      const t = document.createElement("div");
-      t.textContent = text;
-      d.appendChild(t);
-    }
+    if (who === "bot") { try { d.innerHTML = marked.parse(text); } catch(e) { const t = document.createElement("div"); t.textContent = text; d.appendChild(t); } }
+    else { const t = document.createElement("div"); t.textContent = text; d.appendChild(t); }
   }
-
   chat.appendChild(d);
-
   if (who === "bot" && text) enhanceRendered(d);
-
-  if (addActions && text) {
-    const row = who === "bot"
-      ? buildBotActions(d, { dbId })
-      : buildUserActions(d, { dbId });
-    chat.appendChild(row);
-    d._actionsRow = row;
-  }
-
+  if (addActions && text) { const row = who === "bot" ? buildBotActions(d, { dbId }) : buildUserActions(d, { dbId }); chat.appendChild(row); d._actionsRow = row; }
   chat.scrollTop = chat.scrollHeight;
   return d;
 }
 
-// --- REGENERATE ---
 async function regenerateBot(botEl, botDbId) {
   let prev = botEl.previousElementSibling;
   while (prev && !prev.classList.contains("user")) prev = prev.previousElementSibling;
@@ -801,80 +769,35 @@ async function regenerateBot(botEl, botDbId) {
   if (history.length > 0 && history[history.length - 1].role === "assistant") history.pop();
   await runAsk(userText, true);
 }
-
-// --- CONTINUE ---
 async function continueBot(botEl, botDbId) {
   if (!currentConversationId) return;
-
   const loader = addMsg("", "bot", { addActions: false });
   loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
-
   try {
-    const res = await fetch(`${BACKEND_URL}/api/ask`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ continue: true, subject, history: history.slice(-6), language })
-    });
+    const res = await fetch(`${BACKEND_URL}/api/ask`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ continue: true, subject, history: history.slice(-6), language }) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Request failed");
-
-    loader.innerHTML = marked.parse(data.answer);
-    enhanceRendered(loader);
-
+    loader.innerHTML = marked.parse(data.answer); enhanceRendered(loader);
     const saved = await saveMsg(data.answer, "assistant");
-    if (saved && saved.id) {
-      loader.dataset.dbId = saved.id;
-      const row = buildBotActions(loader, { dbId: saved.id });
-      chat.appendChild(row);
-      loader._actionsRow = row;
-    }
+    if (saved && saved.id) { loader.dataset.dbId = saved.id; const row = buildBotActions(loader, { dbId: saved.id }); chat.appendChild(row); loader._actionsRow = row; }
     history.push({ role: "assistant", content: data.answer });
-  } catch (e) {
-    loader.textContent = "Error: " + e.message;
-  }
+  } catch (e) { loader.textContent = "Error: " + e.message; }
   chat.scrollTop = chat.scrollHeight;
 }
-
-// --- EDIT ---
-async function editUserMsg(userEl, userDbId) {
-  const original = userEl.innerText.trim();
-  questionEl.value = original;
-  questionEl.focus();
-  await deleteMessagesFrom(userEl, userDbId, true);
-}
-
-// --- DELETE SINGLE MESSAGE ---
-async function deleteMsg(msgEl, dbId) {
-  showConfirm("Delete message?", "This message will be permanently removed.", async () => {
-    if (dbId) await supabaseClient.from('chats').delete().eq('id', dbId);
-    if (msgEl._actionsRow) msgEl._actionsRow.remove();
-    msgEl.remove();
-    chat.scrollTop = chat.scrollHeight;
-  });
-}
-
+async function editUserMsg(userEl, userDbId) { questionEl.value = userEl.innerText.trim(); questionEl.focus(); await deleteMessagesFrom(userEl, userDbId, true); }
+async function deleteMsg(msgEl, dbId) { showConfirm("Delete message?", "This message will be permanently removed.", async () => { if (dbId) await supabaseClient.from('chats').delete().eq('id', dbId); if (msgEl._actionsRow) msgEl._actionsRow.remove(); msgEl.remove(); }); }
 async function deleteMessagesFrom(startEl, startDbId, includeStart) {
   const allChildren = Array.from(chat.children);
   const startIdx = allChildren.indexOf(startEl);
   if (startIdx === -1) return;
   const toRemove = allChildren.slice(startIdx + (includeStart ? 0 : 1));
   const idsToDelete = [];
-  for (const el of toRemove) {
-    if (el.dataset && el.dataset.dbId) idsToDelete.push(el.dataset.dbId);
-    if (el._actionsRow) el._actionsRow.remove();
-    el.remove();
-  }
+  for (const el of toRemove) { if (el.dataset && el.dataset.dbId) idsToDelete.push(el.dataset.dbId); if (el._actionsRow) el._actionsRow.remove(); el.remove(); }
   if (includeStart && startDbId) idsToDelete.push(startDbId);
-  if (includeStart) {
-    if (startEl._actionsRow) startEl._actionsRow.remove();
-    startEl.remove();
-  }
-  for (const id of idsToDelete) {
-    await supabaseClient.from('chats').delete().eq('id', id);
-  }
+  if (includeStart) { if (startEl._actionsRow) startEl._actionsRow.remove(); startEl.remove(); }
+  for (const id of idsToDelete) await supabaseClient.from('chats').delete().eq('id', id);
   rebuildHistoryFromDOM();
 }
-
 function rebuildHistoryFromDOM() {
   history = [];
   chat.querySelectorAll('.msg').forEach(el => {
@@ -884,58 +807,48 @@ function rebuildHistoryFromDOM() {
   });
 }
 
-// --- CONVERSATIONS ---
+// ============================================================
+// CONVERSATIONS
+// ============================================================
 async function loadConversations() {
   if (!currentUser) return;
   const { data, error } = await supabaseClient.from('conversations').select('*').order('updated_at', { ascending: false }).limit(200);
-  if (error) { console.error(error); return; }
+  if (error) return console.error(error);
   conversations = data || [];
   renderConversationList();
 }
-
 function renderConversationList() {
   const filter = (convSearch.value || '').trim().toLowerCase();
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterdayStart = new Date(todayStart - 86400000);
   const weekStart = new Date(todayStart - 7*86400000);
-
   const filtered = conversations.filter(c => !filter || (c.title || '').toLowerCase().includes(filter));
   const pinned = filtered.filter(c => c.pinned);
   const today = filtered.filter(c => !c.pinned && new Date(c.updated_at) >= todayStart);
   const yesterday = filtered.filter(c => !c.pinned && new Date(c.updated_at) >= yesterdayStart && new Date(c.updated_at) < todayStart);
   const week = filtered.filter(c => !c.pinned && new Date(c.updated_at) >= weekStart && new Date(c.updated_at) < yesterdayStart);
   const older = filtered.filter(c => !c.pinned && new Date(c.updated_at) < weekStart);
-
   function section(label, items) {
     if (items.length === 0) return '';
     return `<div class="conv-section"><div class="conv-label">${label}</div>` +
       items.map(c => `<div class="conv-item ${c.id === currentConversationId ? 'active' : ''}" data-id="${c.id}">
         <span class="conv-title">${escapeHtml(c.title || 'Chat')}</span>
         <button class="conv-icon-btn conv-pin ${c.pinned ? 'pinned' : ''}" data-pin="${c.id}">${c.pinned ? '★' : '☆'}</button>
+        <button class="conv-icon-btn conv-share ${c.is_public ? 'active' : ''}" data-share="${c.id}">${c.is_public ? '🔗' : '⤴'}</button>
         <button class="conv-icon-btn conv-del" data-del="${c.id}">✕</button>
       </div>`).join('') + `</div>`;
   }
-
   const html = section('Pinned', pinned) + section('Today', today) + section('Yesterday', yesterday) + section('Previous 7 Days', week) + section('Older', older);
   convList.innerHTML = html || '<div style="color:#4a6a4a; font-size:12px; padding:20px; text-align:center;">No chats yet.<br>Tap "New Chat" to start.</div>';
-
   convList.querySelectorAll('.conv-item').forEach(el => {
-    el.onclick = (e) => {
-      if (e.target.classList.contains('conv-pin') || e.target.classList.contains('conv-del')) return;
-      openConversation(parseInt(el.dataset.id));
-    };
+    el.onclick = (e) => { if (e.target.classList.contains('conv-pin') || e.target.classList.contains('conv-del') || e.target.classList.contains('conv-share')) return; openConversation(parseInt(el.dataset.id)); };
   });
   convList.querySelectorAll('.conv-pin').forEach(btn => {
-    btn.onclick = async (e) => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.pin);
-      const conv = conversations.find(c => c.id === id);
-      if (!conv) return;
-      conv.pinned = !conv.pinned;
-      await supabaseClient.from('conversations').update({ pinned: conv.pinned }).eq('id', id);
-      renderConversationList();
-    };
+    btn.onclick = async (e) => { e.stopPropagation(); const id = parseInt(btn.dataset.pin); const conv = conversations.find(c => c.id === id); if (!conv) return; conv.pinned = !conv.pinned; await supabaseClient.from('conversations').update({ pinned: conv.pinned }).eq('id', id); renderConversationList(); };
+  });
+  convList.querySelectorAll('.conv-share').forEach(btn => {
+    btn.onclick = async (e) => { e.stopPropagation(); const id = parseInt(btn.dataset.share); await toggleShare(id); };
   });
   convList.querySelectorAll('.conv-del').forEach(btn => {
     btn.onclick = (e) => {
@@ -943,11 +856,7 @@ function renderConversationList() {
       const id = parseInt(btn.dataset.del);
       showConfirm("Delete chat?", "This conversation and all its messages will be permanently removed.", async () => {
         await supabaseClient.from('conversations').delete().eq('id', id);
-        if (currentConversationId === id) {
-          currentConversationId = null;
-          chat.innerHTML = '<div class="welcome"><b>KUMG</b><div class="tagline">Think without limits.</div>Ask me anything.</div>';
-          history = [];
-        }
+        if (currentConversationId === id) { currentConversationId = null; chat.innerHTML = '<div class="welcome"><b>KUMG</b><div class="tagline">Think without limits.</div>Ask me anything.</div>'; history = []; }
         conversations = conversations.filter(c => c.id !== id);
         renderConversationList();
       });
@@ -956,52 +865,64 @@ function renderConversationList() {
 }
 convSearch.addEventListener('input', renderConversationList);
 
+async function toggleShare(id) {
+  const conv = conversations.find(c => c.id === id);
+  if (!conv) return;
+  if (conv.is_public) {
+    await supabaseClient.from('conversations').update({ is_public: false }).eq('id', id);
+    conv.is_public = false;
+    renderConversationList();
+    alert("Sharing turned off.");
+    return;
+  }
+  let token = conv.share_token;
+  if (!token) {
+    token = genToken();
+    await supabaseClient.from('conversations').update({ share_token: token, is_public: true }).eq('id', id);
+    conv.share_token = token;
+  } else {
+    await supabaseClient.from('conversations').update({ is_public: true }).eq('id', id);
+  }
+  conv.is_public = true;
+  renderConversationList();
+  const link = `${APP_URL}?share=${token}`;
+  const msg = `Check out this AI answer on KUMG:\n\n${link}`;
+  if (confirm("Share this chat?\n\nOK → open WhatsApp\nCancel → copy link")) {
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+  } else {
+    navigator.clipboard.writeText(link).then(() => alert("Link copied to clipboard."));
+  }
+}
+
 async function openConversation(id) {
   currentConversationId = id;
   closeSidebar();
   const { data } = await supabaseClient.from('chats').select('*').eq('conversation_id', id).order('created_at', { ascending: true });
-  chat.innerHTML = '';
-  history = [];
-  if (data) {
-    data.forEach(msg => {
-      addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot', { dbId: msg.id });
-      history.push({ role: msg.role, content: msg.content });
-    });
-  }
+  chat.innerHTML = ''; history = [];
+  if (data) data.forEach(msg => { addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot', { dbId: msg.id }); history.push({ role: msg.role, content: msg.content }); });
   renderConversationList();
 }
-
 function newChat() {
   currentConversationId = null;
   chat.innerHTML = '<div class="welcome"><b>KUMG</b><div class="tagline">Think without limits.</div>Ask me anything — school, work, business, life.</div>';
-  history = [];
-  closeSidebar();
-  renderConversationList();
+  history = []; closeSidebar(); renderConversationList();
 }
 $("newChatBtn").onclick = newChat;
-
 $("clearAllBtn").onclick = () => {
   closeSidebar();
   showConfirm("Clear all chats?", "Every conversation and message will be permanently deleted. Your account, points, and streak will NOT be affected.", async () => {
     await supabaseClient.from('conversations').delete().eq('user_id', currentUser.id);
-    conversations = [];
-    currentConversationId = null;
+    conversations = []; currentConversationId = null;
     chat.innerHTML = '<div class="welcome"><b>KUMG</b><div class="tagline">Think without limits.</div>Ask me anything.</div>';
-    history = [];
-    renderConversationList();
+    history = []; renderConversationList();
   });
 };
-
 async function ensureConversation(firstMessage) {
   if (currentConversationId) return currentConversationId;
   const title = (firstMessage || 'Photo question').substring(0, 45);
-  const { data, error } = await supabaseClient.from('conversations').insert([{
-    user_id: currentUser.id, title, subject
-  }]).select().single();
+  const { data, error } = await supabaseClient.from('conversations').insert([{ user_id: currentUser.id, title, subject }]).select().single();
   if (error) { console.error(error); return null; }
-  currentConversationId = data.id;
-  conversations.unshift(data);
-  renderConversationList();
+  currentConversationId = data.id; conversations.unshift(data); renderConversationList();
   return data.id;
 }
 
@@ -1011,19 +932,17 @@ function showConfirm(title, text, onYes) {
   confirmCallback = onYes;
   confirmModal.classList.add("show");
 }
-$("confirmYes").onclick = async () => {
-  confirmModal.classList.remove("show");
-  if (confirmCallback) { await confirmCallback(); confirmCallback = null; }
-};
+$("confirmYes").onclick = async () => { confirmModal.classList.remove("show"); if (confirmCallback) { await confirmCallback(); confirmCallback = null; } };
 $("confirmNo").onclick = () => { confirmModal.classList.remove("show"); confirmCallback = null; };
 
-// --- PROFILE ---
+// ============================================================
+// PROFILE + ANNOUNCEMENTS
+// ============================================================
 async function loadProfile() {
   if (!currentUser) return;
   const { data, error } = await supabaseClient.from('profiles').select('*').eq('id', currentUser.id).single();
-  if (error) { console.error(error); return; }
+  if (error) return console.error(error);
   userProfile = data;
-
   if (userProfile.premium_until && new Date(userProfile.premium_until) < new Date()) {
     if (userProfile.subscription === 'premium' && userProfile.role !== 'owner') {
       await supabaseClient.from('profiles').update({ subscription: 'free' }).eq('id', currentUser.id);
@@ -1034,7 +953,6 @@ async function loadProfile() {
     language = userProfile.preferred_language;
     document.querySelectorAll(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === language));
   }
-
   const today = new Date().toISOString().split('T')[0];
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
   let updates = {};
@@ -1042,27 +960,26 @@ async function loadProfile() {
   if (userProfile.last_active_date !== today) {
     let newStreak = 1;
     if (userProfile.last_active_date === yesterday) newStreak = (userProfile.streak_days || 0) + 1;
-    updates.streak_days = newStreak;
-    updates.points = (userProfile.points || 0) + 5;
-    updates.last_active_date = today;
+    updates.streak_days = newStreak; updates.points = (userProfile.points || 0) + 5; updates.last_active_date = today;
   }
   if (Object.keys(updates).length > 0) {
     await supabaseClient.from('profiles').update(updates).eq('id', currentUser.id);
     Object.assign(userProfile, updates);
   }
-
   $("refCount").textContent = userProfile.referral_count || 0;
   if (userProfile.role === 'owner') $("ownerBtn").classList.remove("hidden");
-  updateUsageUI();
-  updateStatsUI();
-  checkReminder();
+  updateUsageUI(); updateStatsUI(); checkReminder(); loadAnnouncement();
 }
-
-function updateStatsUI() {
-  if (!userProfile) return;
-  pointsStat.textContent = userProfile.points || 0;
-  streakStat.textContent = userProfile.streak_days || 0;
+async function loadAnnouncement() {
+  const { data } = await supabaseClient.from('announcements').select('*').eq('active', true).order('created_at', { ascending: false }).limit(1);
+  if (data && data.length > 0) {
+    announcementBar.innerHTML = `<b>📣 ${escapeHtml(data[0].message)}</b>`;
+    announcementBar.classList.add("show");
+  } else {
+    announcementBar.classList.remove("show");
+  }
 }
+function updateStatsUI() { if (!userProfile) return; pointsStat.textContent = userProfile.points || 0; streakStat.textContent = userProfile.streak_days || 0; }
 async function awardPoints(amount) {
   if (!currentUser || !userProfile) return;
   userProfile.points = (userProfile.points || 0) + amount;
@@ -1080,8 +997,7 @@ function updateUsageUI() {
     const remaining = Math.max(0, FREE_DAILY_LIMIT - userProfile.questions_today);
     usageBadge.textContent = `${remaining} / ${FREE_DAILY_LIMIT} left`;
     usageBadge.classList.toggle("warning", remaining <= 3);
-    planBadge.textContent = "FREE";
-    planBadge.classList.remove("premium"); planBadge.classList.add("free");
+    planBadge.textContent = "FREE"; planBadge.classList.remove("premium"); planBadge.classList.add("free");
   }
 }
 
@@ -1090,9 +1006,7 @@ supabaseClient.auth.onAuthStateChange(async (event, session) => {
     currentUser = session.user;
     userEmail.textContent = currentUser.email;
     authScreen.classList.add("hidden"); mainApp.classList.remove("hidden");
-    await loadProfile();
-    await loadConversations();
-    newChat();
+    await loadProfile(); await loadConversations(); newChat();
   } else {
     currentUser = null; userProfile = null; conversations = []; currentConversationId = null;
     authScreen.classList.remove("hidden"); mainApp.classList.add("hidden");
@@ -1102,11 +1016,7 @@ supabaseClient.auth.onAuthStateChange(async (event, session) => {
 });
 
 $("logoutBtn").onclick = () => { closeSidebar(); supabaseClient.auth.signOut(); };
-$("supportBtn").onclick = () => {
-  closeSidebar();
-  const msg = `Hi KUMG Support, I need help. My email: ${currentUser?.email || 'unknown'}`;
-  window.open(`https://wa.me/${SUPPORT_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-};
+$("supportBtn").onclick = () => { closeSidebar(); const msg = `Hi KUMG Support. My email: ${currentUser?.email || 'unknown'}`; window.open(`https://wa.me/${SUPPORT_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank'); };
 $("shareRefBtn").onclick = () => {
   closeSidebar();
   const code = userProfile?.referral_code;
@@ -1121,17 +1031,13 @@ function shareToWhatsApp(text) {
   const msg = `${short}\n\n— Answered by KUMG\n👉 ${APP_URL}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 async function saveMsg(content, role) {
   if (!currentUser || !currentConversationId) return null;
-  const { data, error } = await supabaseClient.from('chats').insert([{
-    user_id: currentUser.id, conversation_id: currentConversationId, content, role, subject
-  }]).select().single();
-  if (error) { console.error(error); return null; }
+  const { data, error } = await supabaseClient.from('chats').insert([{ user_id: currentUser.id, conversation_id: currentConversationId, content, role, subject }]).select().single();
+  if (error) return null;
   await supabaseClient.from('conversations').update({ updated_at: new Date().toISOString() }).eq('id', currentConversationId);
   return data;
 }
-
 $("cameraBtn").onclick = () => imageInput.click();
 imageInput.onchange = (e) => {
   const file = e.target.files[0]; if (!file) return;
@@ -1142,88 +1048,42 @@ imageInput.onchange = (e) => {
 };
 $("removeImageBtn").onclick = () => { pendingImage = null; imageInput.value = ""; imagePreviewBar.classList.remove("show"); };
 
-// --- SHARED ASK RUNNER ---
+// ============================================================
+// ASK
+// ============================================================
 async function runAsk(q, isRegenerate) {
   const isPremium = userProfile && (userProfile.subscription === 'premium' || userProfile.subscription === 'school');
-  if (!isPremium && userProfile && !isRegenerate && userProfile.questions_today >= FREE_DAILY_LIMIT) {
-    upgradeModal.classList.add("show"); return;
-  }
-
-  if (!isRegenerate) {
-    await ensureConversation(q);
-    if (!currentConversationId) return alert("Could not create chat. Try again.");
-  }
-
+  if (!isPremium && userProfile && !isRegenerate && userProfile.questions_today >= FREE_DAILY_LIMIT) { upgradeModal.classList.add("show"); return; }
+  if (!isRegenerate) { await ensureConversation(q); if (!currentConversationId) return alert("Could not create chat."); }
   const imageToSend = isRegenerate ? null : pendingImage;
-
   if (!isRegenerate) {
     const userEl = addMsg(q || "[Photo]", "user", { imageData: imageToSend, addActions: false });
     const saved = await saveMsg(q || "[Photo uploaded]", "user");
-    if (saved && saved.id) {
-      userEl.dataset.dbId = saved.id;
-      const row = buildUserActions(userEl, { dbId: saved.id });
-      chat.appendChild(row);
-      userEl._actionsRow = row;
-    }
+    if (saved && saved.id) { userEl.dataset.dbId = saved.id; const row = buildUserActions(userEl, { dbId: saved.id }); chat.appendChild(row); userEl._actionsRow = row; }
   }
-
-  if (!isRegenerate) {
-    questionEl.value = "";
-    pendingImage = null; imageInput.value = "";
-    imagePreviewBar.classList.remove("show");
-  }
-
+  if (!isRegenerate) { questionEl.value = ""; pendingImage = null; imageInput.value = ""; imagePreviewBar.classList.remove("show"); }
   sendBtn.disabled = true;
-
   if (!isPremium && userProfile && !isRegenerate) {
-    userProfile.questions_today += 1;
-    updateUsageUI();
+    userProfile.questions_today += 1; updateUsageUI();
     await supabaseClient.from('profiles').update({ questions_today: userProfile.questions_today }).eq('id', currentUser.id);
     awardPoints(10);
   }
-
   const loader = addMsg("", "bot", { addActions: false });
   loader.innerHTML = '<svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
-
   if (!isRegenerate && q) history.push({ role: "user", content: q });
-
   try {
-    const res = await fetch(`${BACKEND_URL}/api/ask`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: q, subject, history: history.slice(-6),
-        think: isThink, search: isSearch, language,
-        paperContext: activePaper ? activePaper.content : null,
-        image: imageToSend
-      })
-    });
+    const res = await fetch(`${BACKEND_URL}/api/ask`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: q, subject, history: history.slice(-6), think: isThink, search: isSearch, language, paperContext: activePaper ? activePaper.content : null, image: imageToSend }) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Request failed");
-    loader.innerHTML = marked.parse(data.answer);
-    enhanceRendered(loader);
+    loader.innerHTML = marked.parse(data.answer); enhanceRendered(loader);
     history.push({ role: "assistant", content: data.answer });
-
     const saved = await saveMsg(data.answer, "assistant");
-    if (saved && saved.id) {
-      loader.dataset.dbId = saved.id;
-      const row = buildBotActions(loader, { dbId: saved.id });
-      chat.appendChild(row);
-      loader._actionsRow = row;
-    }
+    if (saved && saved.id) { loader.dataset.dbId = saved.id; const row = buildBotActions(loader, { dbId: saved.id }); chat.appendChild(row); loader._actionsRow = row; }
     loadConversations();
-  } catch (e) {
-    loader.textContent = "Error: " + e.message;
-  }
-  sendBtn.disabled = false;
-  chat.scrollTop = chat.scrollHeight;
+  } catch (e) { loader.textContent = "Error: " + e.message; }
+  sendBtn.disabled = false; chat.scrollTop = chat.scrollHeight;
 }
-
-async function ask() {
-  const q = questionEl.value.trim();
-  if (!q && !pendingImage) return;
-  await runAsk(q, false);
-}
-
+async function ask() { const q = questionEl.value.trim(); if (!q && !pendingImage) return; await runAsk(q, false); }
 $("quizBtn").onclick = async () => {
   if (history.length === 0) return alert("Ask a question first!");
   await ensureConversation("Quiz session");
@@ -1234,40 +1094,79 @@ $("quizBtn").onclick = async () => {
     const res = await fetch(`${BACKEND_URL}/api/quiz`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subject, history: history.slice(-6), language }) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Request failed");
-    loader.innerHTML = marked.parse(data.answer);
-    enhanceRendered(loader);
+    loader.innerHTML = marked.parse(data.answer); enhanceRendered(loader);
     const saved = await saveMsg(data.answer, "assistant");
-    if (saved && saved.id) {
-      loader.dataset.dbId = saved.id;
-      const row = buildBotActions(loader, { dbId: saved.id });
-      chat.appendChild(row);
-      loader._actionsRow = row;
-    }
+    if (saved && saved.id) { loader.dataset.dbId = saved.id; const row = buildBotActions(loader, { dbId: saved.id }); chat.appendChild(row); loader._actionsRow = row; }
     awardPoints(50); loadConversations();
   } catch (e) { loader.textContent = "Error: " + e.message; }
   sendBtn.disabled = false; chat.scrollTop = chat.scrollHeight;
 };
-
 $("thinkBtn").onclick = () => { isThink = !isThink; $("thinkBtn").classList.toggle("active", isThink); };
 $("searchBtn").onclick = () => { isSearch = !isSearch; $("searchBtn").classList.toggle("active", isSearch); };
 sendBtn.onclick = ask;
 questionEl.addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
 
-$("leaderboardBtn").onclick = async () => {
-  closeSidebar(); $("leaderboardList").innerHTML = '<p style="color:#5a7a5a;">Loading...</p>';
-  $("leaderboardModal").classList.add("show");
-  const { data, error } = await supabaseClient.rpc('get_leaderboard');
-  if (error) { $("leaderboardList").innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+// ============================================================
+// LEADERBOARD (with referral toggle)
+// ============================================================
+$("leaderboardBtn").onclick = () => { closeSidebar(); lbMode = "points"; updateLbTabs(); renderLeaderboard(); $("leaderboardModal").classList.add("show"); };
+$("lbByPoints").onclick = () => { lbMode = "points"; updateLbTabs(); renderLeaderboard(); };
+$("lbByRefs").onclick = () => { lbMode = "referrals"; updateLbTabs(); renderLeaderboard(); };
+function updateLbTabs() {
+  $("lbByPoints").classList.toggle("active", lbMode === "points");
+  $("lbByRefs").classList.toggle("active", lbMode === "referrals");
+  $("lbTitle").textContent = lbMode === "points" ? "Top Minds — Points" : "Top Referrers";
+}
+async function renderLeaderboard() {
+  const list = $("leaderboardList");
+  list.innerHTML = '<p style="color:#5a7a5a;">Loading...</p>';
   const myName = currentUser ? currentUser.email.split('@')[0] : "";
-  if (!data || data.length === 0) { $("leaderboardList").innerHTML = '<p>No users yet.</p>'; return; }
-  $("leaderboardList").innerHTML = data.map((row, i) => {
-    const isMe = row.display_name === myName;
-    const medal = i===0?"🥇":i===1?"🥈":i===2?"🥉":`#${i+1}`;
-    return `<div class="lb-row ${isMe?'me':''}"><span class="lb-rank">${medal}</span><span class="lb-name">${row.display_name}</span><span class="lb-streak">🔥${row.streak_days}</span><span class="lb-points">${row.points}</span></div>`;
-  }).join("");
-};
+  if (lbMode === "points") {
+    const { data, error } = await supabaseClient.rpc('get_leaderboard');
+    if (error) { list.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+    if (!data || data.length === 0) { list.innerHTML = '<p>No users yet.</p>'; return; }
+    list.innerHTML = data.map((row, i) => {
+      const isMe = row.display_name === myName;
+      const medal = i===0?"🥇":i===1?"🥈":i===2?"🥉":`#${i+1}`;
+      return `<div class="lb-row ${isMe?'me':''}"><span class="lb-rank">${medal}</span><span class="lb-name">${row.display_name}</span><span class="lb-streak">🔥${row.streak_days}</span><span class="lb-points">${row.points}</span></div>`;
+    }).join("");
+  } else {
+    const { data, error } = await supabaseClient.rpc('get_referral_leaderboard');
+    if (error) { list.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+    if (!data || data.length === 0) { list.innerHTML = '<p>No referrers yet.</p>'; return; }
+    list.innerHTML = data.map((row, i) => {
+      const isMe = row.display_name === myName;
+      const medal = i===0?"🥇":i===1?"🥈":i===2?"🥉":`#${i+1}`;
+      return `<div class="lb-row ${isMe?'me':''}"><span class="lb-rank">${medal}</span><span class="lb-name">${row.display_name}</span><span class="lb-points">${row.referral_count} invited</span></div>`;
+    }).join("");
+  }
+}
 $("closeLbBtn").onclick = () => $("leaderboardModal").classList.remove("show");
 
+// ============================================================
+// PUBLIC LIBRARY
+// ============================================================
+$("libraryBtn").onclick = async () => {
+  closeSidebar();
+  const list = $("libraryList");
+  list.innerHTML = '<p style="color:#5a7a5a;">Loading...</p>';
+  $("libraryModal").classList.add("show");
+  const { data, error } = await supabaseClient.rpc('get_public_library');
+  if (error) { list.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+  if (!data || data.length === 0) { list.innerHTML = '<p style="color:#5a7a5a;">No public chats yet. Be the first to share one!</p>'; return; }
+  list.innerHTML = data.map(p => `<div class="paper-item" data-token="${p.share_token}"><h3>${escapeHtml(p.title || 'Chat')}</h3><p>${escapeHtml(p.subject || 'General')} · ${new Date(p.created_at).toLocaleDateString()}</p></div>`).join("");
+  list.querySelectorAll(".paper-item").forEach(el => {
+    el.onclick = () => {
+      const token = el.dataset.token;
+      window.open(`${APP_URL}?share=${token}`, '_blank');
+    };
+  });
+};
+$("closeLibraryBtn").onclick = () => $("libraryModal").classList.remove("show");
+
+// ============================================================
+// PAST PAPERS
+// ============================================================
 $("pastPapersBtn").onclick = async () => {
   closeSidebar(); $("papersList").innerHTML = '<p style="color:#5a7a5a;">Loading...</p>';
   $("papersModal").classList.add("show");
@@ -1279,8 +1178,7 @@ $("pastPapersBtn").onclick = async () => {
     el.onclick = () => {
       const paper = data.find(p => p.id == el.dataset.id);
       activePaper = paper;
-      paperBanner.classList.add("show");
-      paperBannerText.textContent = "Studying: " + paper.title;
+      paperBanner.classList.add("show"); paperBannerText.textContent = "Studying: " + paper.title;
       $("papersModal").classList.remove("show"); newChat();
     };
   });
@@ -1288,72 +1186,308 @@ $("pastPapersBtn").onclick = async () => {
 $("closePapersBtn").onclick = () => $("papersModal").classList.remove("show");
 $("exitPaperBtn").onclick = () => { activePaper = null; paperBanner.classList.remove("show"); };
 
+// ============================================================
+// UPGRADE + PAYMENT
+// ============================================================
 $("upgradeSidebarBtn").onclick = () => { closeSidebar(); upgradeModal.classList.add("show"); };
 $("cancelUpgrade").onclick = () => upgradeModal.classList.remove("show");
 $("startPaymentBtn").onclick = () => {
   upgradeModal.classList.remove("show");
   const ref = "KUMG-" + (userProfile?.referral_code || Math.random().toString(36).substring(2,8).toUpperCase());
-  $("paymentRef").textContent = ref;
-  $("ecocashDisplay").textContent = ECOCASH_NUMBER;
-  $("paymentRef").dataset.ref = ref;
+  $("paymentRef").textContent = ref; $("ecocashDisplay").textContent = ECOCASH_NUMBER; $("paymentRef").dataset.ref = ref;
   paymentModal.classList.add("show");
 };
 $("cancelPayment").onclick = () => paymentModal.classList.remove("show");
 $("submitPaymentBtn").onclick = async () => {
-  const txn = $("txnInput").value.trim();
-  const ref = $("paymentRef").dataset.ref;
+  const txn = $("txnInput").value.trim(); const ref = $("paymentRef").dataset.ref;
   if (!txn || txn.length < 5) return alert("Enter the EcoCash transaction ID.");
   const btn = $("submitPaymentBtn"); btn.disabled = true; btn.textContent = "Submitting...";
   const { error } = await supabaseClient.from('payments').insert([{ user_id: currentUser.id, amount: 1.00, method: 'EcoCash', transaction_ref: `${ref} | ${txn}`, status: 'pending' }]);
   btn.disabled = false; btn.textContent = "Submit Payment";
   if (error) { alert("Error: " + error.message); return; }
-  paymentModal.classList.remove("show");
-  alert("Payment submitted! Approved within 1 hour.");
-  $("txnInput").value = "";
+  paymentModal.classList.remove("show"); alert("Payment submitted!"); $("txnInput").value = "";
 };
 
-$("ownerBtn").onclick = async () => {
-  closeSidebar();
-  $("ownerStats").innerHTML = '<p style="color:#5a7a5a; grid-column: span 2; text-align:center;">Loading...</p>';
-  $("pendingList").innerHTML = "";
-  ownerModal.classList.add("show");
-
-  const { data: stats, error } = await supabaseClient.rpc('get_owner_stats');
-  if (error) {
-    $("ownerStats").innerHTML = `<p style="color:#ef4444; grid-column: span 2;">${error.message}</p>`;
-  } else {
-    $("ownerStats").innerHTML = `
-      <div class="analytics-card"><b>${stats.total_users}</b><span>Total Users</span></div>
-      <div class="analytics-card"><b>${stats.premium_users}</b><span>Premium</span></div>
-      <div class="analytics-card"><b>${stats.active_today}</b><span>Active Today</span></div>
-      <div class="analytics-card"><b>$${stats.total_revenue}</b><span>Revenue</span></div>
-      <div class="analytics-card"><b>${stats.total_conversations}</b><span>Chats</span></div>
-      <div class="analytics-card"><b>${stats.total_messages}</b><span>Messages</span></div>
-      <div class="analytics-card"><b>${stats.pending_payments}</b><span>Pending</span></div>
-      <div class="analytics-card"><b style="font-size:14px;">${stats.top_subject}</b><span>Top Subject</span></div>
-    `;
-  }
-
-  const { data: pending } = await supabaseClient.from('payments').select('*').eq('status', 'pending').order('created_at', { ascending: false });
-  if (!pending || pending.length === 0) {
-    $("pendingList").innerHTML = '<p style="color:#5a7a5a; font-size:12px;">No pending payments.</p>';
-  } else {
-    $("pendingList").innerHTML = pending.map(p => `<div class="pending-row" data-id="${p.id}"><div class="u">User: ${p.user_id.substring(0,8)}...</div><div class="r">${p.transaction_ref}</div><div style="color:#5a7a5a; font-size:11px;">${new Date(p.created_at).toLocaleString()}</div><div class="actions"><button class="approve">Approve</button><button class="reject">Reject</button></div></div>`).join("");
-    $("pendingList").querySelectorAll(".pending-row").forEach(row => {
-      const id = row.dataset.id;
-      row.querySelector(".approve").onclick = async () => {
-        const { error } = await supabaseClient.rpc('approve_payment', { payment_id: id });
-        if (error) return alert(error.message); alert("Approved!"); $("ownerBtn").click();
-      };
-      row.querySelector(".reject").onclick = async () => {
-        const { error } = await supabaseClient.rpc('reject_payment', { payment_id: id });
-        if (error) return alert(error.message); alert("Rejected."); $("ownerBtn").click();
-      };
-    });
-  }
-};
+// ============================================================
+// OWNER DASHBOARD (tabs)
+// ============================================================
+document.querySelectorAll(".owner-tab").forEach(tab => {
+  tab.onclick = () => { ownerTab = tab.dataset.otab; document.querySelectorAll(".owner-tab").forEach(t => t.classList.toggle("active", t.dataset.otab === ownerTab)); renderOwnerTab(); };
+});
+$("ownerBtn").onclick = () => { closeSidebar(); ownerTab = "stats"; document.querySelectorAll(".owner-tab").forEach(t => t.classList.toggle("active", t.dataset.otab === "stats")); renderOwnerTab(); ownerModal.classList.add("show"); };
 $("closeOwnerBtn").onclick = () => ownerModal.classList.remove("show");
 
+async function renderOwnerTab() {
+  const c = $("ownerContent");
+  c.innerHTML = '<p style="color:#5a7a5a; text-align:center;">Loading...</p>';
+  if (ownerTab === "stats") return renderOwnerStats(c);
+  if (ownerTab === "payments") return renderOwnerPayments(c);
+  if (ownerTab === "users") return renderOwnerUsers(c);
+  if (ownerTab === "papers") return renderOwnerPapers(c);
+  if (ownerTab === "broadcast") return renderOwnerBroadcast(c);
+}
+
+async function renderOwnerStats(c) {
+  const { data: s, error } = await supabaseClient.rpc('get_owner_stats');
+  if (error) { c.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+  const { data: rev } = await supabaseClient.rpc('get_revenue_breakdown');
+  c.innerHTML = `
+    <div class="analytics-grid">
+      <div class="analytics-card"><b>${s.total_users}</b><span>Users</span></div>
+      <div class="analytics-card"><b>${s.premium_users}</b><span>Premium</span></div>
+      <div class="analytics-card"><b>${s.active_today}</b><span>Active Today</span></div>
+      <div class="analytics-card"><b>$${rev.total}</b><span>Total Revenue</span></div>
+      <div class="analytics-card"><b>$${rev.this_month}</b><span>This Month</span></div>
+      <div class="analytics-card"><b>$${rev.last_30_days}</b><span>Last 30 Days</span></div>
+      <div class="analytics-card"><b>${rev.approved_count}</b><span>Paid</span></div>
+      <div class="analytics-card"><b>${rev.pending_count}</b><span>Pending</span></div>
+      <div class="analytics-card"><b>${s.total_conversations}</b><span>Chats</span></div>
+      <div class="analytics-card"><b>${s.total_flashcards || 0}</b><span>Flashcards</span></div>
+    </div>
+  `;
+}
+
+async function renderOwnerPayments(c) {
+  const { data } = await supabaseClient.from('payments').select('*').eq('status', 'pending').order('created_at', { ascending: false });
+  if (!data || data.length === 0) { c.innerHTML = '<p style="color:#5a7a5a;">No pending payments.</p>'; return; }
+  c.innerHTML = data.map(p => `<div class="pending-row" data-id="${p.id}"><div class="u">User: ${p.user_id.substring(0,8)}...</div><div class="r">${p.transaction_ref}</div><div class="actions"><button class="approve">Approve</button><button class="reject">Reject</button></div></div>`).join("");
+  c.querySelectorAll(".pending-row").forEach(row => {
+    const id = row.dataset.id;
+    row.querySelector(".approve").onclick = async () => { const { error } = await supabaseClient.rpc('approve_payment', { payment_id: id }); if (error) return alert(error.message); alert("Approved!"); renderOwnerTab(); };
+    row.querySelector(".reject").onclick = async () => { const { error } = await supabaseClient.rpc('reject_payment', { payment_id: id }); if (error) return alert(error.message); alert("Rejected."); renderOwnerTab(); };
+  });
+}
+
+async function renderOwnerUsers(c) {
+  const { data, error } = await supabaseClient.rpc('get_all_users');
+  if (error) { c.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+  if (!data || data.length === 0) { c.innerHTML = '<p>No users.</p>'; return; }
+  c.innerHTML = data.map(u => `
+    <div class="user-row" data-uid="${u.id}">
+      <div class="e">${escapeHtml(u.email || '—')}</div>
+      <div class="m">${u.role} · ${u.points} pts · ${u.referral_count} refs · last active ${u.last_active_date || '—'}</div>
+      <div class="a">
+        <button data-plan="free" class="${u.subscription === 'free' ? 'on' : ''}">Free</button>
+        <button data-plan="premium" class="${u.subscription === 'premium' ? 'on' : ''}">Premium</button>
+      </div>
+    </div>
+  `).join("");
+  c.querySelectorAll(".user-row").forEach(row => {
+    const uid = row.dataset.uid;
+    row.querySelectorAll("[data-plan]").forEach(btn => {
+      btn.onclick = async () => {
+        const plan = btn.dataset.plan;
+        const { error } = await supabaseClient.rpc('set_user_plan', { target_user: uid, new_subscription: plan });
+        if (error) return alert(error.message);
+        alert("Updated to " + plan);
+        renderOwnerTab();
+      };
+    });
+  });
+}
+
+async function renderOwnerPapers(c) {
+  const { data, error } = await supabaseClient.from('past_papers').select('*').order('created_at', { ascending: false });
+  if (error) { c.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+  c.innerHTML = `
+    <div style="background:#070a07; border:1px solid #14301a; border-radius:10px; padding:12px; margin-bottom:12px;">
+      <h3 style="color:#22c55e; margin:0 0 8px; font-size:14px;">Add New Paper</h3>
+      <input id="npTitle" placeholder="Title" style="width:100%; padding:8px; background:#0d1a0d; border:1px solid #14301a; border-radius:6px; color:#d6e8d6; font-size:13px; margin-bottom:6px;">
+      <input id="npSubject" placeholder="Subject" style="width:100%; padding:8px; background:#0d1a0d; border:1px solid #14301a; border-radius:6px; color:#d6e8d6; font-size:13px; margin-bottom:6px;">
+      <input id="npLevel" placeholder="Level (e.g. O-Level)" style="width:100%; padding:8px; background:#0d1a0d; border:1px solid #14301a; border-radius:6px; color:#d6e8d6; font-size:13px; margin-bottom:6px;">
+      <textarea id="npContent" placeholder="Paper content..." rows="4" style="width:100%; padding:8px; background:#0d1a0d; border:1px solid #14301a; border-radius:6px; color:#d6e8d6; font-size:13px; margin-bottom:6px; font-family:inherit;"></textarea>
+      <button class="primary" id="npSave" style="padding:10px; font-size:13px;">Save Paper</button>
+    </div>
+    ${(!data || data.length === 0) ? '<p>No papers.</p>' : data.map(p => `
+      <div class="paper-item" style="display:flex; justify-content:space-between; align-items:center;">
+        <div><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.subject)} · ${escapeHtml(p.level)}</p></div>
+        <button class="action-btn" data-del-paper="${p.id}" style="color:#ef4444; border-color:#ef4444;">Delete</button>
+      </div>
+    `).join("")}
+  `;
+  $("npSave").onclick = async () => {
+    const title = $("npTitle").value.trim(); const subj = $("npSubject").value.trim();
+    const level = $("npLevel").value.trim(); const content = $("npContent").value.trim();
+    if (!title || !subj || !level || !content) return alert("Fill all fields.");
+    const { error } = await supabaseClient.from('past_papers').insert([{ title, subject: subj, level, content }]);
+    if (error) return alert(error.message);
+    alert("Paper saved!"); renderOwnerTab();
+  };
+  c.querySelectorAll("[data-del-paper]").forEach(btn => {
+    btn.onclick = async () => {
+      if (!confirm("Delete this paper?")) return;
+      await supabaseClient.from('past_papers').delete().eq('id', btn.dataset.delPaper);
+      renderOwnerTab();
+    };
+  });
+}
+
+async function renderOwnerBroadcast(c) {
+  c.innerHTML = `
+    <p>Send an announcement. It appears as a banner at the top of every user's app.</p>
+    <textarea id="bcMsg" placeholder="Example: New Biology papers added! Check Past Papers." rows="3" style="width:100%; padding:10px; background:#070a07; border:1px solid #14301a; border-radius:10px; color:#d6e8d6; font-size:14px; font-family:inherit;"></textarea>
+    <button class="primary" id="bcSend" style="padding:13px; margin-top:10px;">Send Announcement</button>
+    <button class="cancel" id="bcClear" style="padding:13px;">Turn Off All Announcements</button>
+  `;
+  $("bcSend").onclick = async () => {
+    const msg = $("bcMsg").value.trim();
+    if (!msg) return alert("Type a message.");
+    await supabaseClient.from('announcements').update({ active: false }).eq('active', true);
+    const { error } = await supabaseClient.from('announcements').insert([{ message: msg, active: true }]);
+    if (error) return alert(error.message);
+    alert("Broadcast sent!"); renderOwnerTab();
+  };
+  $("bcClear").onclick = async () => {
+    await supabaseClient.from('announcements').update({ active: false }).eq('active', true);
+    alert("All announcements turned off."); renderOwnerTab();
+  };
+}
+
+// ============================================================
+// STUDY MODE (identical to previous)
+// ============================================================
+$("studyModeBtn").onclick = () => { closeSidebar(); studyScreen.classList.add("show"); switchStudyTab("flashcards"); };
+$("closeStudyBtn").onclick = () => { studyScreen.classList.remove("show"); window.speechSynthesis && window.speechSynthesis.cancel(); };
+document.querySelectorAll(".study-tab").forEach(tab => { tab.onclick = () => switchStudyTab(tab.dataset.tab); });
+function switchStudyTab(tab) {
+  studyTab = tab;
+  document.querySelectorAll(".study-tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
+  if (tab === "flashcards") renderFlashcardsTab(); else if (tab === "practice") renderPracticeTab(); else if (tab === "mycards") renderMyCardsTab();
+}
+async function renderFlashcardsTab() {
+  studyContent.innerHTML = '<div style="text-align:center; color:#5a7a5a; padding:40px;">Loading...</div>';
+  const nowIso = new Date().toISOString();
+  const { data: dueCards, error } = await supabaseClient.from('flashcards').select('*').eq('user_id', currentUser.id).lte('next_review_at', nowIso).order('next_review_at', { ascending: true }).limit(30);
+  if (error) { studyContent.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+  const { count } = await supabaseClient.from('flashcards').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+  if (!dueCards || dueCards.length === 0) {
+    studyContent.innerHTML = `
+      <div class="study-empty">
+        <b style="color:#22c55e; display:block; font-size:20px; margin-bottom:12px;">No cards due right now</b>
+        You have ${count || 0} card${count === 1 ? '' : 's'} total.<br>Generate more or come back later.
+        <div class="study-form" style="margin-top:24px;">
+          <h3>Generate Flashcards</h3>
+          <input id="fcTopic" type="text" placeholder="Topic (e.g. Photosynthesis)" autocomplete="off">
+          <select id="fcCount"><option value="5">5 cards</option><option value="10" selected>10 cards</option><option value="15">15 cards</option><option value="20">20 cards</option></select>
+          <button id="fcGenBtn">Generate from Topic</button>
+          <button class="secondary" id="fcFromChatBtn">Generate from Current Chat</button>
+        </div>
+      </div>`;
+    $("fcGenBtn").onclick = () => generateFlashcards($("fcTopic").value.trim(), parseInt($("fcCount").value));
+    $("fcFromChatBtn").onclick = () => generateFlashcardsFromHistory();
+    return;
+  }
+  reviewQueue = dueCards; reviewIndex = 0; isFlipped = false; renderReviewCard();
+}
+function renderReviewCard() {
+  if (reviewIndex >= reviewQueue.length) {
+    studyContent.innerHTML = `<div class="study-empty"><b style="color:#22c55e; display:block; font-size:22px; margin-bottom:12px;">Done for now 🎉</b>You reviewed ${reviewQueue.length} card${reviewQueue.length === 1 ? '' : 's'}.<br><button class="study-btn got" style="margin-top:24px;" id="backBtn">Back</button></div>`;
+    $("backBtn").onclick = () => renderFlashcardsTab(); return;
+  }
+  const card = reviewQueue[reviewIndex];
+  const cardFront = card.front, cardBack = card.back;
+  studyContent.innerHTML = `
+    <div class="flashcard-wrapper"><div class="flashcard" id="flipCard">
+      <div class="flashcard-face flashcard-front"><div>${escapeHtml(cardFront)}</div><div class="flashcard-hint">Tap to flip</div></div>
+      <div class="flashcard-face flashcard-back"><div>${escapeHtml(cardBack)}</div></div>
+    </div></div>
+    <div class="study-counter">Card ${reviewIndex + 1} of ${reviewQueue.length}</div>
+    <div class="study-actions"><button class="study-btn miss" id="missBtn">Missed</button><button class="study-btn got" id="gotBtn">Got it</button></div>`;
+  const flipCard = $("flipCard");
+  flipCard.onclick = () => { isFlipped = !isFlipped; flipCard.classList.toggle("flipped", isFlipped); };
+  $("missBtn").onclick = () => gradeCard(card, false); $("gotBtn").onclick = () => gradeCard(card, true);
+}
+async function gradeCard(card, gotIt) {
+  let interval = card.interval_days || 0; let ease = parseFloat(card.ease) || 2.5;
+  let reps = (card.reps || 0) + 1; let lapses = card.lapses || 0;
+  if (gotIt) { if (reps === 1) interval = 1; else if (reps === 2) interval = 3; else interval = Math.round(interval * ease); }
+  else { interval = 1; ease = Math.max(1.3, ease - 0.2); lapses += 1; }
+  interval = Math.min(interval, 60);
+  const nextReviewAt = new Date(Date.now() + interval * 86400000).toISOString();
+  await supabaseClient.from('flashcards').update({ interval_days: interval, ease, reps, lapses, next_review_at: nextReviewAt }).eq('id', card.id);
+  awardPoints(gotIt ? 5 : 2); reviewIndex += 1; isFlipped = false; renderReviewCard();
+}
+async function generateFlashcards(topic, count) {
+  if (!topic) return alert("Enter a topic first.");
+  const btn = $("fcGenBtn"); btn.disabled = true; btn.textContent = "Generating...";
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/flashcards`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic, subject, language, count }) });
+    const data = await res.json(); if (!res.ok) throw new Error(data.error || "Failed");
+    await saveFlashcards(data.cards); alert(`Created ${data.cards.length} flashcards!`); renderFlashcardsTab();
+  } catch (e) { alert("Error: " + e.message); btn.disabled = false; btn.textContent = "Generate from Topic"; }
+}
+async function generateFlashcardsFromHistory() {
+  if (history.length === 0) return alert("No chat history. Ask questions first.");
+  const btn = $("fcFromChatBtn"); btn.disabled = true; btn.textContent = "Generating...";
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/flashcards`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ history: history.slice(-10), subject, language, count: 10 }) });
+    const data = await res.json(); if (!res.ok) throw new Error(data.error || "Failed");
+    await saveFlashcards(data.cards); alert(`Created ${data.cards.length} flashcards!`); renderFlashcardsTab();
+  } catch (e) { alert("Error: " + e.message); btn.disabled = false; btn.textContent = "Generate from Current Chat"; }
+}
+async function generateFlashcardsFromText(text) {
+  if (!currentUser) return;
+  const btn = event.currentTarget; btn.textContent = '...'; btn.disabled = true;
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/flashcards`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ history: [{ role: 'assistant', content: text }], subject, language, count: 5 }) });
+    const data = await res.json(); if (!res.ok) throw new Error(data.error || "Failed");
+    await saveFlashcards(data.cards, currentConversationId);
+    btn.textContent = `✓ ${data.cards.length} cards`;
+    setTimeout(() => { btn.innerHTML = '＋ Card'; btn.disabled = false; }, 2500);
+  } catch (e) { btn.textContent = 'Error'; setTimeout(() => { btn.innerHTML = '＋ Card'; btn.disabled = false; }, 2000); }
+}
+async function saveFlashcards(cards, conversationId = null) {
+  if (!cards || cards.length === 0) return;
+  const rows = cards.map(c => ({ user_id: currentUser.id, conversation_id: conversationId, subject, front: c.front, back: c.back, next_review_at: new Date().toISOString() }));
+  await supabaseClient.from('flashcards').insert(rows); awardPoints(cards.length * 3);
+}
+function renderPracticeTab() {
+  studyContent.innerHTML = `
+    <div class="study-form">
+      <h3>Practice Paper Generator</h3>
+      <input id="ppTopic" type="text" placeholder="Topic (e.g. Quadratic Equations)" autocomplete="off">
+      <select id="ppLevel"><option value="">Any level</option><option value="O-Level">O-Level</option><option value="A-Level">A-Level</option><option value="University">University</option><option value="Professional">Professional</option></select>
+      <select id="ppCount"><option value="5">5 questions</option><option value="10" selected>10 questions</option><option value="15">15 questions</option><option value="20">20 questions</option></select>
+      <button id="ppGenBtn">Generate Paper</button>
+    </div>
+    <div id="ppResult" style="margin-top:20px;"></div>`;
+  $("ppGenBtn").onclick = generatePracticePaper;
+}
+async function generatePracticePaper() {
+  const topic = $("ppTopic").value.trim(); const level = $("ppLevel").value; const count = parseInt($("ppCount").value);
+  if (!topic) return alert("Enter a topic first.");
+  const btn = $("ppGenBtn"); btn.disabled = true; btn.textContent = "Generating...";
+  $("ppResult").innerHTML = '<div style="text-align:center; color:#5a7a5a; padding:20px;">AI is writing your paper...</div>';
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/practice`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic, subject, level, count, language }) });
+    const data = await res.json(); if (!res.ok) throw new Error(data.error || "Failed");
+    $("ppResult").innerHTML = `<div class="msg bot" style="max-width:100%;">${marked.parse(data.answer)}</div>`;
+    enhanceRendered($("ppResult").querySelector('.msg')); awardPoints(20);
+    btn.disabled = false; btn.textContent = "Generate Another Paper";
+  } catch (e) { $("ppResult").innerHTML = `<p style="color:#ef4444;">Error: ${e.message}</p>`; btn.disabled = false; btn.textContent = "Generate Paper"; }
+}
+async function renderMyCardsTab() {
+  studyContent.innerHTML = '<div style="text-align:center; color:#5a7a5a; padding:40px;">Loading...</div>';
+  const { data, error } = await supabaseClient.from('flashcards').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(200);
+  if (error) { studyContent.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
+  if (!data || data.length === 0) { studyContent.innerHTML = '<div class="study-empty">No flashcards yet. Generate some from the Flashcards tab.</div>'; return; }
+  const now = Date.now();
+  const dueCount = data.filter(c => new Date(c.next_review_at).getTime() <= now).length;
+  studyContent.innerHTML = `
+    <div style="text-align:center; margin-bottom:16px;">
+      <div style="color:#22c55e; font-size:24px; font-weight:800;">${data.length}</div>
+      <div style="color:#5a7a5a; font-size:11px; text-transform:uppercase; letter-spacing:1px;">Total Cards</div>
+      <div style="color:#f59e0b; margin-top:6px; font-size:13px;">${dueCount} due for review</div>
+    </div>
+    ${data.map(c => `<div class="flashcard-list-item" data-id="${c.id}"><div class="q">${escapeHtml(c.front)}</div><div class="a">${escapeHtml(c.back)}</div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;"><span style="color:#5a7a5a; font-size:11px;">${c.subject} · interval ${c.interval_days}d · ${c.reps} reps</span><button class="action-btn" data-del-card="${c.id}" style="color:#ef4444; border-color:#ef4444;">Delete</button></div></div>`).join('')}`;
+  studyContent.querySelectorAll('[data-del-card]').forEach(btn => {
+    btn.onclick = async () => { await supabaseClient.from('flashcards').delete().eq('id', btn.dataset.delCard); renderMyCardsTab(); };
+  });
+}
+
+// ============================================================
+// ANALYTICS + REMINDER
+// ============================================================
 $("analyticsBtn").onclick = async () => {
   closeSidebar();
   $("analyticsGrid").innerHTML = '<p style="color:#5a7a5a; grid-column: span 2; text-align:center;">Loading...</p>';
@@ -1365,8 +1499,7 @@ $("analyticsBtn").onclick = async () => {
     <div class="analytics-card"><b>${data.this_month}</b><span>This Month</span></div>
     <div class="analytics-card"><b>${data.total_quizzes}</b><span>Quizzes</span></div>
     <div class="analytics-card"><b style="font-size:14px;">${data.top_subject}</b><span>Top Subject</span></div>
-    <div class="analytics-card" style="grid-column: span 2;"><b style="font-size:14px;">${data.weakest_subject}</b><span>Weakest — Ask more here</span></div>
-  `;
+    <div class="analytics-card" style="grid-column: span 2;"><b style="font-size:14px;">${data.weakest_subject}</b><span>Weakest</span></div>`;
 };
 $("closeAnalyticsBtn").onclick = () => $("analyticsModal").classList.remove("show");
 
@@ -1378,18 +1511,12 @@ $("reminderBtn").onclick = () => {
 };
 $("cancelReminderBtn").onclick = () => $("reminderModal").classList.remove("show");
 $("saveReminderBtn").onclick = async () => {
-  const enabled = $("reminderToggle").checked;
-  const time = $("reminderTime").value || "18:00";
-  if (enabled && 'Notification' in window) {
-    const perm = await Notification.requestPermission();
-    if (perm !== 'granted') return alert("Please allow notifications.");
-  }
+  const enabled = $("reminderToggle").checked; const time = $("reminderTime").value || "18:00";
+  if (enabled && 'Notification' in window) { const perm = await Notification.requestPermission(); if (perm !== 'granted') return alert("Please allow notifications."); }
   await supabaseClient.from('profiles').update({ reminder_enabled: enabled, reminder_time: time }).eq('id', currentUser.id);
   userProfile.reminder_enabled = enabled; userProfile.reminder_time = time;
-  $("reminderModal").classList.remove("show");
-  alert(enabled ? `Reminder set for ${time} daily.` : "Reminder off.");
+  $("reminderModal").classList.remove("show"); alert(enabled ? `Reminder set for ${time}.` : "Reminder off.");
 };
-
 function checkReminder() {
   if (!userProfile || !userProfile.reminder_enabled) return;
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
