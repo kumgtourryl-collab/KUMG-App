@@ -101,6 +101,7 @@
   .actions-row.user-actions { align-self: flex-end; margin-right: 4px; }
   .action-btn { background: transparent; border: 1px solid #14301a; color: #7a9a7a; font-size: 10px; padding: 3px 8px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 3px; line-height: 1.2; }
   .action-btn:active { background: #14532d; color: #d6e8d6; }
+  .action-btn.speaking { background: #22c55e; color: #061006; border-color: #22c55e; }
   .action-btn svg { width: 10px; height: 10px; }
   .welcome { text-align: center; color: #4a6a4a; font-size: 14px; margin-top: 40px; line-height: 1.8; }
   .welcome b { color: #22c55e; display: block; font-size: 18px; margin-bottom: 8px; letter-spacing: 2px; }
@@ -113,7 +114,9 @@
   .chip-action { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 16px; border: 1px solid #14301a; background: transparent; color: #7a9a7a; font-size: 12px; cursor: pointer; }
   .chip-action.active { background: #14532d; border-color: #22c55e; color: #d6e8d6; }
   .chip-action svg { width: 13px; height: 13px; }
-  .icon-btn { background: transparent; border: 1px solid #14301a; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #7a9a7a; cursor: pointer; padding: 0; }
+  .icon-btn { background: transparent; border: 1px solid #14301a; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #7a9a7a; cursor: pointer; padding: 0; transition: all 0.2s ease; }
+  .icon-btn.listening { background: #ef4444; border-color: #ef4444; color: #fff; animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
   .right-actions { display: flex; gap: 6px; align-items: center; }
   #sendBtn { background: #22c55e; border: none; border-radius: 50%; width: 42px; height: 42px; color: #061006; display: flex; align-items: center; justify-content: center; cursor: pointer; }
   #sendBtn:disabled { background: #14532d; color: #3a5a3a; }
@@ -358,6 +361,9 @@
         <button class="chip-action" id="quizBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Quiz</button>
       </div>
       <div class="right-actions">
+        <button class="icon-btn" id="micBtn" aria-label="Voice input">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
         <input type="file" id="imageInput" accept="image/*" capture="environment" style="display:none;">
         <button class="icon-btn" id="cameraBtn" aria-label="Photo">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -371,7 +377,7 @@
 <div class="modal" id="confirmModal"><div class="modal-card"><h2 id="confirmTitle">Confirm</h2><p id="confirmText">Are you sure?</p><button class="danger" id="confirmYes">Yes, delete</button><button class="cancel" id="confirmNo">Cancel</button></div></div>
 <div class="modal" id="leaderboardModal"><div class="modal-card"><h2>Top Minds</h2><p>Most active users this week.</p><div id="leaderboardList"></div><button class="cancel" id="closeLbBtn">Close</button></div></div>
 <div class="modal" id="papersModal"><div class="modal-card"><h2>Past Papers</h2><p>Select a paper. KUMG will guide you through it.</p><div id="papersList"></div><button class="cancel" id="closePapersBtn">Cancel</button></div></div>
-<div class="modal" id="upgradeModal"><div class="modal-card"><h2>Upgrade to Premium</h2><p>Unlimited everything. One dollar a month.</p><div class="upgrade-price">$1<span>/month</span></div><ul class="upgrade-features"><li>Unlimited questions per day</li><li>Unlimited Quiz generation</li><li>All Past Papers unlocked</li><li>Priority support</li></ul><button class="primary" id="startPaymentBtn">Pay with EcoCash</button><button class="cancel" id="cancelUpgrade">Maybe later</button></div></div>
+<div class="modal" id="upgradeModal"><div class="modal-card"><h2>Upgrade to Premium</h2><p>Unlimited everything. One dollar a month.</p><div class="upgrade-price">$1<span>/month</span></div><ul class="upgrade-features"><li>Unlimited questions per day</li><li>Unlimited Quiz generation</li><li>All Past Papers unlocked</li><li>Voice input in Shona and Ndebele</li><li>Priority support</li></ul><button class="primary" id="startPaymentBtn">Pay with EcoCash</button><button class="cancel" id="cancelUpgrade">Maybe later</button></div></div>
 <div class="modal" id="paymentModal"><div class="modal-card"><h2>Pay with EcoCash</h2><p>Approval usually takes under 1 hour.</p><div class="step-box"><b>Step 1 — Send $1</b><div class="ecocash" id="ecocashDisplay">—</div><small>Use EcoCash to send exactly $1 USD to this number.</small></div><div class="step-box"><b>Step 2 — Use this reference</b><div class="ref-num" id="paymentRef">KUMG-XXXX</div><small>Add this as the payment reference/note.</small></div><div class="step-box"><b>Step 3 — Enter your EcoCash transaction ID</b><input id="txnInput" type="text" placeholder="e.g. MP240101.1234.A56789" autocomplete="off"><small>You'll find this in the EcoCash SMS.</small></div><button class="primary" id="submitPaymentBtn">Submit Payment</button><button class="cancel" id="cancelPayment">Cancel</button></div></div>
 <div class="modal" id="ownerModal"><div class="modal-card"><h2>Owner Dashboard</h2><div class="analytics-grid" id="ownerStats"></div><h2 style="margin-top:24px;">Pending Payments</h2><div id="pendingList"></div><button class="cancel" id="closeOwnerBtn">Close</button></div></div>
 <div class="modal" id="analyticsModal"><div class="modal-card"><h2>My Analytics</h2><p>Your activity on KUMG.</p><div class="analytics-grid" id="analyticsGrid"></div><button class="cancel" id="closeAnalyticsBtn">Close</button></div></div>
@@ -421,6 +427,7 @@ const paymentModal = $("paymentModal"), ownerModal = $("ownerModal");
 const imagePreviewBar = $("imagePreviewBar"), imagePreview = $("imagePreview"), imageInput = $("imageInput");
 const convList = $("convList"), convSearch = $("convSearch");
 const confirmModal = $("confirmModal");
+const micBtn = $("micBtn");
 
 let isLoginMode = true;
 
@@ -485,17 +492,172 @@ overlay.onclick = closeSidebar;
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-// --- ICON SVGs ---
+// --- ICONS ---
 const ICON = {
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
   regen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>',
   cont: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
   share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
   edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
-  del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>'
+  del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>',
+  speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>',
+  stop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>'
 };
 
-// --- RICH RENDERING ---
+// ============================================================
+// VOICE INPUT + READ ALOUD
+// ============================================================
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isListening = false;
+let currentlySpeakingBtn = null;
+
+function getLangCode() {
+  if (language === 'Shona') return 'sn-ZW';
+  if (language === 'Ndebele') return 'nd-ZW';
+  return 'en-ZW';
+}
+
+// Text-to-speech is available?
+function ttsAvailable() { return 'speechSynthesis' in window; }
+
+function stripMarkdownForSpeech(text) {
+  return text
+    .replace(/```[\s\S]*?```/g, ' code block ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/#{1,6}\s?/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/_([^_]+)_/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\$([^$]+)\$/g, '$1')
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .replace(/^\s*\d+\.\s+/gm, '')
+    .replace(/\n{2,}/g, '. ')
+    .replace(/\n/g, ', ')
+    .trim();
+}
+
+function speakText(btn, text) {
+  if (!ttsAvailable()) return alert("Text-to-speech is not supported on this browser.");
+
+  // Stop if already speaking from this button
+  if (currentlySpeakingBtn === btn) {
+    window.speechSynthesis.cancel();
+    currentlySpeakingBtn = null;
+    btn.classList.remove('speaking');
+    btn.innerHTML = ICON.speak + ' Listen';
+    return;
+  }
+
+  // Cancel any ongoing speech
+  window.speechSynthesis.cancel();
+
+  const plain = stripMarkdownForSpeech(text);
+  if (!plain) return;
+
+  const utter = new SpeechSynthesisUtterance(plain);
+  utter.lang = getLangCode();
+  utter.rate = 0.95;
+  utter.pitch = 1;
+
+  // Try to pick a matching voice
+  const voices = window.speechSynthesis.getVoices();
+  const targetPrefix = utter.lang.slice(0, 2);
+  const exact = voices.find(v => v.lang.toLowerCase() === utter.lang.toLowerCase());
+  const partial = voices.find(v => v.lang.toLowerCase().startsWith(targetPrefix));
+  if (exact) utter.voice = exact;
+  else if (partial) utter.voice = partial;
+
+  utter.onend = () => {
+    if (currentlySpeakingBtn === btn) {
+      currentlySpeakingBtn = null;
+      btn.classList.remove('speaking');
+      btn.innerHTML = ICON.speak + ' Listen';
+    }
+  };
+  utter.onerror = utter.onend;
+
+  currentlySpeakingBtn = btn;
+  btn.classList.add('speaking');
+  btn.innerHTML = ICON.stop + ' Stop';
+
+  window.speechSynthesis.speak(utter);
+}
+
+// Preload voices (some browsers load them async)
+if (ttsAvailable()) {
+  window.speechSynthesis.onvoiceschanged = () => { /* no-op, just triggers load */ };
+  window.speechSynthesis.getVoices();
+}
+
+// Mic toggle
+function toggleVoice() {
+  if (!SpeechRecognition) {
+    return alert("Voice input isn't supported on this browser. Try Chrome on Android.");
+  }
+
+  if (isListening) {
+    try { recognition.stop(); } catch(e) {}
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = getLangCode();
+  recognition.interimResults = true;
+  recognition.continuous = false;
+  recognition.maxAlternatives = 1;
+
+  let finalText = '';
+
+  recognition.onstart = () => {
+    isListening = true;
+    micBtn.classList.add('listening');
+    questionEl.placeholder = "Listening... speak now";
+  };
+
+  recognition.onresult = (event) => {
+    let interim = '';
+    finalText = '';
+    for (let i = 0; i < event.results.length; i++) {
+      if (event.results[i].isFinal) finalText += event.results[i][0].transcript;
+      else interim += event.results[i][0].transcript;
+    }
+    questionEl.value = finalText || interim;
+  };
+
+  recognition.onerror = (e) => {
+    console.warn('Speech error:', e.error);
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      alert("Microphone access was denied. Please allow it in your browser settings.");
+    } else if (e.error === 'no-speech') {
+      // Silent — user didn't speak
+    }
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    micBtn.classList.remove('listening');
+    questionEl.placeholder = "Ask anything...";
+    if (finalText.trim()) {
+      questionEl.focus();
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch (err) {
+    console.warn('Speech start error', err);
+    isListening = false;
+    micBtn.classList.remove('listening');
+  }
+}
+micBtn.onclick = toggleVoice;
+
+// ============================================================
+// RICH RENDERING
+// ============================================================
 async function enhanceRendered(el) {
   if (window.renderMathInElement) {
     try {
@@ -548,7 +710,9 @@ async function enhanceRendered(el) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-// --- MESSAGE ACTIONS ---
+// ============================================================
+// MESSAGE ACTIONS
+// ============================================================
 function buildBotActions(msgEl, msgData) {
   const row = document.createElement("div");
   row.className = "actions-row bot-actions";
@@ -556,11 +720,10 @@ function buildBotActions(msgEl, msgData) {
     <button class="action-btn" data-act="copy">${ICON.copy} Copy</button>
     <button class="action-btn" data-act="regen">${ICON.regen} Retry</button>
     <button class="action-btn" data-act="cont">${ICON.cont} Continue</button>
+    <button class="action-btn" data-act="speak">${ICON.speak} Listen</button>
     <button class="action-btn" data-act="share">${ICON.share} Share</button>
   `;
   row.querySelector('[data-act="copy"]').onclick = () => {
-    const txt = msgEl.querySelector('div') ? msgEl.textContent : msgEl.textContent;
-    // Get pure text content, not innerHTML
     navigator.clipboard.writeText(msgEl.innerText).then(() => {
       const b = row.querySelector('[data-act="copy"]');
       b.textContent = 'Copied!';
@@ -569,6 +732,7 @@ function buildBotActions(msgEl, msgData) {
   };
   row.querySelector('[data-act="regen"]').onclick = () => regenerateBot(msgEl, msgData.dbId);
   row.querySelector('[data-act="cont"]').onclick = () => continueBot(msgEl, msgData.dbId);
+  row.querySelector('[data-act="speak"]').onclick = (e) => speakText(e.currentTarget, msgEl.innerText);
   row.querySelector('[data-act="share"]').onclick = () => shareToWhatsApp(msgEl.innerText);
   return row;
 }
@@ -627,23 +791,15 @@ function addMsg(text, who, options = {}) {
 
 // --- REGENERATE ---
 async function regenerateBot(botEl, botDbId) {
-  // Find the previous user message
   let prev = botEl.previousElementSibling;
   while (prev && !prev.classList.contains("user")) prev = prev.previousElementSibling;
   if (!prev) return alert("Cannot find original question.");
-
   const userText = prev.innerText.trim();
-
-  // Remove bot message + its actions row from DB and DOM
   if (botDbId) await supabaseClient.from('chats').delete().eq('id', botDbId);
   if (botEl._actionsRow) botEl._actionsRow.remove();
   botEl.remove();
-
-  // Trim history: remove last assistant message
   if (history.length > 0 && history[history.length - 1].role === "assistant") history.pop();
-
-  // Re-run the ask flow with the same question
-  await runAsk(userText, false);
+  await runAsk(userText, true);
 }
 
 // --- CONTINUE ---
@@ -665,7 +821,6 @@ async function continueBot(botEl, botDbId) {
     loader.innerHTML = marked.parse(data.answer);
     enhanceRendered(loader);
 
-    // Attach actions to continued message and save
     const saved = await saveMsg(data.answer, "assistant");
     if (saved && saved.id) {
       loader.dataset.dbId = saved.id;
@@ -673,7 +828,6 @@ async function continueBot(botEl, botDbId) {
       chat.appendChild(row);
       loader._actionsRow = row;
     }
-
     history.push({ role: "assistant", content: data.answer });
   } catch (e) {
     loader.textContent = "Error: " + e.message;
@@ -681,13 +835,11 @@ async function continueBot(botEl, botDbId) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-// --- EDIT USER MESSAGE ---
+// --- EDIT ---
 async function editUserMsg(userEl, userDbId) {
   const original = userEl.innerText.trim();
   questionEl.value = original;
   questionEl.focus();
-
-  // Delete this user message and everything after it (bot replies, etc.)
   await deleteMessagesFrom(userEl, userDbId, true);
 }
 
@@ -701,16 +853,11 @@ async function deleteMsg(msgEl, dbId) {
   });
 }
 
-// Delete this message and everything after it (used for edit)
 async function deleteMessagesFrom(startEl, startDbId, includeStart) {
-  // Collect all siblings from startEl to end of chat
   const allChildren = Array.from(chat.children);
   const startIdx = allChildren.indexOf(startEl);
   if (startIdx === -1) return;
-
   const toRemove = allChildren.slice(startIdx + (includeStart ? 0 : 1));
-
-  // Collect DB ids
   const idsToDelete = [];
   for (const el of toRemove) {
     if (el.dataset && el.dataset.dbId) idsToDelete.push(el.dataset.dbId);
@@ -722,15 +869,9 @@ async function deleteMessagesFrom(startEl, startDbId, includeStart) {
     if (startEl._actionsRow) startEl._actionsRow.remove();
     startEl.remove();
   }
-
-  if (idsToDelete.length > 0) {
-    for (const id of idsToDelete) {
-      await supabaseClient.from('chats').delete().eq('id', id);
-    }
+  for (const id of idsToDelete) {
+    await supabaseClient.from('chats').delete().eq('id', id);
   }
-
-  // Trim in-memory history to match
-  // Find matching point: rebuild history from remaining messages
   rebuildHistoryFromDOM();
 }
 
@@ -823,7 +964,7 @@ async function openConversation(id) {
   history = [];
   if (data) {
     data.forEach(msg => {
-      const el = addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot', { dbId: msg.id });
+      addMsg(msg.content, msg.role === 'user' ? 'user' : 'bot', { dbId: msg.id });
       history.push({ role: msg.role, content: msg.content });
     });
   }
@@ -1016,7 +1157,6 @@ async function runAsk(q, isRegenerate) {
   const imageToSend = isRegenerate ? null : pendingImage;
 
   if (!isRegenerate) {
-    // Save user message and get DB id
     const userEl = addMsg(q || "[Photo]", "user", { imageData: imageToSend, addActions: false });
     const saved = await saveMsg(q || "[Photo uploaded]", "user");
     if (saved && saved.id) {
