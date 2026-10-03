@@ -250,7 +250,6 @@
   .study-form input:focus, .study-form select:focus { border-color: #22c55e; }
   .study-form button { width: 100%; padding: 13px; border-radius: 10px; border: none; background: #22c55e; color: #061006; font-weight: 700; font-size: 14px; cursor: pointer; margin-bottom: 8px; }
   .study-form button.secondary { background: transparent; border: 1px solid #22c55e; color: #22c55e; }
-  .study-form button:disabled { opacity: 0.5; cursor: not-allowed; }
   .flashcard-list-item { background: #0d1a0d; border: 1px solid #14301a; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
   .flashcard-list-item .q { color: #d6e8d6; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
   .flashcard-list-item .a { color: #7a9a7a; font-size: 13px; }
@@ -258,7 +257,6 @@
 </head>
 <body>
 
-<!-- SHARE VIEW (no login) -->
 <div class="share-view" id="shareView">
   <div class="share-header">
     <div class="logo">K<span>U</span>M<span>G</span></div>
@@ -437,7 +435,6 @@
 <div class="modal" id="upgradeModal"><div class="modal-card"><h2>Upgrade to Premium</h2><p>Unlimited everything. One dollar a month.</p><div class="upgrade-price">$1<span>/month</span></div><ul class="upgrade-features"><li>Unlimited questions per day</li><li>Unlimited Flashcards and Quizzes</li><li>All Past Papers unlocked</li><li>Voice input in Shona and Ndebele</li><li>Priority support</li></ul><button class="primary" id="startPaymentBtn">Pay with EcoCash</button><button class="cancel" id="cancelUpgrade">Maybe later</button></div></div>
 <div class="modal" id="paymentModal"><div class="modal-card"><h2>Pay with EcoCash</h2><p>Approval usually takes under 1 hour.</p><div class="step-box"><b>Step 1 — Send $1</b><div class="ecocash" id="ecocashDisplay">—</div><small>Use EcoCash to send exactly $1 USD to this number.</small></div><div class="step-box"><b>Step 2 — Use this reference</b><div class="ref-num" id="paymentRef">KUMG-XXXX</div><small>Add this as the payment reference/note.</small></div><div class="step-box"><b>Step 3 — Enter your EcoCash transaction ID</b><input id="txnInput" type="text" placeholder="e.g. MP240101.1234.A56789" autocomplete="off"><small>You'll find this in the EcoCash SMS.</small></div><button class="primary" id="submitPaymentBtn">Submit Payment</button><button class="cancel" id="cancelPayment">Cancel</button></div></div>
 
-<!-- OWNER DASHBOARD with tabs -->
 <div class="modal" id="ownerModal"><div class="modal-card">
   <h2>Owner Dashboard</h2>
   <div class="owner-tabs">
@@ -455,13 +452,16 @@
 <div class="modal" id="reminderModal"><div class="modal-card"><h2>Study Reminder</h2><p>Get a nudge every day to keep your streak alive.</p><div class="reminder-row"><span>Enable Daily Reminder</span><label class="switch"><input type="checkbox" id="reminderToggle"><span class="slider"></span></label></div><div class="reminder-row"><span>Reminder Time</span><input type="time" id="reminderTime" value="18:00" style="width:130px; padding:8px; margin:0;"></div><p style="font-size:11px; color:#5a7a5a; margin-top:12px;">Tip: Install KUMG to your home screen for reminders to work best.</p><button class="primary" id="saveReminderBtn">Save</button><button class="cancel" id="cancelReminderBtn">Cancel</button></div></div>
 
 <script>
+// ============================================================
+// CONFIG
+// ============================================================
 const SUPABASE_URL = "https://mzwfpgmgofhkjplexsam.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_8xuNROZulsGa7GL94cSAGA_D04QsR2Y";
 const BACKEND_URL = "https://kumg-app.onrender.com";
 const FREE_DAILY_LIMIT = 10;
 const ECOCASH_NUMBER = "0790272300";
 const SUPPORT_WHATSAPP = "263790274867";
-const APP_URL = "https://ngtourryl-collab.github.io/kumg/";
+const APP_URL = "https://kumgtourryl-collab.github.io/KUMG-App/";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 marked.setOptions({ breaks: true, gfm: true });
@@ -515,9 +515,6 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js').catch(e => console.log('SW error', e));
 }
 
-// ============================================================
-// SHARE VIEW — runs before anything else if ?share=token
-// ============================================================
 if (shareFromUrl) {
   authScreen.classList.add("hidden");
   mainApp.classList.add("hidden");
@@ -542,14 +539,10 @@ async function loadSharedConversation(token) {
   msgs.forEach(m => {
     const d = document.createElement("div");
     d.className = "msg " + (m.role === 'user' ? 'user' : 'bot');
-    if (m.role === 'bot') {
-      try { d.innerHTML = marked.parse(m.content); } catch(e) { d.textContent = m.content; }
-    } else {
-      d.textContent = m.content;
-    }
+    if (m.role === 'bot') { try { d.innerHTML = marked.parse(m.content); } catch(e) { d.textContent = m.content; } }
+    else d.textContent = m.content;
     shareBody.appendChild(d);
   });
-  // Render math + mermaid
   if (window.renderMathInElement) {
     try { renderMathInElement(shareBody, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false, ignoredTags: ['script','noscript','style','textarea','pre','code'] }); } catch(e){}
   }
@@ -562,9 +555,6 @@ async function loadSharedConversation(token) {
   }
 }
 
-// ============================================================
-// SUBJECTS, LANG
-// ============================================================
 const SUBJECTS = ["General","Writing","Business","Coding","Career","Finance","Marketing","Health","Law","Maths","Biology","Chemistry","Physics","English","History","Geography","Accounts"];
 SUBJECTS.forEach((s,i)=>{
   const b = document.createElement("button");
@@ -582,9 +572,6 @@ document.querySelectorAll(".lang-btn").forEach(btn => {
   };
 });
 
-// ============================================================
-// AUTH
-// ============================================================
 toggleAuth.onclick = () => {
   isLoginMode = !isLoginMode;
   authTitle.textContent = isLoginMode ? "Welcome Back" : "Create Account";
@@ -634,9 +621,7 @@ const ICON = {
   stop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>'
 };
 
-// ============================================================
 // VOICE
-// ============================================================
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let isListening = false;
@@ -687,9 +672,7 @@ function toggleVoice() {
 }
 micBtn.onclick = toggleVoice;
 
-// ============================================================
 // RENDERING
-// ============================================================
 async function enhanceRendered(el) {
   if (window.renderMathInElement) {
     try { renderMathInElement(el, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}], throwOnError: false, ignoredTags: ['script','noscript','style','textarea','pre','code'] }); } catch(e){}
@@ -711,9 +694,7 @@ async function enhanceRendered(el) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-// ============================================================
 // MESSAGE ACTIONS
-// ============================================================
 function buildBotActions(msgEl, msgData) {
   const row = document.createElement("div");
   row.className = "actions-row bot-actions";
@@ -729,7 +710,7 @@ function buildBotActions(msgEl, msgData) {
   row.querySelector('[data-act="regen"]').onclick = () => regenerateBot(msgEl, msgData.dbId);
   row.querySelector('[data-act="cont"]').onclick = () => continueBot(msgEl, msgData.dbId);
   row.querySelector('[data-act="speak"]').onclick = (e) => speakText(e.currentTarget, msgEl.innerText);
-  row.querySelector('[data-act="card"]').onclick = () => generateFlashcardsFromText(msgEl.innerText);
+  row.querySelector('[data-act="card"]').onclick = (e) => generateFlashcardsFromText(msgEl.innerText, e.currentTarget);
   row.querySelector('[data-act="share"]').onclick = () => shareToWhatsApp(msgEl.innerText);
   return row;
 }
@@ -807,9 +788,7 @@ function rebuildHistoryFromDOM() {
   });
 }
 
-// ============================================================
 // CONVERSATIONS
-// ============================================================
 async function loadConversations() {
   if (!currentUser) return;
   const { data, error } = await supabaseClient.from('conversations').select('*').order('updated_at', { ascending: false }).limit(200);
@@ -935,9 +914,7 @@ function showConfirm(title, text, onYes) {
 $("confirmYes").onclick = async () => { confirmModal.classList.remove("show"); if (confirmCallback) { await confirmCallback(); confirmCallback = null; } };
 $("confirmNo").onclick = () => { confirmModal.classList.remove("show"); confirmCallback = null; };
 
-// ============================================================
-// PROFILE + ANNOUNCEMENTS
-// ============================================================
+// PROFILE
 async function loadProfile() {
   if (!currentUser) return;
   const { data, error } = await supabaseClient.from('profiles').select('*').eq('id', currentUser.id).single();
@@ -1048,9 +1025,6 @@ imageInput.onchange = (e) => {
 };
 $("removeImageBtn").onclick = () => { pendingImage = null; imageInput.value = ""; imagePreviewBar.classList.remove("show"); };
 
-// ============================================================
-// ASK
-// ============================================================
 async function runAsk(q, isRegenerate) {
   const isPremium = userProfile && (userProfile.subscription === 'premium' || userProfile.subscription === 'school');
   if (!isPremium && userProfile && !isRegenerate && userProfile.questions_today >= FREE_DAILY_LIMIT) { upgradeModal.classList.add("show"); return; }
@@ -1106,9 +1080,6 @@ $("searchBtn").onclick = () => { isSearch = !isSearch; $("searchBtn").classList.
 sendBtn.onclick = ask;
 questionEl.addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
 
-// ============================================================
-// LEADERBOARD (with referral toggle)
-// ============================================================
 $("leaderboardBtn").onclick = () => { closeSidebar(); lbMode = "points"; updateLbTabs(); renderLeaderboard(); $("leaderboardModal").classList.add("show"); };
 $("lbByPoints").onclick = () => { lbMode = "points"; updateLbTabs(); renderLeaderboard(); };
 $("lbByRefs").onclick = () => { lbMode = "referrals"; updateLbTabs(); renderLeaderboard(); };
@@ -1143,9 +1114,6 @@ async function renderLeaderboard() {
 }
 $("closeLbBtn").onclick = () => $("leaderboardModal").classList.remove("show");
 
-// ============================================================
-// PUBLIC LIBRARY
-// ============================================================
 $("libraryBtn").onclick = async () => {
   closeSidebar();
   const list = $("libraryList");
@@ -1153,20 +1121,14 @@ $("libraryBtn").onclick = async () => {
   $("libraryModal").classList.add("show");
   const { data, error } = await supabaseClient.rpc('get_public_library');
   if (error) { list.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
-  if (!data || data.length === 0) { list.innerHTML = '<p style="color:#5a7a5a;">No public chats yet. Be the first to share one!</p>'; return; }
+  if (!data || data.length === 0) { list.innerHTML = '<p style="color:#5a7a5a;">No public chats yet. Be the first!</p>'; return; }
   list.innerHTML = data.map(p => `<div class="paper-item" data-token="${p.share_token}"><h3>${escapeHtml(p.title || 'Chat')}</h3><p>${escapeHtml(p.subject || 'General')} · ${new Date(p.created_at).toLocaleDateString()}</p></div>`).join("");
   list.querySelectorAll(".paper-item").forEach(el => {
-    el.onclick = () => {
-      const token = el.dataset.token;
-      window.open(`${APP_URL}?share=${token}`, '_blank');
-    };
+    el.onclick = () => { const token = el.dataset.token; window.open(`${APP_URL}?share=${token}`, '_blank'); };
   });
 };
 $("closeLibraryBtn").onclick = () => $("libraryModal").classList.remove("show");
 
-// ============================================================
-// PAST PAPERS
-// ============================================================
 $("pastPapersBtn").onclick = async () => {
   closeSidebar(); $("papersList").innerHTML = '<p style="color:#5a7a5a;">Loading...</p>';
   $("papersModal").classList.add("show");
@@ -1186,9 +1148,6 @@ $("pastPapersBtn").onclick = async () => {
 $("closePapersBtn").onclick = () => $("papersModal").classList.remove("show");
 $("exitPaperBtn").onclick = () => { activePaper = null; paperBanner.classList.remove("show"); };
 
-// ============================================================
-// UPGRADE + PAYMENT
-// ============================================================
 $("upgradeSidebarBtn").onclick = () => { closeSidebar(); upgradeModal.classList.add("show"); };
 $("cancelUpgrade").onclick = () => upgradeModal.classList.remove("show");
 $("startPaymentBtn").onclick = () => {
@@ -1208,9 +1167,6 @@ $("submitPaymentBtn").onclick = async () => {
   paymentModal.classList.remove("show"); alert("Payment submitted!"); $("txnInput").value = "";
 };
 
-// ============================================================
-// OWNER DASHBOARD (tabs)
-// ============================================================
 document.querySelectorAll(".owner-tab").forEach(tab => {
   tab.onclick = () => { ownerTab = tab.dataset.otab; document.querySelectorAll(".owner-tab").forEach(t => t.classList.toggle("active", t.dataset.otab === ownerTab)); renderOwnerTab(); };
 });
@@ -1226,7 +1182,6 @@ async function renderOwnerTab() {
   if (ownerTab === "papers") return renderOwnerPapers(c);
   if (ownerTab === "broadcast") return renderOwnerBroadcast(c);
 }
-
 async function renderOwnerStats(c) {
   const { data: s, error } = await supabaseClient.rpc('get_owner_stats');
   if (error) { c.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
@@ -1246,7 +1201,6 @@ async function renderOwnerStats(c) {
     </div>
   `;
 }
-
 async function renderOwnerPayments(c) {
   const { data } = await supabaseClient.from('payments').select('*').eq('status', 'pending').order('created_at', { ascending: false });
   if (!data || data.length === 0) { c.innerHTML = '<p style="color:#5a7a5a;">No pending payments.</p>'; return; }
@@ -1257,7 +1211,6 @@ async function renderOwnerPayments(c) {
     row.querySelector(".reject").onclick = async () => { const { error } = await supabaseClient.rpc('reject_payment', { payment_id: id }); if (error) return alert(error.message); alert("Rejected."); renderOwnerTab(); };
   });
 }
-
 async function renderOwnerUsers(c) {
   const { data, error } = await supabaseClient.rpc('get_all_users');
   if (error) { c.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
@@ -1285,7 +1238,6 @@ async function renderOwnerUsers(c) {
     });
   });
 }
-
 async function renderOwnerPapers(c) {
   const { data, error } = await supabaseClient.from('past_papers').select('*').order('created_at', { ascending: false });
   if (error) { c.innerHTML = `<p style="color:#ef4444;">${error.message}</p>`; return; }
@@ -1321,11 +1273,10 @@ async function renderOwnerPapers(c) {
     };
   });
 }
-
 async function renderOwnerBroadcast(c) {
   c.innerHTML = `
-    <p>Send an announcement. It appears as a banner at the top of every user's app.</p>
-    <textarea id="bcMsg" placeholder="Example: New Biology papers added! Check Past Papers." rows="3" style="width:100%; padding:10px; background:#070a07; border:1px solid #14301a; border-radius:10px; color:#d6e8d6; font-size:14px; font-family:inherit;"></textarea>
+    <p>Send an announcement. It appears at the top of every user's app.</p>
+    <textarea id="bcMsg" placeholder="Example: New Biology papers added!" rows="3" style="width:100%; padding:10px; background:#070a07; border:1px solid #14301a; border-radius:10px; color:#d6e8d6; font-size:14px; font-family:inherit;"></textarea>
     <button class="primary" id="bcSend" style="padding:13px; margin-top:10px;">Send Announcement</button>
     <button class="cancel" id="bcClear" style="padding:13px;">Turn Off All Announcements</button>
   `;
@@ -1343,9 +1294,7 @@ async function renderOwnerBroadcast(c) {
   };
 }
 
-// ============================================================
-// STUDY MODE (identical to previous)
-// ============================================================
+// STUDY MODE
 $("studyModeBtn").onclick = () => { closeSidebar(); studyScreen.classList.add("show"); switchStudyTab("flashcards"); };
 $("closeStudyBtn").onclick = () => { studyScreen.classList.remove("show"); window.speechSynthesis && window.speechSynthesis.cancel(); };
 document.querySelectorAll(".study-tab").forEach(tab => { tab.onclick = () => switchStudyTab(tab.dataset.tab); });
@@ -1385,11 +1334,10 @@ function renderReviewCard() {
     $("backBtn").onclick = () => renderFlashcardsTab(); return;
   }
   const card = reviewQueue[reviewIndex];
-  const cardFront = card.front, cardBack = card.back;
   studyContent.innerHTML = `
     <div class="flashcard-wrapper"><div class="flashcard" id="flipCard">
-      <div class="flashcard-face flashcard-front"><div>${escapeHtml(cardFront)}</div><div class="flashcard-hint">Tap to flip</div></div>
-      <div class="flashcard-face flashcard-back"><div>${escapeHtml(cardBack)}</div></div>
+      <div class="flashcard-face flashcard-front"><div>${escapeHtml(card.front)}</div><div class="flashcard-hint">Tap to flip</div></div>
+      <div class="flashcard-face flashcard-back"><div>${escapeHtml(card.back)}</div></div>
     </div></div>
     <div class="study-counter">Card ${reviewIndex + 1} of ${reviewQueue.length}</div>
     <div class="study-actions"><button class="study-btn miss" id="missBtn">Missed</button><button class="study-btn got" id="gotBtn">Got it</button></div>`;
@@ -1425,9 +1373,9 @@ async function generateFlashcardsFromHistory() {
     await saveFlashcards(data.cards); alert(`Created ${data.cards.length} flashcards!`); renderFlashcardsTab();
   } catch (e) { alert("Error: " + e.message); btn.disabled = false; btn.textContent = "Generate from Current Chat"; }
 }
-async function generateFlashcardsFromText(text) {
+async function generateFlashcardsFromText(text, btn) {
   if (!currentUser) return;
-  const btn = event.currentTarget; btn.textContent = '...'; btn.disabled = true;
+  btn.textContent = '...'; btn.disabled = true;
   try {
     const res = await fetch(`${BACKEND_URL}/api/flashcards`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ history: [{ role: 'assistant', content: text }], subject, language, count: 5 }) });
     const data = await res.json(); if (!res.ok) throw new Error(data.error || "Failed");
@@ -1485,9 +1433,7 @@ async function renderMyCardsTab() {
   });
 }
 
-// ============================================================
 // ANALYTICS + REMINDER
-// ============================================================
 $("analyticsBtn").onclick = async () => {
   closeSidebar();
   $("analyticsGrid").innerHTML = '<p style="color:#5a7a5a; grid-column: span 2; text-align:center;">Loading...</p>';
