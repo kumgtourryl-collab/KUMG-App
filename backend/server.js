@@ -1,10 +1,12 @@
-gsk_eIApcSxvX8UcMiL4RHFjWGdyb3FY7RrhOAQp6cLIl5XVbTyL7M7mconst express = require('express');
+const express = require('express');
 const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '15mb' }));
 
+// ⚠️ PASTE YOUR NEW GROQ KEY HERE
 const GROQ_API_KEY = "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";
+
 const VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
 const TEXT_MODEL = "openai/gpt-oss-120b";
 
@@ -30,7 +32,6 @@ FORMAT YOUR RESPONSES USING MARKDOWN — THIS IS CRITICAL:
 3. MATH: use LaTeX. $inline$ and $$display$$. Show every step.
 4. CODE: triple backticks with language tag.
 5. DIAGRAMS: use mermaid code blocks for flowcharts / sequence diagrams when genuinely helpful.
-6. IMAGES: markdown images from stable sources only.
 
 ABOUT KUMG (use only as described in rules below):
 - KUMG is an AI assistant available in multiple languages.
@@ -69,7 +70,6 @@ STRICT RULES:
 - Do NOT summarise.
 - Just continue exactly where you left off.
 - Maintain markdown formatting.
-- If you ended with practice questions, skip re-doing them and go deeper.
 
 ABOUT KUMG (only mention when asked): Founder Kerryl U Murwisi, created in Zimbabwe.`;
     if (language === 'Shona') system += `\nRespond in Shona.`;
@@ -207,6 +207,6 @@ FORMAT (markdown):
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.get('/', (req, res) => res.send('KUMG backend v7 is running.'));
+app.get('/', (req, res) => res.send('KUMG backend v8 is running.'));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server on port ${PORT}`));
