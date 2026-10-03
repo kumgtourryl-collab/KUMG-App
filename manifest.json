@@ -2,8 +2,8 @@
   "name": "KUMG - Think without limits",
   "short_name": "KUMG",
   "description": "An AI assistant for everyone. Ask anything — school, work, business, life.",
-  "start_url": "/kumg/",
-  "scope": "/kumg/",
+  "start_url": "/KUMG-App/",
+  "scope": "/KUMG-App/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
@@ -36,7 +36,7 @@
     {
       "name": "New Chat",
       "short_name": "New",
-      "url": "/kumg/",
+      "url": "/KUMG-App/",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     }
   ],
