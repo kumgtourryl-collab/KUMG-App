@@ -1,10 +1,10 @@
-const express = require('express');
+gsk_eIApcSxvX8UcMiL4RHFjWGdyb3FY7RrhOAQp6cLIl5XVbTyL7M7mconst express = require('express');
 const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '15mb' }));
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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";
 const VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
 const TEXT_MODEL = "openai/gpt-oss-120b";
 
