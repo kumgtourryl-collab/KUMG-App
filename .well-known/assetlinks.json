@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.kumg.app",
-        "sha256_cert_fingerprints": ["E5:08:31:41:ED:64:26:2A:72:FB:F6:62:C6:A6:52:3C:AF:0B:A1:A3:D8:12:FE:85:F3:30:EC:3A:AB:CF:3E:DD"]
-      }
-    }]
