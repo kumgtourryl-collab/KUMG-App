@@ -3,8 +3,8 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '15mb' }));
+app.use(express.urlencoded({ extended: false })); // Needed for Twilio form posts
 
-// ⚠️ PASTE YOUR NEW GROQ KEY HERE
 const GROQ_API_KEY = "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";
 
 const VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
@@ -207,6 +207,63 @@ FORMAT (markdown):
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.get('/', (req, res) => res.send('KUMG backend v8 is running.'));
+// ============================================================
+// WHATSAPP BOT (Twilio)
+// ============================================================
+app.post('/api/whatsapp', async (req, res) => {
+  const incomingMessage = req.body.Body;
+  const senderNumber = req.body.From || 'unknown';
+
+  res.set('Content-Type', 'text/xml');
+
+  if (!incomingMessage) {
+    return res.send('<Response></Response>');
+  }
+
+  try {
+    // Call our own /api/ask endpoint
+    const r = await fetch('https://kumg-app.onrender.com/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: incomingMessage,
+        subject: 'General',
+        history: [],
+        language: 'English'
+      })
+    });
+
+    const data = await r.json();
+    let replyText = data.answer || "Sorry, I couldn't answer that right now.";
+
+    // WhatsApp limit ~1600 chars per message
+    if (replyText.length > 1500) {
+      replyText = replyText.substring(0, 1500) + '...\n\nFull answer in the KUMG app.';
+    }
+
+    // Strip markdown for plain WhatsApp display
+    replyText = replyText
+      .replace(/```[\s\S]*?```/g, '[code block]')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/#{1,6}\s?/g, '')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\$([^$]+)\$/g, '$1');
+
+    // Escape XML special characters
+    replyText = replyText
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    res.send(`<Response><Message>${replyText}</Message></Response>`);
+
+  } catch (error) {
+    console.error('WhatsApp bot error:', error.message);
+    res.send(`<Response><Message>Sorry, something went wrong. Try again in a moment.</Message></Response>`);
+  }
+});
+
+app.get('/', (req, res) => res.send('KUMG backend v9 is running.'));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server on port ${PORT}`));
